@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PRODUCTS } from '../constants';
 import { ShoppingBag, Star, Send, ChevronRight, ChevronDown } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -26,24 +26,6 @@ const sealTypes = [
 export const Workshop: React.FC = () => {
   const location = useLocation();
   const { t } = useLanguage();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  // Close dropdown on outside click
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setMobileMenuOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  // Close dropdown on navigation
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [location.pathname]);
 
   // Helper for translations
   const getLabel = (key: string) => t(key as any);
@@ -76,16 +58,28 @@ export const Workshop: React.FC = () => {
   const { category: activeCategory, specificSeal } = getActiveState();
   const filteredProducts = PRODUCTS.filter(p => p.category === activeCategory);
 
-  // Get active label for mobile dropdown button
-  let activeLabelKey = categories.find(c => c.id === activeCategory)?.label || '';
-  if (activeCategory === 'seals' && specificSeal) {
-      activeLabelKey = sealTypes.find(s => s.id === specificSeal)?.id || activeLabelKey;
-  }
-  const activeLabel = getLabel(activeLabelKey);
 
   // Specific render for Seals
   const renderSeals = () => (
       <div className="animate-fade-in space-y-8">
+          
+          {/* Mobile Only: Secondary Horizontal Menu for Seals */}
+          <div className="lg:hidden flex overflow-x-auto gap-2 pb-2 custom-scrollbar -mt-4 mb-4">
+             {sealTypes.map(type => (
+                 <Link 
+                    key={type.id}
+                    to={type.path}
+                    className={`whitespace-nowrap px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all border
+                    ${specificSeal === type.id 
+                        ? 'bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white border-transparent' 
+                        : 'bg-white/50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border-white/20'
+                    }`}
+                 >
+                     {getLabel(type.id)}
+                 </Link>
+             ))}
+          </div>
+
           {/* Header Description for Specific Seal */}
           <div className="text-center mb-8 bg-white/30 dark:bg-slate-900/30 p-6 rounded-3xl border border-white/20 backdrop-blur-sm">
             <h2 className="text-2xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-fuchsia-600 dark:from-indigo-400 dark:to-fuchsia-400 mb-2">{getLabel(specificSeal || 'seal_trad')}</h2>
@@ -145,67 +139,31 @@ export const Workshop: React.FC = () => {
         <h1 className="text-3xl md:text-5xl font-serif font-bold text-center mb-10 text-slate-800 dark:text-white tracking-widest uppercase">
             {t('menu_workshop')}
         </h1>
-
-        {/* Mobile Dropdown Menu */}
-        <div className="lg:hidden relative mb-8 z-40" ref={menuRef}>
-            <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="w-full flex items-center justify-between p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md rounded-2xl shadow-md border border-white/40 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-bold uppercase tracking-wider text-sm"
-            >
-                <span>{activeLabel}</span>
-                <ChevronDown size={20} className={`transition-transform duration-300 ${mobileMenuOpen ? 'rotate-180' : ''}`} />
-            </button>
-            
-            <div className={`absolute top-full left-0 right-0 mt-2 transition-all duration-300 origin-top z-50 ${mobileMenuOpen ? 'opacity-100 visible scale-100' : 'opacity-0 invisible scale-95'}`}>
-                <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 p-2">
-                    {categories.map(cat => (
-                        <div key={cat.id}>
-                            <Link
-                                to={cat.path}
-                                className={`block w-full text-left px-4 py-3 rounded-lg font-bold text-xs tracking-wide uppercase transition-colors ${(activeCategory === cat.id && cat.id !== 'seals') ? 'bg-indigo-50 dark:bg-slate-700 text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}
-                            >
-                                {getLabel(cat.label)}
-                            </Link>
-                            {cat.id === 'seals' && (
-                                <div className={`pl-4 my-1 space-y-1 border-l-2 transition-all duration-300 ${activeCategory === 'seals' ? 'border-indigo-200 dark:border-slate-600' : 'border-slate-200 dark:border-slate-700'}`}>
-                                    {sealTypes.map(type => (
-                                        <Link
-                                            key={type.id}
-                                            to={type.path}
-                                            className={`block py-2 px-2 text-[10px] font-bold uppercase tracking-wider transition-colors rounded-md ${specificSeal === type.id ? 'text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50 dark:bg-fuchsia-900/20' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
-                                        >
-                                            {getLabel(type.id)}
-                                        </Link>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
         
-        {/* Main Grid: Sidebar for Desktop + Content */}
+        {/* Adjusted Grid: Fixed 240px Sidebar + 1fr Content */}
         <div className="grid lg:grid-cols-[240px_1fr] gap-8">
-            {/* Desktop Sidebar */}
-            <div className="hidden lg:block lg:sticky lg:top-28 lg:h-fit z-30">
-                <div className="flex flex-col gap-3">
+            {/* Sidebar Menu */}
+            <div className="lg:sticky lg:top-28 lg:h-fit z-40">
+                {/* Mobile: Narrow Horizontal Scroll */}
+                {/* Desktop: Vertical Stack */}
+                <div className="flex lg:flex-col overflow-x-auto lg:overflow-visible gap-2 lg:gap-3 pb-3 lg:pb-0 mb-4 lg:mb-0 bg-white/60 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none rounded-2xl lg:rounded-none p-2 lg:p-0 border border-white/40 lg:border-none shadow-md lg:shadow-none custom-scrollbar">
                     {categories.map(cat => (
-                        <div key={cat.id}>
+                        <div key={cat.id} className="flex-shrink-0">
                             <Link 
                                 to={cat.path} 
-                                className={`block w-full text-left px-5 py-3 rounded-2xl font-bold text-xs tracking-wide transition-all duration-300 ease-in-out uppercase flex justify-between items-center group
-                                ${activeCategory === cat.id 
-                                    ? 'bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white shadow-lg shadow-indigo-500/30' 
+                                className={`block w-full text-left px-4 py-2 lg:px-5 lg:py-3 rounded-xl lg:rounded-2xl font-bold text-xs tracking-wide transition-all duration-300 ease-in-out uppercase flex justify-between items-center group whitespace-nowrap
+                                ${(activeCategory as string) === cat.id 
+                                    ? 'bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white shadow-md lg:shadow-lg shadow-indigo-500/30' 
                                     : 'bg-white/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400'}
                                 `}
                             >
                                 <span className="group-hover:tracking-wider transition-all duration-300">{getLabel(cat.label)}</span>
-                                {activeCategory === cat.id && <ChevronRight size={14} />}
+                                {activeCategory === cat.id && <ChevronRight size={14} className="hidden lg:block" />}
                             </Link>
 
+                            {/* Desktop Only: Nested Seals Menu */}
                             {cat.id === 'seals' && activeCategory === 'seals' && (
-                                <div className="ml-4 mt-2 space-y-1 border-l-2 border-indigo-200 dark:border-slate-700 pl-3 animate-fade-in">
+                                <div className="hidden lg:block ml-4 mt-2 space-y-1 border-l-2 border-indigo-200 dark:border-slate-700 pl-3 animate-fade-in">
                                     {sealTypes.map(type => (
                                         <Link 
                                             key={type.id}

@@ -19,7 +19,7 @@ const CONSULTATION_TYPES: ConsultationType[] = [
         format: 'Онлайн-зустріч',
         duration: '1 год',
         price: '1000 грн',
-        image: '/image.jpg',
+        image: 'https://picsum.photos/seed/consult1/600/400',
         description: (
             <>
                 <div className="mb-3 p-3 bg-indigo-50 dark:bg-slate-800/50 rounded-2xl border border-indigo-100 dark:border-slate-700">
