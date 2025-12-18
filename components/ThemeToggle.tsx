@@ -7,6 +7,7 @@ export const ThemeToggle: React.FC = () => {
   const { t } = useLanguage();
 
   useEffect(() => {
+    // Check system preference or localStorage could be added here
     if (isDark) {
       document.documentElement.classList.add('dark');
     } else {
@@ -15,22 +16,33 @@ export const ThemeToggle: React.FC = () => {
   }, [isDark]);
 
   return (
-    <div className="relative flex flex-col items-center justify-center group cursor-pointer" onClick={() => setIsDark(!isDark)}>
-      
-      <div className="w-14 h-7 rounded-full border border-slate-300 dark:border-slate-600 relative bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur-sm shadow-inner overflow-hidden transition-colors">
-        <div 
-            className={`absolute top-0.5 bottom-0.5 w-5 rounded-full transition-all duration-500 ease-in-out flex items-center justify-center shadow-md
-            ${isDark ? 'left-[calc(100%-1.5rem)] bg-white' : 'left-1 bg-slate-900'}
-            `}
-        >
-            {isDark ? <Moon size={12} className="text-slate-900" /> : <Sun size={12} className="text-white" />}
-        </div>
-      </div>
+    <button 
+      onClick={() => setIsDark(!isDark)}
+      className={`relative w-14 h-8 rounded-full transition-all duration-500 ease-out shadow-inner border flex items-center px-1
+      ${isDark 
+        ? 'bg-slate-800 border-slate-700 shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]' 
+        : 'bg-indigo-50 border-indigo-200 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)]'
+      }`}
+      aria-label={isDark ? t('theme_light') : t('theme_dark')}
+    >
+      {/* Background Icons (static) for visual depth */}
+      <div className="absolute left-2 text-indigo-400 opacity-50"><Sun size={12} /></div>
+      <div className="absolute right-2 text-slate-500 opacity-50"><Moon size={12} /></div>
 
-      {/* Text hidden by default, visible on hover, positioned below */}
-      <span className="absolute top-full mt-3 left-1/2 transform -translate-x-1/2 text-xs font-serif tracking-widest text-magic-600 dark:text-magic-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap uppercase bg-white/95 dark:bg-slate-900/95 px-3 py-1 rounded-full shadow-lg border border-magic-200 dark:border-magic-800 z-50 pointer-events-none">
-        {isDark ? t('theme_light') : t('theme_dark')}
-      </span>
-    </div>
+      {/* Sliding Knob */}
+      <div 
+        className={`relative z-10 w-6 h-6 rounded-full shadow-[0_2px_4px_rgba(0,0,0,0.2)] flex items-center justify-center transition-all duration-500 cubic-bezier(0.175, 0.885, 0.32, 1.275) transform
+        ${isDark 
+            ? 'translate-x-6 bg-white border border-slate-200' 
+            : 'translate-x-0 bg-slate-900 border border-slate-700'
+        }`}
+      >
+        {isDark ? (
+            <Moon size={12} className="text-slate-900 animate-spin-once" /> 
+        ) : (
+            <Sun size={12} className="text-white animate-spin-once" />
+        )}
+      </div>
+    </button>
   );
 };

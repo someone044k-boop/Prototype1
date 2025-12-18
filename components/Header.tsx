@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, User, ChevronRight, Globe } from 'lucide-react';
+import { Menu, X, ChevronDown, User, ChevronRight, Globe, LogIn } from 'lucide-react';
 import { MENU_STRUCTURE } from '../constants';
 import { ThemeToggle } from './ThemeToggle';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Language } from '../translations';
+import { MenuItem } from '../types';
 
 export const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const [openMobileSections, setOpenMobileSections] = useState<Record<string, boolean>>({});
   const langRef = useRef<HTMLDivElement>(null);
   
   const location = useLocation();
@@ -17,18 +19,16 @@ export const Header: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
+      setScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu when route changes
   useEffect(() => {
       setMobileOpen(false);
   }, [location]);
 
-  // Click outside listener for language dropdown
   useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
           if (langRef.current && !langRef.current.contains(event.target as Node)) {
@@ -39,7 +39,6 @@ export const Header: React.FC = () => {
       return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = 'hidden';
@@ -51,235 +50,250 @@ export const Header: React.FC = () => {
 
   const getLabel = (key: string) => t(key as any);
 
-  // Recursive menu item renderer for Mobile
-  const renderMobileMenu = (items: any[], level = 0) => (
-    <div className={`flex flex-col ${level > 0 ? 'ml-4 pl-4 border-l border-indigo-100 dark:border-slate-800 space-y-2 mt-2' : 'space-y-4'}`}>
-      {items.map(item => (
-        <div key={item.path} className="w-full">
-          {item.subItems ? (
-            <div className="flex flex-col">
-               <div className={`font-sans font-bold text-slate-400 uppercase tracking-widest mb-2 ${level === 0 ? 'text-xs mt-2' : 'text-[10px]'}`}>
-                 {getLabel(item.label)}
-               </div>
-               {renderMobileMenu(item.subItems, level + 1)}
-            </div>
-          ) : (
-             <Link 
+  const toggleMobileSection = (label: string) => {
+    setOpenMobileSections(prev => ({ ...prev, [label]: !prev[label] }));
+  };
+
+  // New interactive, collapsible mobile menu renderer
+  const renderMobileMenu = (items: MenuItem[], level = 0) => (
+    <div className={`flex flex-col ${level > 0 ? 'ml-4 pl-4 border-l border-indigo-100 dark:border-slate-800 space-y-1 mt-2' : 'space-y-1'}`}>
+      {items.map(item => {
+        const isOpen = openMobileSections[item.label] || false;
+        const hasSubItems = item.subItems && item.subItems.length > 0;
+
+        return (
+          <div key={item.path} className="w-full">
+            {hasSubItems ? (
+              <div className="flex flex-col">
+                <button 
+                  onClick={() => toggleMobileSection(item.label)}
+                  className={`flex items-center justify-between w-full text-left font-sans font-bold uppercase tracking-wider py-3 transition-colors duration-300
+                    ${level === 0 ? 'text-sm text-slate-500 dark:text-slate-400' : 'text-xs text-slate-400 dark:text-slate-500'}
+                  `}>
+                  <span>{getLabel(item.label)}</span>
+                  <ChevronDown size={16} className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {isOpen && (
+                  <div className="animate-fade-in" style={{ animationDuration: '0.4s' }}>
+                    {renderMobileMenu(item.subItems!, level + 1)}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link 
                 to={item.path} 
-                className={`block font-sans transition-colors w-full rounded-xl active:bg-slate-100 dark:active:bg-slate-800
-                ${level === 0 
-                    ? 'font-bold text-xl text-slate-800 dark:text-slate-100 py-1' 
-                    : 'text-base font-medium text-slate-600 dark:text-slate-300 py-1.5 hover:text-indigo-600 dark:hover:text-indigo-400'
-                }
-                ${location.pathname === item.path ? 'text-indigo-600 dark:text-indigo-400 pl-2 border-l-4 border-indigo-500' : ''}
+                className={`block font-sans transition-colors w-full rounded-lg active:bg-slate-100 dark:active:bg-slate-800
+                  ${level === 0 
+                    ? 'font-bold text-2xl text-slate-800 dark:text-slate-100 py-3' 
+                    : `text-base font-medium text-slate-600 dark:text-slate-300 py-2.5 hover:text-indigo-600 dark:hover:text-indigo-400 ${location.pathname === item.path ? 'pl-2 border-l-2 border-indigo-500' : ''}`
+                  }
+                  ${location.pathname === item.path ? 'text-indigo-600 dark:text-indigo-400' : ''}
                 `} 
                 onClick={() => setMobileOpen(false)}
-            >
-               {getLabel(item.label)}
-             </Link>
-          )}
-        </div>
-      ))}
+              >
+                {getLabel(item.label)}
+              </Link>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 
   return (
     <>
-        <header 
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out border-b border-white/20 dark:border-white/5 backdrop-blur-xl
-            ${scrolled ? 'h-16 bg-white/95 dark:bg-slate-900/95 shadow-md' : 'h-20 bg-white/80 dark:bg-slate-900/80 shadow-sm'}
+      <header 
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) border-b
+            ${scrolled 
+                ? 'h-[64px] bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl shadow-sm border-indigo-50/50 dark:border-slate-800/50' 
+                : 'h-[90px] bg-transparent border-transparent shadow-none'
+            }
         `}
-        >
-        <div className="w-full px-4 md:px-6 lg:px-8 h-full flex items-center justify-between relative">
-            
-            {/* Logo Area */}
+      >
+        <div className="w-full max-w-[1600px] mx-auto px-4 md:px-6 h-full flex items-center justify-between relative">
             <Link to="/" className="flex items-center gap-3 z-50 group flex-shrink-0" onClick={() => setMobileOpen(false)}>
-                <div className={`transition-all duration-500 ${scrolled ? 'w-9 h-9 rounded-lg' : 'w-11 h-11 rounded-xl'} bg-gradient-to-br from-magic-500 to-fuchsia-600 flex items-center justify-center text-white font-serif font-bold shadow-lg group-hover:shadow-magic-500/50 group-hover:scale-110 text-lg`}>
+                <div className={`transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) ${scrolled ? 'w-9 h-9 rounded-lg text-base' : 'w-11 h-11 rounded-xl text-lg'} bg-gradient-to-br from-indigo-600 to-fuchsia-600 flex items-center justify-center text-white font-serif font-bold shadow-lg shadow-indigo-500/30 group-hover:scale-110`}>
                     D
                 </div>
-                {/* Visible on Tablet (md) and Desktop (lg) */}
-                <span className={`font-serif font-bold tracking-wider transition-all duration-500 hidden md:inline ${scrolled ? 'text-base' : 'text-lg'}`}>
-                    <span className="bg-gradient-to-r from-indigo-800 to-fuchsia-700 dark:from-indigo-400 dark:to-fuchsia-400 bg-clip-text text-transparent">Dobrev</span>
-                    <span className="text-black dark:text-white"> Opus Zodiac</span>
+                <span className={`font-serif font-bold tracking-wider transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) hidden md:inline ${scrolled ? 'text-sm' : 'text-lg'}`}>
+                    <span className="bg-gradient-to-r from-indigo-900 to-fuchsia-800 dark:from-indigo-300 dark:to-fuchsia-300 bg-clip-text text-transparent">Dobrev</span>
+                    <span className="text-slate-900 dark:text-white"> Opus Zodiac</span>
                 </span>
             </Link>
 
-            {/* Desktop Menu */}
             <nav className="hidden lg:flex items-center justify-center absolute left-1/2 -translate-x-1/2 top-0 h-full w-auto">
-            <div className="flex items-center h-full gap-1">
-                {MENU_STRUCTURE.map((item) => (
-                    <div key={item.label} className="relative group h-full flex items-center px-3 xl:px-4">
-                    {item.subItems ? (
-                        <>
-                        <Link 
-                            to={item.path} 
-                            className="flex items-center gap-1 text-sm font-sans font-bold tracking-wide text-black dark:text-white group-hover:text-magic-600 dark:group-hover:text-magic-300 transition-colors uppercase py-2 whitespace-nowrap"
-                        >
-                            {getLabel(item.label)} <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-300 opacity-50" />
-                        </Link>
-                        
-                        {/* Dropdown Level 1 */}
-                        <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 perspective-[1000px]">
-                            <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl border border-white/20 dark:border-white/10 rounded-2xl p-2 w-72 origin-top rotate-x-0 ring-1 ring-black/5 mt-[-10px]">
-                                {item.subItems.map(sub => (
-                                    <div key={sub.path} className="relative group/sub">
-                                        <Link 
-                                            to={sub.path}
-                                            className="flex items-center justify-between px-4 py-3 text-sm font-sans font-bold rounded-xl hover:bg-magic-50 dark:hover:bg-slate-800 text-black dark:text-white hover:text-magic-600 dark:hover:text-magic-300 transition-colors"
-                                        >
-                                            {getLabel(sub.label)}
-                                            {sub.subItems && <ChevronRight size={14} />}
-                                        </Link>
-
-                                        {/* Dropdown Level 2 */}
-                                        {sub.subItems && (
-                                            <div className="absolute top-0 left-full pl-2 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300">
-                                                <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl border border-white/20 dark:border-white/10 rounded-2xl p-2 w-64 ring-1 ring-black/5">
-                                                    {sub.subItems.map(nested => (
-                                                        <Link
-                                                            key={nested.path}
-                                                            to={nested.path}
-                                                            className="block px-4 py-2.5 text-xs font-sans font-medium rounded-lg hover:bg-magic-50 dark:hover:bg-slate-800 text-black dark:text-white hover:text-magic-600 dark:hover:text-magic-300 transition-colors"
-                                                        >
-                                                            {getLabel(nested.label)}
-                                                        </Link>
-                                                    ))}
+                <div className="flex items-center justify-center gap-0 lg:gap-1 xl:gap-2 h-full px-0">
+                    {MENU_STRUCTURE.map((item) => (
+                        <div key={item.label} className="relative group h-full flex items-center px-1.5 xl:px-3">
+                        {item.subItems ? (
+                            <>
+                            <Link 
+                                to={item.path} 
+                                className={`flex items-center gap-0.5 text-[13px] font-bold tracking-wide uppercase py-2 transition-colors duration-300
+                                    text-slate-900 dark:text-white
+                                    group-hover:text-indigo-600 dark:group-hover:text-indigo-400
+                                `}
+                            >
+                                {getLabel(item.label)} <ChevronDown size={10} className="group-hover:rotate-180 transition-transform duration-300 opacity-50" />
+                            </Link>
+                            <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 perspective-[1000px]">
+                                <div className="bg-white/90 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl border border-indigo-50 dark:border-slate-800 rounded-2xl p-2 w-72 origin-top rotate-x-0 mt-[-10px]">
+                                    {item.subItems.map(sub => (
+                                        <div key={sub.path} className="relative group/sub">
+                                            <Link 
+                                                to={sub.path}
+                                                className="flex items-center justify-between px-4 py-3 text-sm font-bold text-slate-700 dark:text-slate-200 rounded-xl hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                                            >
+                                                {getLabel(sub.label)}
+                                                {sub.subItems && <ChevronRight size={14} className="opacity-50" />}
+                                            </Link>
+                                            {sub.subItems && (
+                                                <div className="absolute top-0 left-full pl-2 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300">
+                                                    <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl border border-indigo-50 dark:border-slate-800 rounded-2xl p-2 w-64">
+                                                        {sub.subItems.map(nested => (
+                                                            <Link
+                                                                key={nested.path}
+                                                                to={nested.path}
+                                                                className="block px-4 py-2.5 text-xs font-bold text-slate-600 dark:text-slate-300 rounded-lg hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                                                            >
+                                                                {getLabel(nested.label)}
+                                                            </Link>
+                                                        ))}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
+                            </>
+                        ) : (
+                            <Link 
+                            to={item.path}
+                            className={`text-[13px] font-bold tracking-wide uppercase py-2 transition-colors duration-300
+                                ${location.pathname === item.path 
+                                    ? 'text-indigo-600 dark:text-indigo-400' 
+                                    : 'text-slate-900 dark:text-white'
+                                } 
+                                hover:text-indigo-600 dark:hover:text-indigo-400`}
+                            >
+                            {getLabel(item.label)}
+                            </Link>
+                        )}
                         </div>
-                        </>
-                    ) : (
-                        <Link 
-                        to={item.path}
-                        className={`text-sm font-sans font-bold tracking-wide transition-colors uppercase py-2 whitespace-nowrap ${location.pathname === item.path ? 'text-magic-600 dark:text-magic-400' : 'text-black dark:text-white hover:text-magic-600 dark:hover:text-magic-400'}`}
-                        >
-                        {getLabel(item.label)}
-                        </Link>
-                    )}
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
             </nav>
 
-            {/* Desktop Right Actions */}
-            <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
-                
-                {/* Language Dropdown */}
-                <div className="relative" ref={langRef}>
-                    <button 
-                        onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-                        className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-black dark:text-slate-400 dark:hover:text-white transition-colors uppercase"
-                    >
-                        <Globe size={14} />
-                        <span>{language}</span>
-                        <ChevronDown size={12} className={`transition-transform duration-300 ${langDropdownOpen ? 'rotate-180' : ''}`}/>
-                    </button>
-                    
-                    {/* Dropdown Menu */}
-                    <div className={`absolute top-full right-0 pt-4 transition-all duration-300 transform origin-top-right ${langDropdownOpen ? 'opacity-100 visible scale-100' : 'opacity-0 invisible scale-95'}`}>
-                         <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-100 dark:border-slate-800 p-1 w-24 overflow-hidden">
-                             {['UA', 'EN', 'RU'].map(lang => (
-                                 <button
-                                    key={lang}
-                                    onClick={() => {
-                                        setLanguage(lang as Language);
-                                        setLangDropdownOpen(false);
-                                    }}
-                                    className={`w-full text-left px-3 py-2 text-xs font-bold rounded-lg transition-colors flex items-center justify-between ${language === lang ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' : 'text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
-                                 >
-                                     {lang}
-                                     {language === lang && <div className="w-1.5 h-1.5 rounded-full bg-indigo-500"></div>}
-                                 </button>
-                             ))}
-                         </div>
+            <div className="hidden lg:flex items-center gap-3 xl:gap-4 flex-shrink-0">
+                <div className={`flex items-center rounded-full p-1.5 border transition-all duration-700 gap-2
+                    ${scrolled 
+                        ? 'bg-slate-100/50 dark:bg-slate-800/50 border-slate-200/50 dark:border-slate-700/50' 
+                        : 'bg-white/40 dark:bg-slate-900/40 border-white/40 dark:border-slate-700/40 backdrop-blur-sm'
+                    }
+                `}>
+                    <div className="relative" ref={langRef}>
+                        <button 
+                            onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-white dark:hover:bg-slate-700 transition-all text-xs font-bold text-slate-900 dark:text-white uppercase"
+                        >
+                            <Globe size={14} className="text-indigo-500" />
+                            <span>{language}</span>
+                            <ChevronDown size={10} className={`transition-transform duration-300 ${langDropdownOpen ? 'rotate-180' : ''}`}/>
+                        </button>
+                        <div className={`absolute top-full left-0 mt-3 transition-all duration-300 origin-top-left z-50 ${langDropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+                             <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-indigo-50 dark:border-slate-700 p-1 min-w-[100px] overflow-hidden">
+                                 {['UA', 'EN', 'RU'].map(lang => (
+                                     <button
+                                        key={lang}
+                                        onClick={() => {
+                                            setLanguage(lang as Language);
+                                            setLangDropdownOpen(false);
+                                        }}
+                                        className={`w-full text-left px-3 py-2 text-xs font-bold rounded-lg transition-colors flex items-center justify-between ${language === lang ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' : 'text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                                     >
+                                         {lang}
+                                         {language === lang && <div className="w-1.5 h-1.5 rounded-full bg-indigo-500"></div>}
+                                     </button>
+                                 ))}
+                             </div>
+                        </div>
                     </div>
+                    <div className="w-px h-4 bg-slate-300 dark:bg-slate-600"></div>
+                    <ThemeToggle />
                 </div>
-
-                {/* Theme Toggle */}
-                <ThemeToggle />
-
-                {/* Login Button (Moved to far right) */}
-                <Link to="/login" className="flex items-center gap-2 text-[10px] font-sans font-bold tracking-widest px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:scale-105 transition-all uppercase shadow-lg hover:shadow-indigo-500/20">
-                    <User size={14} /> <span>{t('menu_login')}</span>
+                <Link 
+                    to="/login" 
+                    className={`flex items-center gap-2 rounded-full font-bold text-xs uppercase tracking-widest hover:shadow-lg hover:scale-105 transition-all duration-700
+                        bg-slate-900 text-white dark:bg-white dark:text-slate-900
+                        ${scrolled 
+                            ? 'px-5 py-2.5 hover:shadow-indigo-500/20' 
+                            : 'px-6 py-3 shadow-sm'
+                        }
+                    `}
+                >
+                    <LogIn size={14} strokeWidth={2.5} />
+                    <span>{t('menu_login')}</span>
                 </Link>
             </div>
 
-            {/* Mobile Controls (Toggle) */}
-            <div className="lg:hidden flex items-center gap-2 z-50">
-                {/* Mobile Header Login Button (Styled with Text) */}
+            <div className="lg:hidden flex items-center gap-3 z-50">
                 <Link 
                     to="/login"
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-2 px-3 py-1.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl hover:scale-105 transition-all shadow-md active:scale-95"
+                    className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md active:scale-95 transition-transform"
                 >
-                    <User size={14} />
-                    <span className="text-[10px] font-bold uppercase tracking-wider">{t('menu_login')}</span>
+                    <User size={16} />
                 </Link>
 
                 <button 
-                    className={`p-2 rounded-lg transition-all active:scale-95 ${mobileOpen ? 'bg-slate-100 dark:bg-slate-800 text-indigo-600' : 'text-black dark:text-white'}`} 
+                    className={`p-2 rounded-xl transition-all active:scale-95 ${mobileOpen ? 'bg-white text-indigo-600 shadow-lg' : 'bg-white/50 dark:bg-slate-800/50 text-slate-800 dark:text-white backdrop-blur-md'}`} 
                     onClick={() => setMobileOpen(!mobileOpen)}
                     aria-label="Toggle Menu"
                 >
-                    {mobileOpen ? <X size={28} /> : <Menu size={28} />}
+                    {mobileOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
             </div>
         </div>
-        </header>
+      </header>
 
-        {/* Mobile Menu Overlay */}
-        <div 
-            className={`fixed inset-x-0 bottom-0 z-40 bg-white/95 dark:bg-slate-950/95 backdrop-blur-2xl transition-all duration-300 ease-in-out transform flex flex-col
-            ${scrolled ? 'top-16' : 'top-20'}
-            ${mobileOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'}
-            `}
-        >
-            <div className="flex-1 overflow-y-auto custom-scrollbar p-6 pb-20">
-                 {/* Main Navigation */}
-                 <nav className="animate-fade-in">
-                    {renderMobileMenu(MENU_STRUCTURE)}
-                 </nav>
-            </div>
+      <div 
+        className={`fixed inset-0 z-40 bg-white/95 dark:bg-slate-950/95 backdrop-blur-2xl transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) flex flex-col
+            ${mobileOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}
+        `}
+      >
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-6 pt-28 pb-32">
+             <nav className="animate-fade-in">
+                {renderMobileMenu(MENU_STRUCTURE)}
+             </nav>
+        </div>
 
-            {/* Sticky Bottom Actions for Mobile (Single Compact Row) */}
-            <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-white via-white to-transparent dark:from-slate-950 dark:via-slate-950 border-t border-slate-100 dark:border-slate-800">
-                <div className="flex items-center justify-between gap-2">
-                    
-                    {/* Language - Compact */}
-                    <div className="flex bg-slate-100 dark:bg-slate-900 rounded-lg p-0.5">
-                        {['UA', 'EN', 'RU'].map((lang) => (
-                            <button
-                                key={lang}
-                                onClick={() => setLanguage(lang as Language)}
-                                className={`text-[9px] font-bold px-2.5 py-1.5 rounded-md transition-all ${language === lang ? 'bg-white dark:bg-slate-800 text-indigo-600 shadow-sm' : 'text-slate-400'}`}
-                            >
-                                {lang}
-                            </button>
-                        ))}
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                        {/* Login - Compact Row */}
-                        <Link 
-                            to="/login" 
-                            onClick={() => setMobileOpen(false)}
-                            className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-lg uppercase tracking-wider shadow-md active:scale-[0.98] transition-transform text-[10px]"
+        <div className="absolute bottom-8 left-4 right-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-[2rem] p-2 flex items-center justify-between shadow-2xl border border-white/20 dark:border-slate-800">
+                <div className="flex bg-slate-100 dark:bg-slate-800 rounded-full p-1">
+                    {['UA', 'EN', 'RU'].map((lang) => (
+                        <button
+                            key={lang}
+                            onClick={() => setLanguage(lang as Language)}
+                            className={`text-[10px] font-bold px-3 py-2 rounded-full transition-all ${language === lang ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-white shadow-sm' : 'text-slate-400'}`}
                         >
-                            <User size={14} /> <span>{t('menu_login')}</span>
-                        </Link>
-
-                         {/* Theme - Scaled down */}
-                        <div className="scale-75 origin-center">
-                             <ThemeToggle />
-                        </div>
-                    </div>
+                            {lang}
+                        </button>
+                    ))}
                 </div>
+                <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
+                <ThemeToggle />
+                <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
+                <Link 
+                    to="/login" 
+                    onClick={() => setMobileOpen(false)}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-full uppercase tracking-wider shadow-lg active:scale-95 transition-all text-[10px]"
+                >
+                    <User size={14} /> <span>{t('menu_login')}</span>
+                </Link>
             </div>
         </div>
+      </div>
     </>
   );
 };
