@@ -37,7 +37,7 @@
               }
             },
             animation: {
-              'spin-once': 'spinOnce 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards',
+              'spin-once': 'spinOnce 1s cubic-bezier(0.4, 0, 0.2, 1) forwards',
               'flash-spin': 'flashSpin 0.8s ease-out forwards',
               'spin-slow': 'spin 30s linear infinite',
               'pulse-slow': 'pulse 4s infinite',
@@ -50,6 +50,12 @@
               'curtain-reveal': 'curtainReveal 1.2s ease-out forwards',
               'mandala-intro': 'mandalaIntro 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards',
               'coins-intro': 'coinsIntro 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards',
+              'slide-from-top': 'slideFromTop 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+              'slide-from-bottom': 'slideFromBottom 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+              'slide-from-left': 'slideFromLeft 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+              'slide-from-right': 'slideFromRight 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+              'chevron-wave': 'chevronWave 1.5s ease-in-out infinite',
+              'bounce-slow': 'bounceSlow 2s ease-in-out infinite',
             },
             keyframes: {
               spinOnce: {
@@ -94,6 +100,30 @@
               fadeIn: {
                 '0%': { opacity: '0' },
                 '100%': { opacity: '1' },
+              },
+              slideFromTop: {
+                '0%': { opacity: '0', transform: 'translateX(-50%) translateY(-100px) scale(0.95)' },
+                '100%': { opacity: '1', transform: 'translateX(-50%) translateY(0) scale(1)' },
+              },
+              slideFromBottom: {
+                '0%': { opacity: '0', transform: 'translateX(-50%) translateY(100px) scale(0.95)' },
+                '100%': { opacity: '1', transform: 'translateX(-50%) translateY(0) scale(1)' },
+              },
+              slideFromLeft: {
+                '0%': { opacity: '0', transform: 'translateY(-50%) translateX(-100px) scale(0.95)' },
+                '100%': { opacity: '1', transform: 'translateY(-50%) translateX(0) scale(1)' },
+              },
+              slideFromRight: {
+                '0%': { opacity: '0', transform: 'translateY(-50%) translateX(100px) scale(0.95)' },
+                '100%': { opacity: '1', transform: 'translateY(-50%) translateX(0) scale(1)' },
+              },
+              chevronWave: {
+                '0%, 100%': { opacity: '0.2' },
+                '25%, 35%': { opacity: '1' },
+              },
+              bounceSlow: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(10px)' },
               },
               float: {
                 '0%, 100%': { transform: 'translateY(0)' },
@@ -308,16 +338,40 @@
       /* Snake border for round elements */
       .snake-border-round {
         position: relative;
+        box-sizing: content-box;
         background: linear-gradient(var(--bg-color, white), var(--bg-color, white)) padding-box,
                     conic-gradient(from var(--snake-angle, 0deg), 
                       #6366f1, #8b5cf6, #d946ef, #ec4899, #f97316, 
                       #eab308, #22c55e, #06b6d4, #3b82f6, #6366f1
                     ) border-box;
-        border: 4px solid transparent;
+        border: 16px solid transparent;
+        margin: -16px;
         animation: snake-rotate 3s linear infinite;
       }
       .dark .snake-border-round {
         --bg-color: rgb(15, 23, 42);
+      }
+      
+      /* Animated gradient borders for seasonal blocks */
+      .gradient-border-winter {
+        background: conic-gradient(from var(--snake-angle, 0deg), #1e293b 0%, #475569 25%, #cbd5e1 50%, #475569 75%, #1e293b 100%) border-box;
+        border: 4px solid transparent;
+        animation: snake-rotate 4s linear infinite;
+      }
+      .gradient-border-spring {
+        background: conic-gradient(from var(--snake-angle, 0deg), #dc2626 0%, #f97316 25%, #fbbf24 50%, #f97316 75%, #dc2626 100%) border-box;
+        border: 4px solid transparent;
+        animation: snake-rotate 4s linear infinite;
+      }
+      .gradient-border-autumn {
+        background: conic-gradient(from var(--snake-angle, 0deg), #7c3aed 0%, #c026d3 25%, #f472b6 50%, #c026d3 75%, #7c3aed 100%) border-box;
+        border: 4px solid transparent;
+        animation: snake-rotate 4s linear infinite;
+      }
+      .gradient-border-summer {
+        background: conic-gradient(from var(--snake-angle, 0deg), #059669 0%, #0d9488 20%, #22d3ee 40%, #38bdf8 60%, #0d9488 80%, #059669 100%) border-box;
+        border: 4px solid transparent;
+        animation: snake-rotate 4s linear infinite;
       }
       
       /* Hover effects */
