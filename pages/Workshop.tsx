@@ -1,234 +1,1313 @@
-import React, { useEffect, useState } from 'react';
-import { PRODUCTS } from '../constants';
-import { ShoppingBag, Star, Send, ChevronRight, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Send, ChevronRight, X, Clock, Sparkles } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { PersonalMyth } from './PersonalMyth';
 
+// Categories for sidebar
 const categories = [
-  { id: 'coins', label: 'sub_coins', path: '/workshop/coins' },
-  { id: 'procedures', label: 'sub_proc', path: '/workshop/procedures' },
-  { id: 'seals', label: "sub_seals", path: '/workshop/seals' }, 
-  { id: 'attributes', label: 'sub_attr', path: '/workshop/attributes' },
-  { id: 'jewelry', label: 'sub_jewel', path: '/workshop/jewelry' },
-  { id: 'myth', label: 'sub_myth', path: '/workshop/personal-myth' },
+    { id: 'coins', label: 'sub_coins', path: '/workshop/coins' },
+    { id: 'procedures', label: 'sub_proc', path: '/workshop/procedures' },
+    { id: 'seals', label: 'sub_seals', path: '/workshop/seals' },
+    { id: 'attributes', label: 'sub_attr', path: '/workshop/attributes' },
+    { id: 'jewelry', label: 'sub_jewel', path: '/workshop/jewelry' },
+    { id: 'myth', label: 'sub_myth', path: '/workshop/personal-myth' },
 ];
 
+// Jewelry subcategories
+const jewelryTypes = [
+    { id: 'rings', label: 'Перстні сили', path: '/workshop/jewelry/rings' },
+    { id: 'pendants', label: 'Підвіска бездоганності', path: '/workshop/jewelry/pendants' },
+];
+
+// Seal types
 const sealTypes = [
-    { id: 'seal_trad', path: '/workshop/seals/traditional' },
-    { id: 'seal_gen', path: '/workshop/seals/general' },
-    { id: 'seal_oph', path: '/workshop/seals/ophiuchus' },
-    { id: 'seal_bday', path: '/workshop/seals/birthday' },
-    { id: 'seal_wealth', path: '/workshop/seals/wealth' },
-    { id: 'seal_elem', path: '/workshop/seals/elements' }
+    { id: 'seal_trad', label: 'Традиційна', path: '/workshop/seals/traditional' },
+    { id: 'seal_gen', label: 'Загальна', path: '/workshop/seals/general' },
+    { id: 'seal_oph', label: 'Змієносця', path: '/workshop/seals/ophiuchus' },
+    { id: 'seal_bday', label: 'Дня народження', path: '/workshop/seals/birthday' },
+    { id: 'seal_wealth', label: 'Багатства', path: '/workshop/seals/wealth' },
+    { id: 'seal_elem', label: 'Стихій', path: '/workshop/seals/elements' },
+];
+
+// Data for Rings (5 items) with Rich Text descriptions
+const RINGS_DATA: { id: string; title: string; price: string; image: string; description: React.ReactNode }[] = [
+    { 
+        id: 'ring1', 
+        title: 'Чорний перстень сили', 
+        price: '8000 грн', 
+        image: '/Jewerly/blackring1.jpeg', 
+        description: (
+            <div className="space-y-4">
+                <p className="text-slate-700 dark:text-slate-300">
+                    Перстень із символом <strong className="text-slate-900 dark:text-white">темної сили</strong> підсилює життєву енергію, харизму та лідерські якості. Ідеальний для тих, хто прагне успіху та визнання.
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                    <img src="/Jewerly/blackring2.jpeg" alt="Чорний перстень 2" className="w-full h-32 object-cover rounded-xl shadow-lg" />
+                    <img src="/Jewerly/blackring3.jpeg" alt="Чорний перстень 3" className="w-full h-32 object-cover rounded-xl shadow-lg" />
+                </div>
+            </div>
+        )
+    },
+    { 
+        id: 'ring2', 
+        title: 'Сірий перстень балансу', 
+        price: '7500 грн', 
+        image: '/Jewerly/greyring1.jpeg', 
+        description: (
+            <div className="space-y-4">
+                <p className="text-slate-700 dark:text-slate-300">
+                    Срібний перстень з <strong className="text-slate-900 dark:text-white">місячним каменем</strong> розвиває інтуїцію, захищає від негативу та гармонізує емоційний стан.
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                    <img src="/Jewerly/greyring2.png" alt="Сірий перстень 2" className="w-full h-32 object-cover rounded-xl shadow-lg" />
+                    <img src="/Jewerly/greyring3.jpeg" alt="Сірий перстень 3" className="w-full h-32 object-cover rounded-xl shadow-lg" />
+                </div>
+            </div>
+        )
+    },
+    { 
+        id: 'ring3', 
+        title: 'Білий перстень світла', 
+        price: '9000 грн', 
+        image: '/Jewerly/whitering1.jpeg', 
+        description: (
+            <div className="space-y-4">
+                <p className="text-slate-700 dark:text-slate-300">
+                    Потужний талісман для <strong className="text-slate-900 dark:text-white">воїнів духу</strong>. Додає сміливості, рішучості та допомагає долати перешкоди.
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                    <img src="/Jewerly/whitering2.jpeg" alt="Білий перстень 2" className="w-full h-32 object-cover rounded-xl shadow-lg" />
+                    <img src="/Jewerly/whiteblack.jpg" alt="Білий та чорний" className="w-full h-32 object-cover rounded-xl shadow-lg" />
+                </div>
+            </div>
+        )
+    },
+    { 
+        id: 'ring4', 
+        title: 'Перстень Майстра', 
+        price: '12000 грн', 
+        image: '/Jewerly/fullmaster.png', 
+        description: (
+            <div className="space-y-4">
+                <p className="text-slate-700 dark:text-slate-300">
+                    <strong className="text-indigo-600 dark:text-indigo-400">Королівський перстень</strong> успіху та процвітання. Відкриває шляхи до багатства, мудрості та духовного зростання.
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                    <img src="/Jewerly/4room.jpg" alt="Кімната майстра" className="w-full h-32 object-cover rounded-xl shadow-lg" />
+                    <img src="/Jewerly/absolutwiev.jpg" alt="Абсолютний вигляд" className="w-full h-32 object-cover rounded-xl shadow-lg" />
+                </div>
+            </div>
+        )
+    },
+];
+
+// Data for Pendants (2 items) with Rich Text descriptions
+const PENDANTS_DATA: { id: string; title: string; price: string; image: string; description: React.ReactNode }[] = [
+    { 
+        id: 'pendant1', 
+        title: 'Кулон Майстра', 
+        price: '6000 грн', 
+        image: '/Jewerly/masterkulon.jpeg', 
+        description: (
+            <div className="space-y-4">
+                <p className="text-slate-700 dark:text-slate-300">
+                    <strong className="text-slate-900 dark:text-white">Сакральний символ</strong> гармонії та балансу. Допомагає досягти внутрішньої рівноваги та духовного просвітлення.
+                </p>
+                <div className="flex justify-center">
+                    <img src="/Jewerly/kulonstuden.png" alt="Кулон студента" className="w-full max-w-xs h-40 object-cover rounded-xl shadow-lg" />
+                </div>
+            </div>
+        )
+    },
+    { 
+        id: 'pendant2', 
+        title: 'Кулон Учня', 
+        price: '5500 грн', 
+        image: '/Jewerly/kulonstuden.png', 
+        description: (
+            <div className="space-y-4">
+                <p className="text-slate-700 dark:text-slate-300">
+                    Потужний <strong className="text-fuchsia-600 dark:text-fuchsia-400">оберіг від негативних енергій</strong>. Створює захисне поле навколо власника та очищує ауру.
+                </p>
+                <div className="flex justify-center">
+                    <img src="/Jewerly/masterkulon.jpeg" alt="Кулон майстра" className="w-full max-w-xs h-40 object-cover rounded-xl shadow-lg" />
+                </div>
+            </div>
+        )
+    },
+];
+
+// Data for Seals (6 items) with Rich Text descriptions
+const SEALS_DATA: { id: string; title: string; price: string; image: string; description: React.ReactNode }[] = [
+    { 
+        id: 'seal1', 
+        title: 'Традиційна печатка', 
+        price: '3000 грн', 
+        image: '/master/shrtr.svg', 
+        description: (
+            <div className="space-y-4">
+                <p className="text-slate-700 dark:text-slate-300">
+                    <strong className="text-slate-900 dark:text-white">Традиційна печатка на орган</strong> - це збір цілісності органу через проекцію <strong className="text-amber-600 dark:text-amber-400">12х сил</strong> на цей орган організму.
+                </p>
+                <p className="text-slate-700 dark:text-slate-300">
+                    Кожен прошарок є прояв <strong className="text-indigo-600 dark:text-indigo-400">зодіакальної якості</strong>. Кожен прошарок <strong>посилюється астрологічною силою</strong>. Вона наповнює зодіакальну якість.
+                </p>
+                <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-xl border-l-4 border-emerald-400">
+                    <p className="text-slate-700 dark:text-slate-300">
+                        <strong>Кожні 3 прошарка</strong> виникає сутність що схожа на <strong className="text-emerald-600 dark:text-emerald-400">змію або дракона</strong>, яка втілює розум стихії.
+                    </p>
+                </div>
+                <div className="bg-rose-50 dark:bg-rose-900/20 p-4 rounded-xl border-l-4 border-rose-400">
+                    <p className="text-slate-700 dark:text-slate-300">
+                        <strong>Після збірки 12 прошарків у органі виникає сутність Змієносця. Як вікно у потойбіччя.</strong>
+                    </p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">(сутність Змієносця традиційно це символ Георгія Змієборця)</p>
+                </div>
+                <p className="text-slate-700 dark:text-slate-300 font-medium">
+                    Всі ці сили використовуються для відновлення цілісної гармонії обраного органу.
+                </p>
+                
+                {/* Organ seals by element */}
+                <div className="space-y-3 mt-4">
+                    <div className="bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-2xl border border-emerald-200 dark:border-emerald-800">
+                        <p className="text-sm text-slate-700 dark:text-slate-300">
+                            Печатка <strong className="text-emerald-700 dark:text-emerald-400">Скорпіона</strong> - Хребет.<br/>
+                            Печатка <strong className="text-emerald-700 dark:text-emerald-400">Тельця</strong> - Тазові кістки та ноги.<br/>
+                            Печатка <strong className="text-emerald-700 dark:text-emerald-400">Діви</strong> - сечостатева система.
+                        </p>
+                    </div>
+                    <div className="bg-rose-50 dark:bg-rose-900/20 p-3 rounded-2xl border border-rose-200 dark:border-rose-800">
+                        <p className="text-sm text-slate-700 dark:text-slate-300">
+                            Печатка <strong className="text-rose-700 dark:text-rose-400">Овна</strong> - Кишечник.<br/>
+                            Печатка <strong className="text-rose-700 dark:text-rose-400">Козерога</strong> - органи травлення та сонячне сплетіння.<br/>
+                            Печатка <strong className="text-rose-700 dark:text-rose-400">Близнюків</strong> - грудна клітина, серце та легені.
+                        </p>
+                    </div>
+                    <div className="bg-amber-50 dark:bg-amber-900/20 p-3 rounded-2xl border border-amber-200 dark:border-amber-800">
+                        <p className="text-sm text-slate-700 dark:text-slate-300">
+                            Печатка <strong className="text-amber-700 dark:text-amber-400">Стрільця</strong> - органи шиї, трахея та щитова залоза.<br/>
+                            Печатка <strong className="text-amber-700 dark:text-amber-400">Лева</strong> - нижня щелепа, ротова порожнина та язик.<br/>
+                            Печатка <strong className="text-amber-700 dark:text-amber-400">Риб</strong> - кістки черепу.
+                        </p>
+                    </div>
+                    <div className="bg-gradient-to-r from-fuchsia-50 to-violet-50 dark:from-fuchsia-900/20 dark:to-violet-900/20 p-3 rounded-2xl border border-fuchsia-200 dark:border-fuchsia-800">
+                        <p className="text-sm text-slate-700 dark:text-slate-300">
+                            Печатка <strong className="text-fuchsia-700 dark:text-fuchsia-400">Водолія</strong> - великі півкулі мозку<br/>
+                            Печатка <strong className="text-fuchsia-700 dark:text-fuchsia-400">Терезів</strong> - таламус та нейромережі мозку<br/>
+                            Печатка <strong className="text-fuchsia-700 dark:text-fuchsia-400">Рака</strong> - Зона моста, що поєднує головний та спинний мозок.
+                        </p>
+                    </div>
+                </div>
+                
+                {/* Vitruvian Man image */}
+                <div className="flex justify-center mt-4">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Da_Vinci_Vitruve_Luc_Viatour.jpg/800px-Da_Vinci_Vitruve_Luc_Viatour.jpg" alt="Вітрувіанська людина" className="w-full max-w-xs rounded-2xl shadow-lg" />
+                </div>
+            </div>
+        )
+    },
+    { 
+        id: 'seal2', 
+        title: 'Загальна печатка', 
+        price: '2500 грн', 
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Laughing_Buddha.jpg/440px-Laughing_Buddha.jpg', 
+        description: (
+            <div className="space-y-4">
+                <p className="text-slate-700 dark:text-slate-300">
+                    <strong className="text-slate-900 dark:text-white">Є похідною від традиційної печатки майстра.</strong>
+                </p>
+                <div className="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-2xl border border-indigo-200 dark:border-indigo-800">
+                    <p className="text-slate-700 dark:text-slate-300">
+                        <strong className="text-indigo-700 dark:text-indigo-400">Загальна печатка на 4 стихії</strong> - це скорочений збір цілісності енергетики людини.
+                    </p>
+                </div>
+                <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-2xl border border-amber-200 dark:border-amber-800">
+                    <p className="font-bold text-amber-700 dark:text-amber-400 mb-2">✨ Заповнюються:</p>
+                    <ul className="space-y-2 pl-2">
+                        <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                            <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                            Навички особистих стосунків
+                        </li>
+                        <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                            <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                            Навички суспільного життя
+                        </li>
+                    </ul>
+                </div>
+                <p className="text-slate-700 dark:text-slate-300 bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-2xl border-l-4 border-emerald-400">
+                    Якщо людині вистачає особистих якостей - <strong className="text-emerald-600 dark:text-emerald-400">печатка поширюється на простір життя</strong>.
+                </p>
+                <div className="bg-gradient-to-r from-fuchsia-50 to-violet-50 dark:from-fuchsia-900/20 dark:to-violet-900/20 p-4 rounded-2xl border border-fuchsia-200 dark:border-fuchsia-800">
+                    <p className="text-slate-700 dark:text-slate-300">
+                        <strong className="text-fuchsia-700 dark:text-fuchsia-400">Ця печатка має мету лікування суспільного життя людини.</strong>
+                    </p>
+                </div>
+            </div>
+        )
+    },
+    { 
+        id: 'seal3', 
+        title: 'Печатка Змієносця', 
+        price: '4000 грн', 
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Novgorod_George.jpg/440px-Novgorod_George.jpg', 
+        description: (
+            <div className="space-y-4">
+                <p className="text-center text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">
+                    Є найскладнішим варіантом печатки майстра
+                </p>
+                <div className="bg-cyan-50 dark:bg-cyan-900/20 p-4 rounded-2xl border border-cyan-200 dark:border-cyan-800">
+                    <p className="text-slate-700 dark:text-slate-300">
+                        <strong className="text-cyan-700 dark:text-cyan-400">Печатка змієносця</strong> полягає у прямому впливі на <strong>8му чакру</strong>. Вплинути на 8му чакру можна лише <strong className="text-slate-900 dark:text-white">спрямувавши на неї бездоганні сили - астрологічні планети (алхімічні константи)</strong>.
+                    </p>
+                </div>
+                <div className="space-y-3">
+                    <div className="bg-indigo-50 dark:bg-indigo-900/20 p-3 rounded-2xl border border-indigo-200 dark:border-indigo-800">
+                        <p className="text-sm text-slate-700 dark:text-slate-300">
+                            На <strong className="text-indigo-700 dark:text-indigo-400">1 рівні практики</strong> це <strong>4 бездоганні першооснови</strong> - <span className="text-indigo-600 dark:text-indigo-400 font-semibold">Юпітер, Марс, Сатурн, Пустотність</span>.
+                        </p>
+                    </div>
+                    <div className="bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-2xl border border-emerald-200 dark:border-emerald-800">
+                        <p className="text-sm text-slate-700 dark:text-slate-300">
+                            На <strong className="text-emerald-700 dark:text-emerald-400">2 рівні практики</strong> це <strong>4 ключі гармонії</strong> - <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Нептун, Меркурій, Сонце, Уран</span>.
+                        </p>
+                    </div>
+                    <div className="bg-amber-50 dark:bg-amber-900/20 p-3 rounded-2xl border border-amber-200 dark:border-amber-800">
+                        <p className="text-sm text-slate-700 dark:text-slate-300">
+                            На <strong className="text-amber-700 dark:text-amber-400">3 рівні практики</strong> це <strong>4 вікна бездоганності</strong> - <span className="text-amber-600 dark:text-amber-400 font-semibold">Гея, Венера, Місяць, Плутон</span>.
+                        </p>
+                    </div>
+                    <div className="bg-gradient-to-r from-fuchsia-50 to-violet-50 dark:from-fuchsia-900/20 dark:to-violet-900/20 p-3 rounded-2xl border border-fuchsia-200 dark:border-fuchsia-800">
+                        <p className="text-sm text-slate-700 dark:text-slate-300">
+                            На <strong className="text-fuchsia-700 dark:text-fuchsia-400">4 рівні практики</strong> у <strong>8му чакру проектуються всі бездоганні сили</strong>, як <span className="text-fuchsia-600 dark:text-fuchsia-400 font-semibold">цілісний набір</span>.
+                        </p>
+                    </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3 mt-4">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg" alt="The Magician" className="w-full h-40 object-cover rounded-xl shadow-lg" />
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Пам%27ятник_Юрію_Змієборцю_у_Львові.jpg/440px-Пам%27ятник_Юрію_Змієборцю_у_Львові.jpg" alt="Пам'ятник Юрію Змієборцю" className="w-full h-40 object-cover rounded-xl shadow-lg" />
+                </div>
+                <p className="text-sm text-slate-500 dark:text-slate-400 italic text-center">
+                    Св. Георгій Змієборець — традиційний символ сутності Змієносця
+                </p>
+            </div>
+        )
+    },
+    { 
+        id: 'seal4', 
+        title: 'Печатка дня народження', 
+        price: '3500 грн', 
+        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop', 
+        description: (
+            <div className="space-y-4">
+                <p className="text-slate-700 dark:text-slate-300">
+                    На день народження людини відкривається її <strong className="text-indigo-600 dark:text-indigo-400">канал матеріалізації</strong>. <strong className="text-slate-900 dark:text-white">Астрологічні сили</strong> стають у таке положення, яке близьке до моменту <strong>народження людини</strong>.
+                </p>
+                <p className="text-slate-700 dark:text-slate-300">
+                    Через канал народження людини стає доступним <strong className="text-slate-900 dark:text-white">осередок у світі духів із якого душа прийшла у матеріальну дійсність</strong>.<br/>
+                    <strong className="text-cyan-600 dark:text-cyan-400">У той самий осередок душа повернеться після смерті.</strong>
+                </p>
+                <div className="bg-cyan-50 dark:bg-cyan-900/20 p-4 rounded-2xl border-2 border-cyan-300 dark:border-cyan-700">
+                    <p className="font-bold text-cyan-700 dark:text-cyan-300 mb-2">🌟 Що формує печатка:</p>
+                    <p className="text-slate-700 dark:text-slate-300">
+                        <strong>Цілісність якостей реінкарнуючої душі людини</strong>.
+                    </p>
+                    <p className="text-slate-700 dark:text-slate-300 mt-2">
+                        Ця печатка посилює <strong className="text-slate-900 dark:text-white">зв'язок із осередком у світі духів та канал матеріалізації через який матеріалізуються усі блага та події життя</strong>.
+                    </p>
+                </div>
+                <p className="text-slate-700 dark:text-slate-300">
+                    Печатка на день народження створює <strong className="text-slate-900 dark:text-white">глибокі духовні перетворення людини</strong>.
+                </p>
+                <div className="bg-gradient-to-r from-indigo-50 to-fuchsia-50 dark:from-indigo-900/20 dark:to-fuchsia-900/20 p-4 rounded-xl">
+                    <p className="text-slate-700 dark:text-slate-300">
+                        Застосування <strong className="text-indigo-600 dark:text-indigo-400">архетипів</strong> та <strong className="text-fuchsia-600 dark:text-fuchsia-400">бездоганних сил (сил астрології)</strong> переносить гармонію на матрицю душі за правилом безумовного благодіяння.
+                    </p>
+                </div>
+            </div>
+        )
+    },
+    { 
+        id: 'seal5', 
+        title: 'Печатка багатства', 
+        price: '5000 грн', 
+        image: 'https://picsum.photos/400/400?random=34', 
+        description: (
+            <div className="space-y-3">
+                <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-2xl border border-amber-200 dark:border-amber-800">
+                    <p className="font-bold text-amber-700 dark:text-amber-300 mb-2 uppercase tracking-wider text-sm">💰 Магічний інструмент достатку</p>
+                    <p className="text-slate-700 dark:text-slate-300">
+                        Печатка пов'язана із <strong className="text-amber-600 dark:text-amber-400">егрегором достатку</strong> та відкриває грошові потоки.
+                    </p>
+                </div>
+                <div className="grid gap-2">
+                    <div className="flex items-center gap-3 p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm">
+                        <span className="text-xl">🔓</span>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Відкриває <strong>фінансові можливості</strong></p>
+                    </div>
+                    <div className="flex items-center gap-3 p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm">
+                        <span className="text-xl">🌊</span>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Активує <strong>грошові потоки</strong></p>
+                    </div>
+                    <div className="flex items-center gap-3 p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm">
+                        <span className="text-xl">⚖️</span>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">Балансує <strong>матеріальну енергію</strong></p>
+                    </div>
+                </div>
+                <p className="text-sm text-slate-500 dark:text-slate-400 italic text-center">
+                    Працює через виправлення деформацій монади у сфері достатку
+                </p>
+            </div>
+        )
+    },
+    { 
+        id: 'seal6', 
+        title: 'Печатка 4 стихій', 
+        price: '4500 грн', 
+        image: 'https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400&h=400&fit=crop', 
+        description: (
+            <div className="space-y-4">
+                <p className="text-slate-700 dark:text-slate-300">
+                    Ця печатка повторює процедуру <strong className="text-indigo-600 dark:text-indigo-400">екзаменацій навчання</strong>.
+                </p>
+                <p className="text-slate-700 dark:text-slate-300">
+                    Те що на екзаменації ми проходимо впродовж <strong>4х та більше зустрічей</strong>, виконується у пришвидшеному варіанті.<br/>
+                    Майстер проектує на вас властивості еліти стихії - <strong className="text-slate-900 dark:text-white">Валета, Лицаря, Дами та Короля</strong>.
+                </p>
+                <div className="bg-gradient-to-r from-cyan-50 to-fuchsia-50 dark:from-cyan-900/20 dark:to-fuchsia-900/20 p-4 rounded-2xl border border-cyan-200 dark:border-cyan-800">
+                    <p className="text-slate-700 dark:text-slate-300 font-medium">
+                        <strong className="text-slate-900 dark:text-white">Поєднання еліти у групу створює у вашій природі складний зв'язок із стихією.</strong>
+                    </p>
+                </div>
+                <div className="space-y-3">
+                    <div className="flex items-start gap-3 p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+                        <span className="w-2 h-2 rounded-full bg-indigo-500 mt-2 flex-shrink-0"></span>
+                        <p className="text-slate-700 dark:text-slate-300">
+                            Має значення ваш природній зв'язок із стихією - <strong className="text-indigo-600 dark:text-indigo-400">ваш знак зодіаку</strong>.
+                        </p>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+                        <span className="w-2 h-2 rounded-full bg-fuchsia-500 mt-2 flex-shrink-0"></span>
+                        <p className="text-slate-700 dark:text-slate-300">
+                            Має значення поточні обставини життя - <strong className="text-fuchsia-600 dark:text-fuchsia-400">печатка упорядковує стихію у вашому житті</strong> та упорядковує події життя.
+                        </p>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+                        <span className="w-2 h-2 rounded-full bg-amber-500 mt-2 flex-shrink-0"></span>
+                        <p className="text-slate-700 dark:text-slate-300">
+                            Має значення ваші особисті зусилля - <strong className="text-amber-600 dark:text-amber-400">чим більше навичок взаємодії зі стихією ви маєте, тим більше матеріалу печатки ви можете засвоїти</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        )
+    },
+];
+
+// Data for Procedures (4 items)
+const PROCEDURES_DATA = [
+    { id: 'proc1', title: 'Весняне очищення', season: 'Весна', image: 'https://picsum.photos/400/400?random=40', description: 'Ритуал очищення від зимової стагнації. Пробуджує життєві сили та готує до нового циклу зростання.' },
+    { id: 'proc2', title: 'Літнє наповнення', season: 'Літо', image: 'https://picsum.photos/400/400?random=41', description: 'Процедура накопичення сонячної енергії. Максимально заряджає на весь рік вперед.' },
+    { id: 'proc3', title: 'Осіння трансформація', season: 'Осінь', image: 'https://picsum.photos/400/400?random=42', description: 'Ритуал збору плодів та підготовки до внутрішньої роботи. Час підбиття підсумків.' },
+    { id: 'proc4', title: 'Зимова медитація', season: 'Зима', image: 'https://picsum.photos/400/400?random=43', description: 'Глибоке занурення у внутрішній світ. Час для рефлексії та планування нового циклу.' },
+];
+
+// Data for Coins (12 items - zodiac)
+const COINS_DATA = [
+    { id: 'coin1', title: 'Монета Овна', zodiac: '♈', price: '1500 грн', image: 'https://picsum.photos/400/400?random=50', description: 'Монета першого знаку зодіаку. Дарує сміливість, ініціативність та енергію для нових починань.' },
+    { id: 'coin2', title: 'Монета Тельця', zodiac: '♉', price: '1500 грн', image: 'https://picsum.photos/400/400?random=51', description: 'Монета стабільності та достатку. Притягує матеріальне благополуччя та надійність.' },
+    { id: 'coin3', title: 'Монета Близнюків', zodiac: '♊', price: '1500 грн', image: 'https://picsum.photos/400/400?random=52', description: 'Монета комунікації та інтелекту. Покращує навички спілкування та навчання.' },
+    { id: 'coin4', title: 'Монета Рака', zodiac: '♋', price: '1500 грн', image: 'https://picsum.photos/400/400?random=53', description: 'Монета дому та родини. Захищає сімейне вогнище та підсилює емоційні зв\'язки.' },
+    { id: 'coin5', title: 'Монета Лева', zodiac: '♌', price: '1500 грн', image: 'https://picsum.photos/400/400?random=54', description: 'Монета творчості та самовираження. Дарує впевненість та харизму лідера.' },
+    { id: 'coin6', title: 'Монета Діви', zodiac: '♍', price: '1500 грн', image: 'https://picsum.photos/400/400?random=55', description: 'Монета порядку та здоров\'я. Допомагає в організації життя та підтримці тіла.' },
+    { id: 'coin7', title: 'Монета Терезів', zodiac: '♎', price: '1500 грн', image: 'https://picsum.photos/400/400?random=56', description: 'Монета гармонії та партнерства. Балансує стосунки та приносить справедливість.' },
+    { id: 'coin8', title: 'Монета Скорпіона', zodiac: '♏', price: '1500 грн', image: 'https://picsum.photos/400/400?random=57', description: 'Монета трансформації та глибини. Відкриває таємниці та дарує силу відродження.' },
+    { id: 'coin9', title: 'Монета Стрільця', zodiac: '♐', price: '1500 грн', image: 'https://picsum.photos/400/400?random=58', description: 'Монета пригод та мудрості. Розширює горизонти та приносить удачу в подорожах.' },
+    { id: 'coin10', title: 'Монета Козерога', zodiac: '♑', price: '1500 грн', image: 'https://picsum.photos/400/400?random=59', description: 'Монета амбіцій та досягнень. Допомагає будувати кар\'єру та досягати цілей.' },
+    { id: 'coin11', title: 'Монета Водолія', zodiac: '♒', price: '1500 грн', image: 'https://picsum.photos/400/400?random=60', description: 'Монета інновацій та свободи. Пробуджує оригінальність та незалежність мислення.' },
+    { id: 'coin12', title: 'Монета Риб', zodiac: '♓', price: '1500 грн', image: 'https://picsum.photos/400/400?random=61', description: 'Монета інтуїції та духовності. Поглиблює зв\'язок з вищими силами та підсвідомістю.' },
 ];
 
 export const Workshop: React.FC = () => {
-  const location = useLocation();
-  const { t } = useLanguage();
+    const location = useLocation();
+    const { t } = useLanguage();
+    const [selectedItem, setSelectedItem] = useState<any>(null);
 
-  // Helper for translations
-  const getLabel = (key: string) => t(key as any);
+    const getLabel = (key: string) => t(key as any);
 
-  // Determine active category and specific Seal type based on URL
-  const getActiveState = () => {
-      const path = location.pathname;
-      let category = 'coins';
-      let specificSeal = null;
+    // Prevent body scroll when modal is open
+    useEffect(() => {
+        if (selectedItem) {
+            document.body.classList.add('modal-open');
+        } else {
+            document.body.classList.remove('modal-open');
+        }
+        return () => document.body.classList.remove('modal-open');
+    }, [selectedItem]);
 
-      if (path.includes('/coins')) category = 'coins';
-      else if (path.includes('/procedures')) category = 'procedures';
-      else if (path.includes('/seals')) {
-          category = 'seals';
-          if (path.includes('/traditional')) specificSeal = 'seal_trad';
-          else if (path.includes('/general')) specificSeal = 'seal_gen';
-          else if (path.includes('/ophiuchus')) specificSeal = 'seal_oph';
-          else if (path.includes('/birthday')) specificSeal = 'seal_bday';
-          else if (path.includes('/wealth')) specificSeal = 'seal_wealth';
-          else if (path.includes('/elements')) specificSeal = 'seal_elem';
-          else specificSeal = 'seal_trad'; // Default seal
-      }
-      else if (path.includes('/attributes')) category = 'attributes';
-      else if (path.includes('/jewelry')) category = 'jewelry';
-      else if (path.includes('/personal-myth')) category = 'myth';
-      
-      return { category, specificSeal };
-  };
+    // Determine active category
+    const getActiveState = () => {
+        const path = location.pathname;
+        let category: string | null = null;
+        let subCategory: string | null = null;
 
-  const { category: activeCategory, specificSeal } = getActiveState();
-  const filteredProducts = PRODUCTS.filter(p => p.category === activeCategory);
+        if (path.includes('/coins')) category = 'coins';
+        else if (path.includes('/procedures')) category = 'procedures';
+        else if (path.includes('/seals')) {
+            category = 'seals';
+            if (path.includes('/traditional')) subCategory = 'seal_trad';
+            else if (path.includes('/general')) subCategory = 'seal_gen';
+            else if (path.includes('/ophiuchus')) subCategory = 'seal_oph';
+            else if (path.includes('/birthday')) subCategory = 'seal_bday';
+            else if (path.includes('/wealth')) subCategory = 'seal_wealth';
+            else if (path.includes('/elements')) subCategory = 'seal_elem';
+            else subCategory = 'seal_trad';
+        }
+        else if (path.includes('/attributes')) category = 'attributes';
+        else if (path.includes('/jewelry')) {
+            category = 'jewelry';
+            if (path.includes('/rings')) subCategory = 'rings';
+            else if (path.includes('/pendants')) subCategory = 'pendants';
+            else subCategory = 'rings';
+        }
+        else if (path.includes('/personal-myth')) category = 'myth';
 
+        return { category, subCategory };
+    };
 
-  // Specific render for Seals
-  const renderSeals = () => (
-      <div className="animate-fade-in space-y-8">
-          
-          {/* Mobile Only: Secondary Horizontal Menu for Seals */}
-          <div className="lg:hidden flex overflow-x-auto gap-2 pb-2 custom-scrollbar -mt-4 mb-4">
-             {sealTypes.map(type => (
-                 <Link 
-                    key={type.id}
-                    to={type.path}
-                    className={`whitespace-nowrap px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all border
-                    ${specificSeal === type.id 
-                        ? 'bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white border-transparent' 
-                        : 'bg-white/50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border-white/20'
-                    }`}
-                 >
-                     {getLabel(type.id)}
-                 </Link>
-             ))}
-          </div>
+    const { category: activeCategory, subCategory } = getActiveState();
 
-          {/* Header Description for Specific Seal */}
-          <div className="text-center mb-8 bg-white/30 dark:bg-slate-900/30 p-6 rounded-3xl border border-white/20 backdrop-blur-sm">
-            <h2 className="text-2xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-fuchsia-600 dark:from-indigo-400 dark:to-fuchsia-400 mb-2">{getLabel(specificSeal || 'seal_trad')}</h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">Унікальний магічний інструмент, створений для корекції долі та підсилення природного потенціалу.</p>
-          </div>
-          
-          {/* Content Block 1 */}
-          <div className="grid md:grid-cols-2 gap-6 items-center">
-              <div className="rounded-[2rem] overflow-hidden shadow-2xl border border-white/20 group">
-                  <img src="https://picsum.photos/600/400?random=1" alt="Seal 1" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-              </div>
-              <div className="glass-panel p-6 rounded-3xl text-justify text-slate-700 dark:text-slate-300 shadow-lg">
-                  <h3 className="font-bold text-lg mb-3 text-indigo-600 dark:text-indigo-400">Сакральна геометрія</h3>
-                  <p className="leading-relaxed text-sm">Опис магічних властивостей печаток та їх вплив на долю власника. Глибоке розуміння символіки, закладеної в кожну лінію та вигин.</p>
-              </div>
-          </div>
-
-          {/* Content Block 2 */}
-          <div className="grid md:grid-cols-2 gap-6 items-center">
-              <div className="glass-panel p-6 rounded-3xl text-justify text-slate-700 dark:text-slate-300 shadow-lg order-2 md:order-1">
-                  <h3 className="font-bold text-lg mb-3 text-fuchsia-600 dark:text-fuchsia-400">Енергетичний заряд</h3>
-                  <p className="leading-relaxed text-sm">Кожна печатка виготовляється індивідуально та заряджається під конкретний запит майстром. Це не просто прикраса, а інструмент впливу.</p>
-              </div>
-              <div className="rounded-[2rem] overflow-hidden shadow-2xl border border-white/20 order-1 md:order-2 group">
-                  <img src="https://picsum.photos/600/400?random=2" alt="Seal 2" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-              </div>
-          </div>
-
-          {/* Type Specific Description & CTA */}
-          <div className="bg-gradient-to-br from-indigo-50 to-fuchsia-50 dark:from-slate-900 dark:to-indigo-950 p-6 rounded-[2.5rem] shadow-inner border border-white/50 dark:border-white/5">
-              <div className="flex flex-col md:flex-row gap-6 items-center">
-                  <div className="flex-1 text-slate-600 dark:text-slate-300 text-base leading-relaxed space-y-3">
-                      <p>Це детальний опис для обраного типу печатки ({getLabel(specificSeal || '')}).</p>
-                      <p>Тут розкривається суть цього артефакту, кому він підходить найкраще і які задачі вирішує.</p>
-                      <ul className="list-disc pl-5 space-y-1 text-sm marker:text-indigo-500">
-                          <li>Підсилення особистої волі</li>
-                          <li>Захист від негативних впливів</li>
-                          <li>Гармонізація внутрішнього стану</li>
-                      </ul>
-                  </div>
-                  <div className="w-48 h-48 rounded-full bg-white dark:bg-slate-800 shadow-2xl p-1.5 border-4 border-indigo-100 dark:border-indigo-900 flex-shrink-0 animate-pulse-slow">
-                      <img src="https://picsum.photos/300/300?random=3" alt="Seal Type" className="w-full h-full object-cover rounded-full" />
-                  </div>
-              </div>
-              
-              <div className="mt-6 text-center">
-                   <a href="https://t.me/dobrevk" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white rounded-full font-bold shadow-lg hover:shadow-indigo-500/50 hover:scale-105 transition-all uppercase tracking-wider text-sm">
-                       <Send size={16} /> ЗАМОВИТИ У МАЙСТРА
-                   </a>
-              </div>
-          </div>
-      </div>
-  );
-
-  return (
-    <div className="min-h-screen pt-24 pb-12 px-2 md:px-4 w-full mx-auto">
-        <h1 className="text-3xl md:text-5xl font-serif font-bold text-center mb-10 text-slate-800 dark:text-white tracking-widest uppercase">
-            {t('menu_workshop')}
-        </h1>
-        
-        {/* Adjusted Grid: Fixed 240px Sidebar + 1fr Content */}
-        <div className="grid lg:grid-cols-[240px_1fr] gap-8">
-            {/* Sidebar Menu */}
-            <div className="lg:sticky lg:top-28 lg:h-fit z-40">
-                {/* Mobile: Narrow Horizontal Scroll */}
-                {/* Desktop: Vertical Stack */}
-                <div className="flex lg:flex-col overflow-x-auto lg:overflow-visible gap-2 lg:gap-3 pb-3 lg:pb-0 mb-4 lg:mb-0 bg-white/60 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none rounded-2xl lg:rounded-none p-2 lg:p-0 border border-white/40 lg:border-none shadow-md lg:shadow-none custom-scrollbar">
-                    {categories.map(cat => (
-                        <div key={cat.id} className="flex-shrink-0">
-                            <Link 
-                                to={cat.path} 
-                                className={`block w-full text-left px-4 py-2 lg:px-5 lg:py-3 rounded-xl lg:rounded-2xl font-bold text-xs tracking-wide transition-all duration-300 ease-in-out uppercase flex justify-between items-center group whitespace-nowrap
-                                ${(activeCategory as string) === cat.id 
-                                    ? 'bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white shadow-md lg:shadow-lg shadow-indigo-500/30' 
-                                    : 'bg-white/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400'}
-                                `}
-                            >
-                                <span className="group-hover:tracking-wider transition-all duration-300">{getLabel(cat.label)}</span>
-                                {activeCategory === cat.id && <ChevronRight size={14} className="hidden lg:block" />}
-                            </Link>
-
-                            {/* Desktop Only: Nested Seals Menu */}
-                            {cat.id === 'seals' && activeCategory === 'seals' && (
-                                <div className="hidden lg:block ml-4 mt-2 space-y-1 border-l-2 border-indigo-200 dark:border-slate-700 pl-3 animate-fade-in">
-                                    {sealTypes.map(type => (
-                                        <Link 
-                                            key={type.id}
-                                            to={type.path} 
-                                            className={`block py-1.5 text-[10px] font-bold uppercase tracking-wider transition-colors
-                                            ${specificSeal === type.id 
-                                                ? 'text-fuchsia-600 dark:text-fuchsia-400' 
-                                                : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}
-                                            `}
-                                        >
-                                            {getLabel(type.id)}
-                                        </Link>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* Content Area */}
-            <div className="min-w-0">
-                {activeCategory === 'myth' ? (
-                    <PersonalMyth />
-                ) : activeCategory === 'seals' ? (
-                    renderSeals()
-                ) : (
-                    <div className="grid md:grid-cols-3 gap-6 animate-fade-in">
-                        {filteredProducts.length > 0 ? (
-                            filteredProducts.map(product => (
-                                <div key={product.id} className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden group hover:-translate-y-2 transition-transform duration-500">
-                                    <div className="h-48 overflow-hidden relative">
-                                        <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                                        <div className="absolute inset-0 bg-indigo-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
-                                            <button className="px-5 py-2 bg-white text-indigo-900 font-bold rounded-full text-[10px] uppercase tracking-wide shadow-xl transform scale-90 group-hover:scale-100 transition-transform">Переглянути</button>
-                                        </div>
-                                    </div>
-                                    <div className="p-5">
-                                        <h3 className="font-serif font-bold text-base mb-1 text-slate-800 dark:text-slate-100">{product.name}</h3>
-                                        <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-3 line-clamp-2 leading-relaxed">{product.description}</p>
-                                        <div className="flex justify-between items-center pt-3 border-t border-slate-100 dark:border-slate-800">
-                                            <span className="font-bold text-fuchsia-600 dark:text-fuchsia-400 text-base">{product.price} грн</span>
-                                            <button className="p-2 bg-slate-50 dark:bg-slate-800 rounded-full hover:bg-gradient-to-r from-indigo-500 to-fuchsia-500 hover:text-white transition-all shadow-sm hover:shadow-lg">
-                                                <ShoppingBag size={16} />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
-                        ) : (
-                            <div className="col-span-3 text-center py-20 text-slate-400 italic bg-white/30 dark:bg-slate-900/30 rounded-[2.5rem] border-2 border-dashed border-slate-200 dark:border-slate-800">
-                                <h3 className="text-xl font-bold mb-3">{getLabel(categories.find(c => c.id === activeCategory)?.label || '')}</h3>
-                                <p className="mb-6">Колекція оновлюється магічними артефактами.</p>
-                                {activeCategory === 'jewelry' && (
-                                    <div className="mt-4 animate-fade-in">
-                                        <p className="mb-4 font-bold text-lg text-slate-700 dark:text-slate-200">Перстні Сили (5 шт) - 16400 грн</p>
-                                        <a href="https://t.me/dobrevk" target="_blank" rel="noreferrer" className="inline-block bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white px-8 py-3 rounded-full text-sm font-bold uppercase hover:shadow-lg hover:scale-105 transition-all">Замовити</a>
-                                    </div>
-                                )}
-                            </div>
-                        )}
+    // Product Card Component - styled like Consultations
+    const ProductCard: React.FC<{ item: any; index: number; showPrice?: boolean }> = ({ item, index, showPrice = true }) => (
+        <div
+            className="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 flex flex-col overflow-hidden group hover:border-indigo-300 dark:hover:border-indigo-700 h-full relative opacity-0 animate-fade-in card-lift"
+            style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'forwards', boxShadow: '0 8px 30px -5px rgba(129, 140, 248, 0.2)' }}
+            onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 25px 60px -10px rgba(129, 140, 248, 0.4)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 8px 30px -5px rgba(129, 140, 248, 0.2)'; }}
+        >
+            {/* Image Section */}
+            <div 
+                className="aspect-square overflow-hidden relative bg-slate-100 dark:bg-slate-800 cursor-pointer"
+                onClick={() => setSelectedItem(item)}
+            >
+                <div className="absolute inset-0 bg-indigo-900/10 group-hover:bg-transparent transition-colors z-10"></div>
+                <img loading="lazy" src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                {item.zodiac && (
+                    <div className="absolute top-3 right-3 w-10 h-10 rounded-full bg-gradient-to-br from-amber-200 to-amber-600 flex items-center justify-center text-amber-900 font-bold text-xl shadow-lg z-20">
+                        {item.zodiac}
+                    </div>
+                )}
+                {item.season && (
+                    <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/90 dark:bg-slate-800/90 text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 shadow-lg z-20">
+                        {item.season}
                     </div>
                 )}
             </div>
+
+            {/* Card Content */}
+            <div className="p-3 flex-1 flex flex-col items-center text-center">
+                <h3 className="text-lg font-bold font-serif mb-1 text-slate-800 dark:text-white leading-tight min-h-[2.5rem] flex items-center justify-center">{item.title}</h3>
+                
+                {showPrice && item.price && (
+                    <div className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-fuchsia-600 dark:from-indigo-400 dark:to-fuchsia-400 mb-3">
+                        {item.price}
+                    </div>
+                )}
+                
+                <div className="mt-auto w-full">
+                    <button
+                        onClick={() => setSelectedItem(item)}
+                        className="w-full py-2.5 rounded-xl font-bold uppercase text-[10px] tracking-widest transition-all bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-fuchsia-600 hover:text-white dark:hover:text-white shadow-lg hover:shadow-indigo-500/30"
+                    >
+                        ДЕТАЛЬНІШЕ
+                    </button>
+                </div>
+            </div>
         </div>
-    </div>
-  );
+    );
+
+    // Modal Component - styled like Consultations
+    const Modal = () => {
+        if (!selectedItem) return null;
+        return (
+            <div
+                className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in"
+                onClick={(e) => { if (e.target === e.currentTarget) setSelectedItem(null); }}
+            >
+                <div className="bg-white dark:bg-slate-900 w-full max-w-5xl max-h-[90vh] rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row overflow-hidden border border-white/20 dark:border-slate-700 relative animate-fade-in">
+                    
+                    {/* Close Button */}
+                    <button 
+                        onClick={() => setSelectedItem(null)} 
+                        className="absolute top-4 right-4 z-50 p-2 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md rounded-full text-slate-800 dark:text-white hover:bg-red-500 hover:text-white transition-all shadow-sm"
+                    >
+                        <X size={24} />
+                    </button>
+
+                    {/* Modal Image (Left Side) */}
+                    <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group">
+                        <img loading="lazy" src={selectedItem.image} alt={selectedItem.title} className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex flex-col justify-end p-8">
+                            <h3 className="text-white font-serif text-3xl font-bold mb-3 leading-tight drop-shadow-lg">{selectedItem.title}</h3>
+                            {selectedItem.price && <p className="text-indigo-200 text-lg font-medium">{selectedItem.price}</p>}
+                            {selectedItem.zodiac && <p className="text-amber-300 text-4xl mt-2">{selectedItem.zodiac}</p>}
+                        </div>
+                    </div>
+
+                    {/* Modal Content (Right Side) */}
+                    <div className="flex-1 p-6 md:p-10 overflow-y-auto custom-scrollbar flex flex-col relative bg-white dark:bg-slate-900">
+                        {/* Mobile Header */}
+                        <div className="md:hidden mb-6">
+                            <h2 className="text-2xl font-serif font-bold text-slate-800 dark:text-white mb-2">{selectedItem.title}</h2>
+                            {selectedItem.price && <div className="text-xl font-bold text-indigo-600 dark:text-indigo-400">{selectedItem.price}</div>}
+                        </div>
+
+                        {/* Description */}
+                        <div className="text-slate-600 dark:text-slate-300 mb-8 font-medium text-base leading-relaxed">
+                            {selectedItem.description}
+                        </div>
+                        
+                        {/* Footer */}
+                        <div className="mt-auto pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center gap-6">
+                            <div className="flex-1 w-full">
+                                <p className="text-xs text-slate-400">Для замовлення зв'яжіться з майстром через Telegram.</p>
+                            </div>
+                            <a 
+                                href="https://t.me/dobrevk" 
+                                target="_blank" 
+                                rel="noreferrer"
+                                className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white font-bold rounded-xl shadow-lg hover:shadow-indigo-500/50 hover:scale-[1.02] transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-2 ring-4 ring-indigo-50 dark:ring-slate-800"
+                            >
+                                <Send size={18} /> ЗАМОВИТИ
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    // Render Jewelry - all items with section headers
+    const renderJewelry = () => (
+        <div className="animate-fade-in space-y-12">
+            {/* Rings Section */}
+            <div>
+                <h2 className="text-xl md:text-2xl font-serif font-bold text-center mb-6 text-slate-800 dark:text-white uppercase tracking-widest">
+                    Перстні сили
+                </h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-6xl mx-auto">
+                    {RINGS_DATA.map((item, i) => <ProductCard key={item.id} item={item} index={i} />)}
+                </div>
+            </div>
+
+            {/* Pendants Section */}
+            <div>
+                <h2 className="text-xl md:text-2xl font-serif font-bold text-center mb-6 text-slate-800 dark:text-white uppercase tracking-widest">
+                    Підвіска бездоганності
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+                    {PENDANTS_DATA.map((item, i) => <ProductCard key={item.id} item={item} index={i + 5} />)}
+                </div>
+            </div>
+        </div>
+    );
+
+    // Render Seals - detailed content page
+    const renderSeals = () => (
+        <div className="animate-fade-in space-y-12 max-w-5xl mx-auto">
+            {/* Section 1: Main intro with mandala */}
+            <div className="grid md:grid-cols-[280px_1fr] gap-8 items-start">
+                {/* Mandala */}
+                <div className="flex justify-center">
+                    <div className="w-56 h-56 rounded-full bg-gradient-to-br from-cyan-100 via-fuchsia-100 to-yellow-100 dark:from-cyan-900/30 dark:via-fuchsia-900/30 dark:to-yellow-900/30 p-3 shadow-xl">
+                        <img src="/mandala.png" alt="Печатка" className="w-full h-full object-contain drop-shadow-lg" />
+                    </div>
+                </div>
+                {/* Text content */}
+                <div className="space-y-4 text-slate-700 dark:text-slate-300">
+                    <p className="text-base leading-relaxed">
+                        <strong className="text-slate-900 dark:text-white">Практика печатки майстра - це традиційна практика.</strong><br/>
+                        За традицією учень має пройти навчання у майстрів 12 сил та отримати <strong className="text-indigo-600 dark:text-indigo-400">печатку кожного майстра</strong>. Учень сам стає майстром, коли поєднує всередині себе все те що отримав від учителів.
+                    </p>
+                    <p className="text-base leading-relaxed bg-cyan-50 dark:bg-cyan-900/20 p-3 rounded-xl border-l-4 border-cyan-400">
+                        Даний проект створений <strong>майстром Водолієм</strong>. Який може надавати печатку власної сили - <strong className="text-cyan-600 dark:text-cyan-400">Пустоти</strong> (асцедент у натальній карті).
+                    </p>
+                    <p className="text-base leading-relaxed">
+                        Кожен майстер вкладає <strong>власне розуміння</strong> у печатку, застосовує <strong>власне мистецтво</strong> та звертається до бездоганних сил, щоб відтиснути печатку власної сили на іншій людині.<br/>
+                        <strong>Майстер може надати силу та сконфігурувати її у печатці.</strong> Але людина має сама <strong className="text-indigo-600 dark:text-indigo-400">навчатися</strong> та <strong className="text-indigo-600 dark:text-indigo-400">упорядковувати містичний досвід</strong>, який отримує. У цьому і полягає власне духовне життя.
+                    </p>
+                </div>
+            </div>
+
+            {/* Section 2: Practice description with seal image */}
+            <div className="grid md:grid-cols-[1fr_300px] gap-8 items-center">
+                <div className="space-y-4">
+                    <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-2xl border border-amber-200 dark:border-amber-800">
+                        <p className="text-base leading-relaxed text-slate-700 dark:text-slate-300">
+                            Практика <strong className="text-amber-700 dark:text-amber-400">печатки майстра</strong> - це синтез матерії <strong>8ї чакри</strong> у енергетиці іншої людини.<br/>
+                            В залежності від <strong>техніки, особливостей людини</strong> та обставин - сили відкладають певний матеріал <strong className="text-amber-600 dark:text-amber-400">8ї чакри</strong> та певні властивості.
+                        </p>
+                    </div>
+                    
+                    <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <p className="text-base leading-relaxed text-slate-700 dark:text-slate-300">
+                            <strong className="text-slate-900 dark:text-white">Кожна печатка створює цілісність.</strong><br/>
+                            Деякі техніки ініціюють <strong className="text-fuchsia-600 dark:text-fuchsia-400">8 чакру</strong>, розкривають та посилюють цілісність людини.
+                        </p>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-indigo-50 to-fuchsia-50 dark:from-indigo-900/20 dark:to-fuchsia-900/20 p-4 rounded-2xl border border-indigo-200 dark:border-indigo-800">
+                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                            <strong className="text-indigo-700 dark:text-indigo-300">Спрощене мистецтво</strong> - збирає цілісність із 4х стихій.<br/>
+                            <strong className="text-fuchsia-700 dark:text-fuchsia-300">Детальне мистецтво</strong> - збирає цілісність із 12 архетипів.
+                        </p>
+                    </div>
+                </div>
+                {/* Seal image */}
+                <div className="flex justify-center">
+                    <div className="w-64 h-64 rounded-full overflow-hidden shadow-2xl border-4 border-amber-300 dark:border-amber-700">
+                        <img src="/master/shrtr.svg" alt="Печатка" className="w-full h-full object-contain bg-gradient-to-br from-amber-100 to-orange-200 dark:from-amber-900/50 dark:to-orange-900/50 p-4" />
+                    </div>
+                </div>
+            </div>
+
+            {/* Section 3: Egregors */}
+            <div className="text-center py-6">
+                <p className="text-base text-slate-600 dark:text-slate-400">
+                    Іноді печатку можна пов'язати із егрегором <strong className="text-slate-900 dark:text-white">(егрегор достатку)</strong>.<br/>
+                    Іноді через печатку можна виправити складні <strong className="text-indigo-600 dark:text-indigo-400">деформації монади</strong>.
+                </p>
+            </div>
+
+            {/* Section 4: Examination with image */}
+            <div className="grid md:grid-cols-[300px_1fr] gap-8 items-center">
+                <div className="rounded-3xl overflow-hidden shadow-xl">
+                    <img src="/master/aboutmaster2.webp" alt="Екзаменація" className="w-full h-64 object-cover" />
+                </div>
+                <div className="space-y-4">
+                    <p className="text-base text-slate-700 dark:text-slate-300">
+                        <strong className="text-slate-900 dark:text-white">Екзаменація у Школі Архетипів</strong> - це процедура відтиску печатки відповідного профілю:
+                    </p>
+                    <ul className="space-y-2 pl-4">
+                        <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                            <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
+                            <strong>Цілісна людина</strong>
+                        </li>
+                        <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                            <span className="w-2 h-2 rounded-full bg-fuchsia-500"></span>
+                            <strong>Герой, суспільний діяч</strong>
+                        </li>
+                        <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <strong>Маг стихії</strong>
+                        </li>
+                        <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                            <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                            <strong>Майстер сили</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            {/* Section 5: Types of seals */}
+            <div>
+                <h2 className="text-2xl md:text-3xl font-serif font-bold text-center mb-8 text-slate-800 dark:text-white uppercase tracking-widest">
+                    Види печатки
+                </h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                    {SEALS_DATA.map((item, i) => <ProductCard key={item.id} item={item} index={i} />)}
+                </div>
+            </div>
+
+            {/* Section 6: Traditional Seal - Seal on Organ */}
+            <div className="space-y-6 pt-8 border-t border-slate-200 dark:border-slate-700">
+                <div className="space-y-4">
+                    <p className="text-base text-slate-700 dark:text-slate-300">
+                        <strong className="text-slate-900 dark:text-white">Традиційна печатка на орган</strong> - це збір цілісності органу через проекцію 12х сил на цей орган організму.
+                    </p>
+                    <p className="text-base text-slate-700 dark:text-slate-300">
+                        Кожен прошарок є прояв <strong>зодіакальної якісті</strong>.<br/>
+                        Кожен прошарок <strong>посилюється астрологічною силою</strong>. Вона наповнює зодіакальну якість.
+                    </p>
+                    <p className="text-base text-slate-700 dark:text-slate-300 bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-xl border-l-4 border-emerald-400">
+                        <strong>Кожні 3 прошарка</strong> виникає сутність що схожа на <strong className="text-emerald-600 dark:text-emerald-400">змію або дракона</strong>, яка втілює розум стихії.
+                    </p>
+                    <p className="text-base text-slate-700 dark:text-slate-300 bg-rose-50 dark:bg-rose-900/20 p-3 rounded-xl border-l-4 border-rose-400">
+                        <strong>Після збірки 12 прошарків у органі виникає сутність Змієносця. Як вікно у потойбіччя.</strong><br/>
+                        <span className="text-sm text-slate-500 dark:text-slate-400">(сутність Змієносця традиційно це символ Георгія Змієборця)</span>
+                    </p>
+                </div>
+
+                <p className="text-base text-slate-700 dark:text-slate-300 font-medium">
+                    Всі ці сили використовуються для відновлення цілісної гармонії обраного органу.
+                </p>
+
+                {/* Vitruvian Man with organ seals */}
+                <div className="grid md:grid-cols-[350px_1fr] gap-6 items-start">
+                    {/* Image */}
+                    <div className="rounded-2xl overflow-hidden shadow-xl">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Da_Vinci_Vitruve_Luc_Viatour.jpg/800px-Da_Vinci_Vitruve_Luc_Viatour.jpg" alt="Вітрувіанська людина" className="w-full object-cover" />
+                    </div>
+
+                    {/* Organ seals list */}
+                    <div className="space-y-3">
+                        {/* Group 1 - Earth */}
+                        <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-2xl border border-emerald-200 dark:border-emerald-800">
+                            <p className="text-sm text-slate-700 dark:text-slate-300">
+                                Печатка <strong className="text-emerald-700 dark:text-emerald-400">Скорпіона</strong> - Хребет.<br/>
+                                Печатка <strong className="text-emerald-700 dark:text-emerald-400">Тельця</strong> - Тазові кістки та ноги.<br/>
+                                Печатка <strong className="text-emerald-700 dark:text-emerald-400">Діви</strong> - сечостатева система.
+                            </p>
+                        </div>
+
+                        {/* Group 2 - Fire */}
+                        <div className="bg-rose-50 dark:bg-rose-900/20 p-4 rounded-2xl border border-rose-200 dark:border-rose-800">
+                            <p className="text-sm text-slate-700 dark:text-slate-300">
+                                Печатка <strong className="text-rose-700 dark:text-rose-400">Овна</strong> - Кишечник.<br/>
+                                Печатка <strong className="text-rose-700 dark:text-rose-400">Козерога</strong> - органи травлення та сонячне сплетіння.<br/>
+                                Печатка <strong className="text-rose-700 dark:text-rose-400">Близнюків</strong> - грудна клітина, серце та легені.
+                            </p>
+                        </div>
+
+                        {/* Group 3 - Air */}
+                        <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-2xl border border-amber-200 dark:border-amber-800">
+                            <p className="text-sm text-slate-700 dark:text-slate-300">
+                                Печатка <strong className="text-amber-700 dark:text-amber-400">Стрільця</strong> - органи шиї, трахея та щитова залоза.<br/>
+                                Печатка <strong className="text-amber-700 dark:text-amber-400">Лева</strong> - нижня щелепа, ротова порожнина та язик.<br/>
+                                Печатка <strong className="text-amber-700 dark:text-amber-400">Риб</strong> - кістки черепу.
+                            </p>
+                        </div>
+
+                        {/* Group 4 - Water */}
+                        <div className="bg-gradient-to-r from-fuchsia-50 to-violet-50 dark:from-fuchsia-900/20 dark:to-violet-900/20 p-4 rounded-2xl border border-fuchsia-200 dark:border-fuchsia-800">
+                            <p className="text-sm text-slate-700 dark:text-slate-300">
+                                Печатка <strong className="text-fuchsia-700 dark:text-fuchsia-400">Водолія</strong> - великі півкулі мозку<br/>
+                                Печатка <strong className="text-fuchsia-700 dark:text-fuchsia-400">Терезів</strong> - таламус та нейромережі мозку<br/>
+                                Печатка <strong className="text-fuchsia-700 dark:text-fuchsia-400">Рака</strong> - Зона моста, що поєднує головний та спинний мозок.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Section 7: General Seal - Загальна печатка */}
+            <div className="space-y-6 pt-8 border-t border-slate-200 dark:border-slate-700">
+                <h2 className="text-2xl md:text-3xl font-serif font-bold text-center mb-6 text-slate-800 dark:text-white uppercase tracking-widest">
+                    Загальна печатка
+                </h2>
+
+                <div className="grid md:grid-cols-[1fr_280px] gap-8 items-start">
+                    {/* Text content */}
+                    <div className="space-y-4">
+                        <p className="text-base text-slate-700 dark:text-slate-300">
+                            <strong className="text-slate-900 dark:text-white">Є похідною від традиційної печатки майстра.</strong>
+                        </p>
+                        
+                        <div className="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-2xl border border-indigo-200 dark:border-indigo-800">
+                            <p className="text-base text-slate-700 dark:text-slate-300">
+                                <strong className="text-indigo-700 dark:text-indigo-400">Загальна печатка на 4 стихії</strong> - це скорочений збір цілісності енергетики людини.
+                            </p>
+                        </div>
+
+                        <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-2xl border border-amber-200 dark:border-amber-800">
+                            <p className="text-base text-slate-700 dark:text-slate-300">
+                                <strong className="text-amber-700 dark:text-amber-400">Заповнюються:</strong>
+                            </p>
+                            <ul className="mt-2 space-y-1 pl-4">
+                                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                                    <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                                    Навички особистих стосунків
+                                </li>
+                                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                                    <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                                    Навички суспільного життя
+                                </li>
+                            </ul>
+                        </div>
+
+                        <p className="text-base text-slate-700 dark:text-slate-300 bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-2xl border-l-4 border-emerald-400">
+                            Якщо людині вистачає особистих якостей - <strong className="text-emerald-600 dark:text-emerald-400">печатка поширюється на простір життя</strong>.
+                        </p>
+
+                        <div className="bg-gradient-to-r from-fuchsia-50 to-violet-50 dark:from-fuchsia-900/20 dark:to-violet-900/20 p-4 rounded-2xl border border-fuchsia-200 dark:border-fuchsia-800">
+                            <p className="text-base text-slate-700 dark:text-slate-300">
+                                <strong className="text-fuchsia-700 dark:text-fuchsia-400">Ця печатка має мету лікування суспільного життя людини.</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Buddha/Hotei image */}
+                    <div className="flex justify-center">
+                        <div className="w-64 h-72 rounded-3xl overflow-hidden shadow-xl border-2 border-amber-200 dark:border-amber-800">
+                            <img 
+                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Laughing_Buddha.jpg/440px-Laughing_Buddha.jpg" 
+                                alt="Хотей - Будда достатку" 
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Section 8: Ophiuchus Seal - Печатка Змієносця */}
+            <div className="space-y-6 pt-8 border-t border-slate-200 dark:border-slate-700">
+                <h2 className="text-2xl md:text-3xl font-serif font-bold text-center mb-2 text-slate-800 dark:text-white uppercase tracking-widest">
+                    Печатка Змієносця
+                </h2>
+                <p className="text-center text-sm text-slate-500 dark:text-slate-400 mb-6 uppercase tracking-wider">
+                    Є найскладнішим варіантом печатки майстра
+                </p>
+
+                <div className="bg-cyan-50 dark:bg-cyan-900/20 p-5 rounded-2xl border border-cyan-200 dark:border-cyan-800 mb-6">
+                    <p className="text-base text-slate-700 dark:text-slate-300">
+                        <strong className="text-cyan-700 dark:text-cyan-400">Печатка змієносця</strong> полягає у прямому впливі на <strong>8му чакру</strong>. Вплинути на 8му чакру можна лише <strong className="text-slate-900 dark:text-white">спрямувавши на неї бездоганні сили - астрологічні планети (алхімічні константи)</strong>.
+                    </p>
+                </div>
+
+                {/* Main content with images */}
+                <div className="grid md:grid-cols-[200px_1fr_200px] gap-6 items-start">
+                    {/* Left image - St. George */}
+                    <div className="flex flex-col items-center">
+                        <div className="w-48 h-56 rounded-2xl overflow-hidden shadow-xl border-2 border-amber-300 dark:border-amber-700">
+                            <img 
+                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Novgorod_George.jpg/440px-Novgorod_George.jpg" 
+                                alt="Св. Георгій Змієборець" 
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 text-center">Св. Георгій Змієборець</p>
+                    </div>
+
+                    {/* Center - Practice levels */}
+                    <div className="space-y-4">
+                        <div className="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-2xl border border-indigo-200 dark:border-indigo-800">
+                            <p className="text-sm text-slate-700 dark:text-slate-300">
+                                На <strong className="text-indigo-700 dark:text-indigo-400">1 рівні практики</strong> це <strong>4 бездоганні першооснови</strong> - <span className="text-indigo-600 dark:text-indigo-400 font-semibold">Юпітер, Марс, Сатурн, Пустотність</span>.
+                            </p>
+                        </div>
+
+                        <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-2xl border border-emerald-200 dark:border-emerald-800">
+                            <p className="text-sm text-slate-700 dark:text-slate-300">
+                                На <strong className="text-emerald-700 dark:text-emerald-400">2 рівні практики</strong> це <strong>4 ключі гармонії</strong> - <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Нептун, Меркурій, Сонце, Уран</span>.
+                            </p>
+                        </div>
+
+                        <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-2xl border border-amber-200 dark:border-amber-800">
+                            <p className="text-sm text-slate-700 dark:text-slate-300">
+                                На <strong className="text-amber-700 dark:text-amber-400">3 рівні практики</strong> це <strong>4 вікна бездоганності</strong> - <span className="text-amber-600 dark:text-amber-400 font-semibold">Гея, Венера, Місяць, Плутон</span>.
+                            </p>
+                        </div>
+
+                        <div className="bg-gradient-to-r from-fuchsia-50 to-violet-50 dark:from-fuchsia-900/20 dark:to-violet-900/20 p-4 rounded-2xl border border-fuchsia-200 dark:border-fuchsia-800">
+                            <p className="text-sm text-slate-700 dark:text-slate-300">
+                                На <strong className="text-fuchsia-700 dark:text-fuchsia-400">4 рівні практики</strong> у <strong>8му чакру проектуються всі бездоганні сили</strong>, як <span className="text-fuchsia-600 dark:text-fuchsia-400 font-semibold">цілісний набір</span>.
+                            </p>
+                        </div>
+
+                        {/* Center mandala */}
+                        <div className="flex justify-center py-4">
+                            <div className="w-40 h-40 rounded-full bg-gradient-to-br from-cyan-100 via-fuchsia-100 to-amber-100 dark:from-cyan-900/30 dark:via-fuchsia-900/30 dark:to-amber-900/30 p-2 shadow-xl">
+                                <img src="/mandala.png" alt="Мандала" className="w-full h-full object-contain drop-shadow-lg animate-spin-slow" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right image - The Magician tarot */}
+                    <div className="flex flex-col items-center">
+                        <div className="w-48 h-72 rounded-2xl overflow-hidden shadow-xl border-2 border-fuchsia-300 dark:border-fuchsia-700">
+                            <img 
+                                src="https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg" 
+                                alt="The Magician - Таро" 
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 text-center">The Magician</p>
+                    </div>
+                </div>
+
+                {/* Bottom section with monument */}
+                <div className="grid md:grid-cols-[1fr_280px] gap-6 items-center mt-6">
+                    <div className="text-center md:text-right">
+                        <p className="text-lg font-serif text-slate-700 dark:text-slate-300 italic">
+                            Св. Георгій Змієборець
+                        </p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                            Україна, Львів
+                        </p>
+                    </div>
+                    <div className="flex justify-center">
+                        <div className="w-64 h-48 rounded-2xl overflow-hidden shadow-xl">
+                            <img 
+                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Пам%27ятник_Юрію_Змієборцю_у_Львові.jpg/440px-Пам%27ятник_Юрію_Змієборцю_у_Львові.jpg" 
+                                alt="Пам'ятник Юрію Змієборцю у Львові" 
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Section 9: Birthday Seal - Печатка дня народження */}
+            <div className="space-y-6 pt-8 border-t border-slate-200 dark:border-slate-700">
+                <h2 className="text-2xl md:text-3xl font-serif font-bold text-center mb-6 text-slate-800 dark:text-white uppercase tracking-widest">
+                    Печатка дня народження
+                </h2>
+
+                <div className="grid md:grid-cols-[1fr_320px] gap-8 items-start">
+                    {/* Text content */}
+                    <div className="space-y-4">
+                        <p className="text-base text-slate-700 dark:text-slate-300">
+                            На день народження людини відкривається її <strong className="text-indigo-600 dark:text-indigo-400">канал матеріалізації</strong>. <strong className="text-slate-900 dark:text-white">Астрологічні сили</strong> стають у таке положення, яке близьке до моменту <strong>народження людини</strong>.
+                        </p>
+
+                        <p className="text-base text-slate-700 dark:text-slate-300">
+                            Через канал народження людини стає доступним <strong className="text-slate-900 dark:text-white">осередок у світі духів із якого душа прийшла у матеріальну дійсність</strong>.<br/>
+                            <strong className="text-cyan-600 dark:text-cyan-400">У той самий осередок душа повернеться після смерті.</strong>
+                        </p>
+
+                        <div className="bg-cyan-50 dark:bg-cyan-900/20 p-5 rounded-2xl border-2 border-cyan-300 dark:border-cyan-700">
+                            <p className="text-base text-slate-700 dark:text-slate-300">
+                                Печатка на день народження формує <strong className="text-cyan-700 dark:text-cyan-400">цілісність якостей реінкарнуючої душі людини</strong>.
+                            </p>
+                            <p className="text-base text-slate-700 dark:text-slate-300 mt-2">
+                                Ця печатка посилює <strong className="text-slate-900 dark:text-white">зв'язок із осередком у світі духів та канал матеріалізації через який матеріалізуються усі блага та події життя</strong>.
+                            </p>
+                        </div>
+
+                        <p className="text-base text-slate-700 dark:text-slate-300">
+                            Печатка на день народження створює <strong className="text-slate-900 dark:text-white">глибокі духовні перетворення людини</strong>.
+                        </p>
+
+                        <p className="text-base text-slate-700 dark:text-slate-300">
+                            Застосування <strong className="text-indigo-600 dark:text-indigo-400">архетипів</strong> та <strong className="text-fuchsia-600 dark:text-fuchsia-400">бездоганних сил (сил астрології)</strong> переносить гармонію на матрицю душі за правилом безумовного благодіяння.
+                        </p>
+                    </div>
+
+                    {/* Image - spiritual/meditation scene */}
+                    <div className="flex justify-center">
+                        <div className="w-full max-w-xs h-64 rounded-3xl overflow-hidden shadow-xl border-2 border-indigo-200 dark:border-indigo-800">
+                            <img 
+                                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop" 
+                                alt="Духовне перетворення" 
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+
+    // Seasonal procedures data with full descriptions
+    const seasonalProcedures = [
+        {
+            id: 'winter',
+            date: '19-23 грудня',
+            title: 'ЕВОЛЮЦІЯ',
+            window: 'четверте вікно бездоганності',
+            color: 'from-cyan-100 to-cyan-200 dark:from-cyan-900/30 dark:to-cyan-800/30',
+            borderColor: 'border-cyan-300 dark:border-cyan-700',
+            textColor: 'text-cyan-700 dark:text-cyan-300',
+            position: 'top',
+            description: 'Зимове сонцестояння відкриває <strong>четверте вікно бездоганності - ЕВОЛЮЦІЯ</strong>. У цей період працює камертон який вмикає <strong>механізми еволюції</strong>. Він штовхає вас до <strong>набору нових якостей</strong>. За допомогою цього камертону ми всі дивимось у наступний рік як на <strong>простір набору нових якостей</strong>.',
+        },
+        {
+            id: 'spring',
+            date: '20-23 березня',
+            title: 'НАРОДЖЕННЯ',
+            window: 'перше вікно бездоганності',
+            color: 'from-rose-100 to-rose-200 dark:from-rose-900/30 dark:to-rose-800/30',
+            borderColor: 'border-rose-300 dark:border-rose-700',
+            textColor: 'text-rose-700 dark:text-rose-300',
+            position: 'right',
+            description: 'Весняне рівнодення відкриває <strong>перше вікно бездоганності - НАРОДЖЕННЯ</strong>. У цей період працює камертон який вмикає <strong>статеву (червону) енергію</strong> та всі Ваші <strong>генетичні програми</strong>. Він дозволяє Вам реалізувати усі свої особливі властивості та таланти. За допомогою цього камертону ми всі <strong>намагаємося утворити щось нове у своєму житті, що покращить наше життя впродовж всього року</strong>.',
+        },
+        {
+            id: 'autumn',
+            date: '20-23 вересня',
+            title: 'ПРОСВІТЛЕННЯ',
+            window: 'третє вікно бездоганності',
+            color: 'from-emerald-100 to-emerald-200 dark:from-emerald-900/30 dark:to-emerald-800/30',
+            borderColor: 'border-emerald-300 dark:border-emerald-700',
+            textColor: 'text-emerald-700 dark:text-emerald-300',
+            position: 'left',
+            description: 'Осіннє рівнодення відкриває <strong>третє вікно бездоганності - ПРОСВІТЛЕННЯ</strong>. У цей період працює камертон який вмикає <strong>розум</strong> та всі Ваші <strong>програми підсвідомості</strong>. Він відчищає програми поведінки та світобачення через які ви взаємодієте із об\'єктивною дійсністю. <strong>За допомогою цього камертону ми збільшуємо прибуток у житті та утворення життєвої сили, що потрібна для повсякденних справ</strong>.',
+            note: 'Особливість нашої біосфери вимагає додаткових зусиль для синхронізації із цим камертоном. Тому більшість людей не встигають самостійно синхронізуватись із цим вікном бездоганності. У цей період потрібно більше зусиль майстра на те щоб поєднати Вас із камертоном 3го вікна бездоганності.',
+        },
+        {
+            id: 'summer',
+            date: '19-23 червня',
+            title: 'ПРОБУДЖЕННЯ',
+            window: 'друге вікно бездоганності',
+            color: 'from-amber-100 to-amber-200 dark:from-amber-900/30 dark:to-amber-800/30',
+            borderColor: 'border-amber-300 dark:border-amber-700',
+            textColor: 'text-amber-700 dark:text-amber-300',
+            position: 'bottom',
+            description: 'Літнє сонцестояння відкриває <strong>друге вікно бездоганності - ПРОБУДЖЕННЯ</strong>. У цей період працює камертон який вмикає <strong>почуття та збільшує глибину ваших взаємодій у суспільстві</strong>. Він збільшує вашу вагу та вплив у суспільстві завдяки вагомості почуттів які є навколо вас та у ваших справах. <strong>За допомогою цього камертону ми збільшуємо добробут у своєму житті що дозволяє нам знайти нові сенси життя (пробудитись та сформувати нові цілі)</strong>.',
+        },
+    ];
+
+    // Render Procedures - elegant seasonal layout with mandala center
+    const renderProcedures = () => (
+        <div className="animate-fade-in">
+            {/* Desktop Layout - Cross pattern with mandala center */}
+            <div className="hidden lg:block relative max-w-6xl mx-auto" style={{ minHeight: '800px' }}>
+                {/* Center Mandala */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 z-20">
+                    <div className="w-full h-full rounded-full snake-border-round p-2 shadow-2xl">
+                        <img src="/mandala.png" alt="Mandala" className="w-full h-full object-contain animate-spin-slow drop-shadow-xl" />
+                    </div>
+                </div>
+
+                {/* Top - Winter (Cyan) */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[420px] opacity-0 animate-fade-in" style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}>
+                    <div className={`bg-gradient-to-br ${seasonalProcedures[0].color} rounded-3xl p-6 border-2 ${seasonalProcedures[0].borderColor} shadow-lg`}>
+                        <div className={`text-center font-bold text-sm mb-3 ${seasonalProcedures[0].textColor}`}>{seasonalProcedures[0].date}</div>
+                        <div className="text-slate-700 dark:text-slate-200 text-sm leading-relaxed text-justify" dangerouslySetInnerHTML={{ __html: seasonalProcedures[0].description }} />
+                    </div>
+                    {/* Connector line */}
+                    <div className="w-0.5 h-16 bg-gradient-to-b from-cyan-300 to-transparent mx-auto"></div>
+                </div>
+
+                {/* Right - Spring (Rose) */}
+                <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[380px] opacity-0 animate-fade-in" style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}>
+                    <div className="flex items-center">
+                        <div className="w-16 h-0.5 bg-gradient-to-r from-transparent to-rose-300"></div>
+                        <div className={`bg-gradient-to-br ${seasonalProcedures[1].color} rounded-3xl p-6 border-2 ${seasonalProcedures[1].borderColor} shadow-lg flex-1`}>
+                            <div className={`text-center font-bold text-sm mb-3 ${seasonalProcedures[1].textColor}`}>{seasonalProcedures[1].date}</div>
+                            <div className="text-slate-700 dark:text-slate-200 text-sm leading-relaxed text-justify" dangerouslySetInnerHTML={{ __html: seasonalProcedures[1].description }} />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Left - Autumn (Emerald) */}
+                <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[380px] opacity-0 animate-fade-in" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
+                    <div className="flex items-center">
+                        <div className={`bg-gradient-to-br ${seasonalProcedures[2].color} rounded-3xl p-6 border-2 ${seasonalProcedures[2].borderColor} shadow-lg flex-1`}>
+                            <div className={`text-center font-bold text-sm mb-3 ${seasonalProcedures[2].textColor}`}>{seasonalProcedures[2].date}</div>
+                            <div className="text-slate-700 dark:text-slate-200 text-sm leading-relaxed text-justify" dangerouslySetInnerHTML={{ __html: seasonalProcedures[2].description }} />
+                            {seasonalProcedures[2].note && (
+                                <div className="mt-4 pt-4 border-t border-emerald-300/50 dark:border-emerald-600/50">
+                                    <p className="text-xs text-slate-600 dark:text-slate-400 italic">{seasonalProcedures[2].note}</p>
+                                </div>
+                            )}
+                        </div>
+                        <div className="w-16 h-0.5 bg-gradient-to-l from-transparent to-emerald-300"></div>
+                    </div>
+                </div>
+
+                {/* Bottom - Summer (Amber) */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[420px] opacity-0 animate-fade-in" style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}>
+                    {/* Connector line */}
+                    <div className="w-0.5 h-16 bg-gradient-to-t from-amber-300 to-transparent mx-auto"></div>
+                    <div className={`bg-gradient-to-br ${seasonalProcedures[3].color} rounded-3xl p-6 border-2 ${seasonalProcedures[3].borderColor} shadow-lg`}>
+                        <div className={`text-center font-bold text-sm mb-3 ${seasonalProcedures[3].textColor}`}>{seasonalProcedures[3].date}</div>
+                        <div className="text-slate-700 dark:text-slate-200 text-sm leading-relaxed text-justify" dangerouslySetInnerHTML={{ __html: seasonalProcedures[3].description }} />
+                    </div>
+                </div>
+            </div>
+
+            {/* Mobile/Tablet Layout - Vertical stack */}
+            <div className="lg:hidden space-y-6 max-w-lg mx-auto">
+                {/* Mandala */}
+                <div className="flex justify-center mb-8">
+                    <div className="w-32 h-32 rounded-full snake-border-round p-2 shadow-xl">
+                        <img src="/mandala.png" alt="Mandala" className="w-full h-full object-contain animate-spin-slow" />
+                    </div>
+                </div>
+
+                {seasonalProcedures.map((proc, i) => (
+                    <div 
+                        key={proc.id}
+                        className={`bg-gradient-to-br ${proc.color} rounded-3xl p-6 border-2 ${proc.borderColor} shadow-lg opacity-0 animate-fade-in`}
+                        style={{ animationDelay: `${i * 150}ms`, animationFillMode: 'forwards' }}
+                    >
+                        <div className={`text-center font-bold text-sm mb-3 ${proc.textColor}`}>{proc.date}</div>
+                        <div className="text-slate-700 dark:text-slate-200 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: proc.description }} />
+                        {proc.note && (
+                            <div className="mt-4 pt-4 border-t border-current/20">
+                                <p className="text-xs text-slate-600 dark:text-slate-400 italic">{proc.note}</p>
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+
+    // Render Attributes (1 horizontal card with mandala)
+    const renderAttributes = () => (
+        <div className="animate-fade-in">
+            <div className="max-w-4xl mx-auto">
+                <div
+                    className="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 overflow-hidden group hover:border-indigo-300 dark:hover:border-indigo-700 card-lift card-reveal flex flex-col md:flex-row"
+                    style={{ boxShadow: '0 8px 30px -5px rgba(129, 140, 248, 0.2)' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 25px 60px -10px rgba(129, 140, 248, 0.4)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 8px 30px -5px rgba(129, 140, 248, 0.2)'; }}
+                >
+                    {/* Mandala Image - Left side */}
+                    <div className="w-full md:w-1/3 aspect-square md:aspect-auto overflow-hidden relative bg-gradient-to-br from-indigo-50 to-fuchsia-50 dark:from-slate-800 dark:to-indigo-950 flex items-center justify-center p-8">
+                        <img src="/mandala.png" alt="Мандала" className="w-full h-full object-contain drop-shadow-2xl animate-spin-slow max-w-[200px]" />
+                    </div>
+                    {/* Content - Right side */}
+                    <div className="flex-1 p-6 md:p-8 flex flex-col justify-center">
+                        <h3 className="text-2xl md:text-3xl font-bold font-serif mb-3 text-slate-800 dark:text-white">Мандала Архетипів</h3>
+                        <p className="text-slate-600 dark:text-slate-400 text-base mb-4 leading-relaxed">
+                            Сакральний символ для медитації та духовної практики. Мандала допомагає зосередитись на внутрішньому світі та гармонізувати енергетичні потоки.
+                        </p>
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                            <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-fuchsia-600">2000 грн</div>
+                            <a href="https://t.me/dobrevk" target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white rounded-full font-bold shadow-lg hover:shadow-indigo-500/50 hover:scale-105 transition-all uppercase tracking-wider text-sm">
+                                <Send size={16} /> ЗАМОВИТИ
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+
+    // Render Coins (12 cards)
+    const renderCoins = () => (
+        <div className="animate-fade-in space-y-10">
+            <p className="text-center text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                12 унікальних монет, кожна з яких несе енергію свого знаку зодіаку.
+            </p>
+
+            {/* Zodiac Circle Animation */}
+            <div className="relative flex items-center justify-center py-8">
+                <div className="relative w-[280px] h-[280px] md:w-[400px] md:h-[400px]">
+                    <div className="absolute inset-0 animate-coins-intro" style={{ transformOrigin: 'center center' }}>
+                        {COINS_DATA.map((coin, i) => {
+                            const angle = i * 30;
+                            const radius = 42;
+                            const angleRad = (angle - 90) * (Math.PI / 180);
+                            const x = 50 + radius * Math.cos(angleRad);
+                            const y = 50 + radius * Math.sin(angleRad);
+                            return (
+                                <div
+                                    key={coin.id}
+                                    className="absolute w-8 h-8 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-amber-200 via-amber-400 to-amber-600 shadow-lg flex items-center justify-center text-amber-900 font-bold text-sm md:text-xl border-2 border-amber-300 cursor-pointer hover:scale-125 transition-transform"
+                                    style={{ left: `${x}%`, top: `${y}%`, transform: 'translate(-50%, -50%)', boxShadow: '0 4px 15px rgba(217, 119, 6, 0.4)' }}
+                                    onClick={() => setSelectedItem(coin)}
+                                >
+                                    {coin.zodiac}
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50%] h-[50%] animate-mandala-intro">
+                        <img loading="lazy" src="/master/shrtr.svg" alt="Zodiac Wheel" className="w-full h-full object-contain drop-shadow-2xl" />
+                    </div>
+                </div>
+            </div>
+
+            {/* Cards Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
+                {COINS_DATA.map((item, i) => <ProductCard key={item.id} item={item} index={i} />)}
+            </div>
+        </div>
+    );
+
+    // Landing page content - full width, no sidebar
+    const renderLanding = () => (
+        <div className="animate-fade-in max-w-5xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-10">
+                <h1 className="text-2xl md:text-4xl font-serif font-bold mb-4">
+                    <span className="text-indigo-600 dark:text-indigo-400">МАЙСТЕРНЯ</span>
+                    <span className="text-slate-400 mx-3">|</span>
+                    <span className="text-slate-700 dark:text-slate-300">МАГІЧНІ АРТЕФАКТИ</span>
+                </h1>
+                <p className="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
+                    Унікальні предмети сили, створені майстром для вашого духовного розвитку та захисту.
+                </p>
+            </div>
+
+            {/* Categories Grid - 3x2 */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {categories.map((cat, i) => (
+                    <Link
+                        key={cat.id}
+                        to={cat.path}
+                        className="p-8 bg-white dark:bg-slate-800 rounded-3xl shadow-lg hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-1 text-center group card-reveal"
+                        style={{ animationDelay: `${i * 80}ms`, boxShadow: '0 4px 20px -5px rgba(129, 140, 248, 0.15)' }}
+                    >
+                        <div className="w-20 h-20 mx-auto mb-5 rounded-full bg-gradient-to-br from-indigo-50 to-fuchsia-50 dark:from-indigo-900/30 dark:to-fuchsia-900/30 flex items-center justify-center border border-indigo-100 dark:border-indigo-800">
+                            <Sparkles className="w-9 h-9 text-indigo-500 dark:text-indigo-400" />
+                        </div>
+                        <h3 className="font-bold text-slate-800 dark:text-white uppercase tracking-widest text-xs group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                            {getLabel(cat.label)}
+                        </h3>
+                    </Link>
+                ))}
+            </div>
+        </div>
+    );
+
+    // Get dynamic page title
+    const getPageTitle = () => {
+        if (!activeCategory) return t('menu_workshop');
+        if (activeCategory === 'coins') return 'INFINITY COINS';
+        if (activeCategory === 'procedures') return 'СЕЗОННІ ПРОЦЕДУРИ';
+        if (activeCategory === 'seals') return 'ПЕЧАТКИ МАЙСТРА';
+        if (activeCategory === 'attributes') return 'АТРИБУТИКА';
+        if (activeCategory === 'jewelry') return 'ЮВЕЛІРНІ ПРИКРАСИ';
+        if (activeCategory === 'myth') return 'ПЕРСОНАЛЬНИЙ МІФ';
+        return getLabel(categories.find(c => c.id === activeCategory)?.label || 'menu_workshop');
+    };
+
+    // Landing page - full width without sidebar
+    if (!activeCategory) {
+        return (
+            <div className="min-h-screen pt-24 pb-12 px-4 md:px-8 w-full mx-auto">
+                {renderLanding()}
+                <Modal />
+            </div>
+        );
+    }
+
+    // Category pages - with horizontal tabs and title
+    return (
+        <div className="min-h-screen pt-24 pb-12 px-2 md:px-4 w-full mx-auto">
+            <h1 className="text-3xl md:text-5xl font-serif font-bold text-center mb-8 text-slate-800 dark:text-white tracking-widest uppercase">
+                {getPageTitle()}
+            </h1>
+
+            {/* Horizontal Navigation Tabs with underline animation - single row */}
+            <div className="flex justify-center gap-8 md:gap-12 mb-10 overflow-x-auto pb-2">
+                {categories.map(cat => (
+                    <Link
+                        key={cat.id}
+                        to={cat.path}
+                        className="group relative flex items-center py-2 flex-shrink-0"
+                    >
+                        <span className={`text-xs font-bold uppercase tracking-widest transition-colors duration-300 whitespace-nowrap
+                            ${activeCategory === cat.id 
+                                ? 'text-indigo-600 dark:text-indigo-400' 
+                                : 'text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-white'}`}
+                        >
+                            {getLabel(cat.label)}
+                        </span>
+                        {/* Animated underline */}
+                        <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-indigo-500 to-fuchsia-500 transition-all duration-300 ease-out
+                            ${activeCategory === cat.id ? 'w-full' : 'w-0 group-hover:w-full'}`}
+                        />
+                    </Link>
+                ))}
+            </div>
+
+            {/* Content */}
+            <div className="max-w-6xl mx-auto">
+                {activeCategory === 'coins' && renderCoins()}
+                {activeCategory === 'procedures' && renderProcedures()}
+                {activeCategory === 'seals' && renderSeals()}
+                {activeCategory === 'attributes' && renderAttributes()}
+                {activeCategory === 'jewelry' && renderJewelry()}
+                {activeCategory === 'myth' && <PersonalMyth />}
+            </div>
+
+            <Modal />
+        </div>
+    );
 };

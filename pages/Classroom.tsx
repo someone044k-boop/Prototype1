@@ -128,11 +128,11 @@ export const Classroom: React.FC = () => {
                     <div className="flex flex-col gap-3">
                         <Link 
                             to="/training" 
-                            className="w-full py-3 bg-gold-500 text-white font-bold rounded hover:bg-gold-600 transition-colors uppercase tracking-wider"
+                            className="w-full py-3 bg-gradient-to-r from-indigo-500 to-fuchsia-600 text-white font-bold rounded-xl hover:shadow-lg transition-all uppercase tracking-wider"
                         >
                             {t('btn_buy_course')}
                         </Link>
-                        <Link to="/" className="text-sm text-slate-500 hover:text-gold-500 underline">
+                        <Link to="/" className="text-sm text-slate-500 hover:text-indigo-500 underline">
                             {t('back')}
                         </Link>
                     </div>

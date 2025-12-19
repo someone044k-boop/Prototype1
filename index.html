@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dobrev Opus Zodiac | Школа Архетипів</title>
+    <link rel="icon" href="/favicon.ico" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -13,6 +14,7 @@
             fontFamily: {
               sans: ['Montserrat', 'sans-serif'],
               serif: ['Cinzel', 'serif'],
+              mono: ['Montserrat', 'monospace'],
             },
             colors: {
               // Replaced Gold with Magical Violet/Indigo palette
@@ -35,24 +37,100 @@
               }
             },
             animation: {
-              'spin-once': 'spin 1s ease-out forwards',
+              'spin-once': 'spinOnce 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards',
+              'flash-spin': 'flashSpin 0.8s ease-out forwards',
+              'spin-slow': 'spin 30s linear infinite',
               'pulse-slow': 'pulse 4s infinite',
               'fade-in': 'fadeIn 0.6s ease-out',
+              'drop-in': 'dropIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
               'float': 'float 6s ease-in-out infinite',
-              'breathe': 'breathe 3s ease-in-out infinite',
+              'breathe': 'mandala-breathe 4s ease-in-out infinite',
+              'heartbeat': 'heartbeat 2.3s ease-in-out infinite',
+              'snake-border': 'snake-border 3s ease-in-out infinite',
+              'curtain-reveal': 'curtainReveal 1.2s ease-out forwards',
+              'mandala-intro': 'mandalaIntro 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards',
+              'coins-intro': 'coinsIntro 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards',
             },
             keyframes: {
+              spinOnce: {
+                '0%': { transform: 'rotate(0deg)' },
+                '100%': { transform: 'rotate(360deg)' },
+              },
+              mandalaIntro: {
+                '0%': { transform: 'scale(0.3) rotate(0deg)', opacity: '0' },
+                '100%': { transform: 'scale(1) rotate(360deg)', opacity: '1' },
+              },
+              coinsIntro: {
+                '0%': { transform: 'rotate(0deg)', opacity: '0' },
+                '100%': { transform: 'rotate(-30deg)', opacity: '1' },
+              },
+              dropIn: {
+                '0%': { 
+                  opacity: '0',
+                  transform: 'translateY(-30px) scale(0.9)'
+                },
+                '100%': { 
+                  opacity: '1',
+                  transform: 'translateY(0) scale(1)'
+                },
+              },
+              flashSpin: {
+                '0%': { 
+                  transform: 'scale(0) rotate(0deg)', 
+                  opacity: '0',
+                  filter: 'brightness(3) blur(10px)'
+                },
+                '30%': { 
+                  transform: 'scale(1.2) rotate(180deg)', 
+                  opacity: '1',
+                  filter: 'brightness(2) blur(0px)'
+                },
+                '100%': { 
+                  transform: 'scale(1) rotate(360deg)', 
+                  opacity: '1',
+                  filter: 'brightness(1) blur(0px)'
+                },
+              },
               fadeIn: {
-                '0%': { opacity: '0', transform: 'translateY(10px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
               },
               float: {
                 '0%, 100%': { transform: 'translateY(0)' },
                 '50%': { transform: 'translateY(-10px)' },
               },
-              breathe: {
-                '0%, 60%, 100%': { transform: 'scale(1.15)', filter: 'brightness(1.1)' },
-                '30%': { transform: 'scale(1)', filter: 'brightness(1)' },
+              'mandala-breathe': {
+                '0%, 100%': { transform: 'scale(1)' },
+                '50%': { transform: 'scale(1.08)' },
+              },
+              'heartbeat': {
+                '0%': { transform: 'scale(1)' },
+                '15%': { transform: 'scale(1.08)' },
+                '30%': { transform: 'scale(1)' },
+                '45%': { transform: 'scale(1.08)' },
+                '57%': { transform: 'scale(1)' },
+                '100%': { transform: 'scale(1)' },
+              },
+              'curtainReveal': {
+                '0%': { 
+                  clipPath: 'inset(0 50% 0 50%)',
+                  opacity: '0'
+                },
+                '100%': { 
+                  clipPath: 'inset(0 0% 0 0%)',
+                  opacity: '1'
+                },
+              },
+              'snake-border': {
+                '0%': { 
+                  backgroundPosition: '0% 50%'
+                },
+                '50%': { 
+                  backgroundPosition: '100% 50%'
+                },
+                '100%': { 
+                  backgroundPosition: '0% 50%'
+                }
               }
             },
             borderRadius: {
@@ -63,14 +141,79 @@
         },
       }
     </script>
+    <!-- Preload fonts for faster loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap"></noscript>
+    
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap');
-      
-      body {
-        font-family: 'Montserrat', sans-serif;
+      /* Global Montserrat font */
+      *, *::before, *::after {
+        font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       }
-      h1, h2, h3, h4, h5, h6, .font-serif {
-        font-family: 'Cinzel', serif;
+      body, h1, h2, h3, h4, h5, h6, p, span, div, a, button, input, textarea, select, label {
+        font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      }
+      /* Cinzel only for .font-serif class */
+      .font-serif {
+        font-family: 'Cinzel', Georgia, serif !important;
+      }
+      
+      /* Prose uses Montserrat */
+      .prose, .prose * {
+        font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      }
+      .prose h1, .prose h2, .prose h3, .prose h4 {
+        font-family: 'Cinzel', Georgia, serif;
+      }
+      
+      /* Global smooth transitions */
+      *, *::before, *::after {
+        transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 200ms;
+      }
+      
+      /* Card lift animation - works with fade-in */
+      .card-lift {
+        transform: translateY(0);
+        transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+      }
+      .card-lift:hover {
+        transform: translateY(-8px);
+      }
+      
+      /* Staggered card reveal animation */
+      @keyframes cardReveal {
+        from {
+          opacity: 0;
+          transform: translateY(20px) scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      .card-reveal {
+        opacity: 0;
+        animation: cardReveal 0.7s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+      }
+      
+      /* Smooth page transitions */
+      .page-transition {
+        animation: pageEnter 0.4s ease-out;
+      }
+      @keyframes pageEnter {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      /* Image loading optimization */
+      img {
+        content-visibility: auto;
+        will-change: transform;
+        opacity: 1;
       }
       
       /* Custom Scrollbar */
@@ -81,11 +224,16 @@
         background: transparent;
       }
       ::-webkit-scrollbar-thumb {
-        background: #a78bfa; /* magic-400 */
+        background: #a78bfa;
         border-radius: 9999px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #7c3aed; /* magic-600 */
+        background: #7c3aed;
+      }
+      
+      /* Smooth scroll */
+      html {
+        scroll-behavior: smooth;
       }
       
       /* Utilities */
@@ -99,21 +247,177 @@
         background: rgba(15, 23, 42, 0.7);
         border: 1px solid rgba(255, 255, 255, 0.05);
       }
+      
+      /* Rainbow animated border */
+      .rainbow-border {
+        position: relative;
+        background: linear-gradient(var(--bg-color, white), var(--bg-color, white)) padding-box,
+                    linear-gradient(var(--angle, 0deg), #ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0080ff, #8000ff, #ff0080, #ff0000) border-box;
+        border: 3px solid transparent;
+        animation: rainbow-rotate 3s linear infinite;
+      }
+      .dark .rainbow-border {
+        --bg-color: rgb(15, 23, 42);
+      }
+      @keyframes rainbow-rotate {
+        0% { --angle: 0deg; }
+        100% { --angle: 360deg; }
+      }
+      @property --angle {
+        syntax: '<angle>';
+        initial-value: 0deg;
+        inherits: false;
+      }
+      
+      /* Snake border animation */
+      .snake-border {
+        position: relative;
+        background: linear-gradient(var(--bg-color, white), var(--bg-color, white)) padding-box,
+                    conic-gradient(from var(--snake-angle, 0deg), 
+                      #6366f1, #8b5cf6, #d946ef, #ec4899, #f97316, 
+                      #eab308, #22c55e, #06b6d4, #3b82f6, #6366f1
+                    ) border-box;
+        border: 3px solid transparent;
+        animation: snake-rotate 3s linear infinite;
+      }
+      .dark .snake-border {
+        --bg-color: rgb(15, 23, 42);
+      }
+      @keyframes snake-rotate {
+        0% { --snake-angle: 0deg; }
+        100% { --snake-angle: 360deg; }
+      }
+      @property --snake-angle {
+        syntax: '<angle>';
+        initial-value: 0deg;
+        inherits: false;
+      }
+      
+      /* Elegant block styling */
+      .elegant-block {
+        background: linear-gradient(to bottom right, white, #eef2ff);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 25px 50px -12px rgba(129, 140, 248, 0.2);
+      }
+      .dark .elegant-block {
+        background: linear-gradient(to bottom right, rgb(15, 23, 42), rgba(49, 46, 129, 0.2));
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 25px 50px -12px rgba(129, 140, 248, 0.15);
+      }
+      
+      /* Snake border for round elements */
+      .snake-border-round {
+        position: relative;
+        background: linear-gradient(var(--bg-color, white), var(--bg-color, white)) padding-box,
+                    conic-gradient(from var(--snake-angle, 0deg), 
+                      #6366f1, #8b5cf6, #d946ef, #ec4899, #f97316, 
+                      #eab308, #22c55e, #06b6d4, #3b82f6, #6366f1
+                    ) border-box;
+        border: 4px solid transparent;
+        animation: snake-rotate 3s linear infinite;
+      }
+      .dark .snake-border-round {
+        --bg-color: rgb(15, 23, 42);
+      }
+      
+      /* Hover effects */
+      .hover-lift {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .hover-lift:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.15);
+      }
+      
+      /* Modal scroll lock - use scrollbar-gutter to prevent layout shift */
+      html {
+        scrollbar-gutter: stable;
+      }
+      body.modal-open {
+        overflow: hidden !important;
+      }
+      
+      /* GPU acceleration for animations */
+      .gpu-accelerated {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        perspective: 1000px;
+      }
+      
+      /* Prevent horizontal scroll */
+      html, body {
+        overflow-x: hidden;
+      }
+      
+      /* Center content on zoom and large screens */
+      #root {
+        max-width: 1920px;
+        margin: 0 auto;
+      }
+      
+      /* Safe area for notched devices */
+      @supports (padding: max(0px)) {
+        body {
+          padding-left: max(0px, env(safe-area-inset-left));
+          padding-right: max(0px, env(safe-area-inset-right));
+          padding-bottom: max(0px, env(safe-area-inset-bottom));
+        }
+      }
+      
+      /* Touch-friendly buttons on mobile */
+      @media (max-width: 639px) {
+        button, .btn {
+          min-height: 44px;
+        }
+      }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
-    "react-router-dom": "https://esm.sh/react-router-dom@^7.10.1",
-    "recharts": "https://esm.sh/recharts@^3.6.0",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3"
-  }
-}
-</script>
 </head>
-  <body class="bg-gradient-to-br from-indigo-50 via-purple-50 to-fuchsia-50 dark:from-slate-950 dark:via-indigo-950/30 dark:to-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-500 min-h-screen">
+  <body class="bg-gradient-to-br from-indigo-50 via-purple-50 to-fuchsia-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-500 min-h-screen">
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+    <script>
+      // Global lazy loading for images and content
+      document.addEventListener('DOMContentLoaded', () => {
+        // Lazy load images with Intersection Observer
+        const lazyImages = () => {
+          const images = document.querySelectorAll('img[loading="lazy"]');
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('loaded');
+                observer.unobserve(entry.target);
+              }
+            });
+          }, { rootMargin: '50px' });
+          images.forEach(img => observer.observe(img));
+        };
+
+        // Lazy load sections with fade-in animation
+        const lazySections = () => {
+          const sections = document.querySelectorAll('.lazy-section');
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('animate-fade-in');
+                entry.target.style.opacity = '1';
+                observer.unobserve(entry.target);
+              }
+            });
+          }, { rootMargin: '0px', threshold: 0.1 });
+          sections.forEach(section => observer.observe(section));
+        };
+
+        // Run on initial load and on route changes
+        lazyImages();
+        lazySections();
+
+        // MutationObserver for dynamic content
+        const mutationObserver = new MutationObserver(() => {
+          lazyImages();
+          lazySections();
+        });
+        mutationObserver.observe(document.getElementById('root'), { childList: true, subtree: true });
+      });
+    </script>
   </body>
 </html>

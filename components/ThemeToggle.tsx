@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
 
 export const ThemeToggle: React.FC = () => {
   const [isDark, setIsDark] = useState(false);
-  const { t } = useLanguage();
 
   useEffect(() => {
-    // Check system preference or localStorage could be added here
     if (isDark) {
       document.documentElement.classList.add('dark');
     } else {
@@ -16,33 +13,21 @@ export const ThemeToggle: React.FC = () => {
   }, [isDark]);
 
   return (
-    <button 
-      onClick={() => setIsDark(!isDark)}
-      className={`relative w-14 h-8 rounded-full transition-all duration-500 ease-out shadow-inner border flex items-center px-1
-      ${isDark 
-        ? 'bg-slate-800 border-slate-700 shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]' 
-        : 'bg-indigo-50 border-indigo-200 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)]'
-      }`}
-      aria-label={isDark ? t('theme_light') : t('theme_dark')}
-    >
-      {/* Background Icons (static) for visual depth */}
-      <div className="absolute left-2 text-indigo-400 opacity-50"><Sun size={12} /></div>
-      <div className="absolute right-2 text-slate-500 opacity-50"><Moon size={12} /></div>
-
-      {/* Sliding Knob */}
-      <div 
-        className={`relative z-10 w-6 h-6 rounded-full shadow-[0_2px_4px_rgba(0,0,0,0.2)] flex items-center justify-center transition-all duration-500 cubic-bezier(0.175, 0.885, 0.32, 1.275) transform
-        ${isDark 
-            ? 'translate-x-6 bg-white border border-slate-200' 
-            : 'translate-x-0 bg-slate-900 border border-slate-700'
-        }`}
+    <div className="relative group">
+      <button 
+        onClick={() => setIsDark(!isDark)}
+        className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-indigo-400"
+        aria-label="Toggle theme"
       >
-        {isDark ? (
-            <Moon size={12} className="text-slate-900 animate-spin-once" /> 
-        ) : (
-            <Sun size={12} className="text-white animate-spin-once" />
-        )}
+        {isDark ? <Moon size={16} /> : <Sun size={16} />}
+      </button>
+      
+      {/* Tooltip */}
+      <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-50">
+        <div className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded-lg whitespace-nowrap shadow-lg">
+          {isDark ? 'магія дня' : 'магія ночі'}
+        </div>
       </div>
-    </button>
+    </div>
   );
 };

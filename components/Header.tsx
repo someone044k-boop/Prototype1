@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, User, ChevronRight, Globe, LogIn } from 'lucide-react';
+import { Menu, X, ChevronDown, User, ChevronRight, LogIn } from 'lucide-react';
 import { MENU_STRUCTURE } from '../constants';
 import { ThemeToggle } from './ThemeToggle';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Language } from '../translations';
+import { AuthModal } from './AuthModal';
 
 export const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const [mandalaAnimated, setMandalaAnimated] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
   
   const location = useLocation();
@@ -23,6 +26,15 @@ export const Header: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Animate mandala on every page change
+  useEffect(() => {
+    setMandalaAnimated(false);
+    const timer = setTimeout(() => {
+      setMandalaAnimated(true);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
 
   // Close mobile menu when route changes
   useEffect(() => {
@@ -97,9 +109,14 @@ export const Header: React.FC = () => {
         <div className="w-full max-w-[1600px] mx-auto px-4 md:px-6 h-full flex items-center justify-between relative">
             
             {/* Logo Area */}
-            <Link to="/" className="flex items-center gap-3 z-50 group flex-shrink-0" onClick={() => setMobileOpen(false)}>
-                <div className={`transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) ${scrolled ? 'w-9 h-9 rounded-lg text-base' : 'w-11 h-11 rounded-xl text-lg'} bg-gradient-to-br from-indigo-600 to-fuchsia-600 flex items-center justify-center text-white font-serif font-bold shadow-lg shadow-indigo-500/30 group-hover:scale-110`}>
-                    D
+            <Link to="/" className="flex items-center gap-3 z-50 group flex-shrink-0" onClick={() => { setMobileOpen(false); window.scrollTo(0, 0); }}>
+                <div className={`transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) ${scrolled ? 'w-12 h-12' : 'w-14 h-14'} flex items-center justify-center group-hover:scale-110 relative`}>
+                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 via-fuchsia-500/20 to-indigo-500/20 rounded-full blur-md opacity-60 animate-pulse"></div>
+                    <img 
+                        src="/mandala.png" 
+                        alt="Dobrev Opus Zodiac" 
+                        className={`w-full h-full object-contain relative z-10 drop-shadow-lg ${mandalaAnimated ? 'animate-spin-once' : ''}`}
+                    />
                 </div>
                 {/* Visible on Tablet (md) and Desktop (lg) */}
                 <span className={`font-serif font-bold tracking-wider transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) hidden md:inline ${scrolled ? 'text-sm' : 'text-lg'}`}>
@@ -110,9 +127,9 @@ export const Header: React.FC = () => {
 
             {/* Desktop Menu - Centered & Single Line */}
             <nav className="hidden lg:flex items-center justify-center absolute left-1/2 -translate-x-1/2 top-0 h-full w-auto">
-                <div className="flex items-center justify-center gap-0 lg:gap-1 xl:gap-2 h-full px-0">
+                <div className="flex items-center justify-center gap-0 h-full px-0">
                     {MENU_STRUCTURE.map((item) => (
-                        <div key={item.label} className="relative group h-full flex items-center px-1.5 xl:px-3">
+                        <div key={item.label} className="relative group h-full flex items-center px-1 xl:px-1.5">
                         {item.subItems ? (
                             <>
                             <Link 
@@ -178,55 +195,27 @@ export const Header: React.FC = () => {
             </nav>
 
             {/* Desktop Right Actions */}
-            <div className="hidden lg:flex items-center gap-3 xl:gap-4 flex-shrink-0">
+            <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
                 
-                {/* Settings Pill (Lang + Theme) */}
-                <div className={`flex items-center rounded-full p-1.5 border transition-all duration-700 gap-2
-                    ${scrolled 
-                        ? 'bg-slate-100/50 dark:bg-slate-800/50 border-slate-200/50 dark:border-slate-700/50' 
-                        : 'bg-white/40 dark:bg-slate-900/40 border-white/40 dark:border-slate-700/40 backdrop-blur-sm'
-                    }
-                `}>
-                    {/* Language */}
-                    <div className="relative" ref={langRef}>
-                        <button 
-                            onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-white dark:hover:bg-slate-700 transition-all text-xs font-bold text-slate-900 dark:text-white uppercase"
+                {/* Language Selector - Compact */}
+                <div className="flex bg-slate-100 dark:bg-slate-800 rounded-full p-0.5" ref={langRef}>
+                    {['UA', 'EN', 'RU'].map((lang) => (
+                        <button
+                            key={lang}
+                            onClick={() => setLanguage(lang as Language)}
+                            className={`text-[10px] font-bold px-2 py-1 rounded-full transition-all ${language === lang ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                         >
-                            <Globe size={14} className="text-indigo-500" />
-                            <span>{language}</span>
-                            <ChevronDown size={10} className={`transition-transform duration-300 ${langDropdownOpen ? 'rotate-180' : ''}`}/>
+                            {lang}
                         </button>
-                        
-                        {/* Dropdown */}
-                        <div className={`absolute top-full left-0 mt-3 transition-all duration-300 origin-top-left z-50 ${langDropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
-                             <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-indigo-50 dark:border-slate-700 p-1 min-w-[100px] overflow-hidden">
-                                 {['UA', 'EN', 'RU'].map(lang => (
-                                     <button
-                                        key={lang}
-                                        onClick={() => {
-                                            setLanguage(lang as Language);
-                                            setLangDropdownOpen(false);
-                                        }}
-                                        className={`w-full text-left px-3 py-2 text-xs font-bold rounded-lg transition-colors flex items-center justify-between ${language === lang ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' : 'text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
-                                     >
-                                         {lang}
-                                         {language === lang && <div className="w-1.5 h-1.5 rounded-full bg-indigo-500"></div>}
-                                     </button>
-                                 ))}
-                             </div>
-                        </div>
-                    </div>
-
-                    <div className="w-px h-4 bg-slate-300 dark:bg-slate-600"></div>
-
-                    {/* Theme Toggle */}
-                    <ThemeToggle />
+                    ))}
                 </div>
 
+                {/* Theme Toggle */}
+                <ThemeToggle />
+
                 {/* Login Button */}
-                <Link 
-                    to="/login" 
+                <button 
+                    onClick={() => setAuthModalOpen(true)}
                     className={`flex items-center gap-2 rounded-full font-bold text-xs uppercase tracking-widest hover:shadow-lg hover:scale-105 transition-all duration-700
                         bg-slate-900 text-white dark:bg-white dark:text-slate-900
                         ${scrolled 
@@ -237,18 +226,17 @@ export const Header: React.FC = () => {
                 >
                     <LogIn size={14} strokeWidth={2.5} />
                     <span>{t('menu_login')}</span>
-                </Link>
+                </button>
             </div>
 
             {/* Mobile Controls */}
             <div className="lg:hidden flex items-center gap-3 z-50">
-                <Link 
-                    to="/login"
-                    onClick={() => setMobileOpen(false)}
+                <button 
+                    onClick={() => { setMobileOpen(false); setAuthModalOpen(true); }}
                     className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md active:scale-95 transition-transform"
                 >
                     <User size={16} />
-                </Link>
+                </button>
 
                 <button 
                     className={`p-2 rounded-xl transition-all active:scale-95 ${mobileOpen ? 'bg-white text-indigo-600 shadow-lg' : 'bg-white/50 dark:bg-slate-800/50 text-slate-800 dark:text-white backdrop-blur-md'}`} 
@@ -298,16 +286,18 @@ export const Header: React.FC = () => {
                     <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
 
                     {/* Login CTA */}
-                    <Link 
-                        to="/login" 
-                        onClick={() => setMobileOpen(false)}
+                    <button 
+                        onClick={() => { setMobileOpen(false); setAuthModalOpen(true); }}
                         className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-full uppercase tracking-wider shadow-lg active:scale-95 transition-all text-[10px]"
                     >
                         <User size={14} /> <span>{t('menu_login')}</span>
-                    </Link>
+                    </button>
                 </div>
             </div>
         </div>
+
+        {/* Auth Modal */}
+        <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
     </>
   );
 };

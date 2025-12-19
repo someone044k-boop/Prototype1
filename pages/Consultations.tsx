@@ -19,7 +19,7 @@ const CONSULTATION_TYPES: ConsultationType[] = [
         format: 'Онлайн-зустріч',
         duration: '1 год',
         price: '1000 грн',
-        image: 'https://picsum.photos/seed/consult1/600/400',
+        image: '/consultation/consalt.webp',
         description: (
             <>
                 <div className="mb-3 p-3 bg-indigo-50 dark:bg-slate-800/50 rounded-2xl border border-indigo-100 dark:border-slate-700">
@@ -79,7 +79,7 @@ const CONSULTATION_TYPES: ConsultationType[] = [
         format: 'Онлайн-зустріч',
         duration: '2 год',
         price: '2000 грн',
-        image: 'https://picsum.photos/seed/consult2/600/400',
+        image: '/consultation/langarch.webp',
         description: (
             <div className="space-y-3 text-base leading-snug">
                 <p>
@@ -123,7 +123,7 @@ const CONSULTATION_TYPES: ConsultationType[] = [
                     <p>
                         ▪️ Консультація мовою архетипів відрізняється від звичайної психології. Архетипи показують, на що можна впливати, щоб покращити вашу енергію та рівень життя.
                     </p>
-                    <p className="mt-2 font-serif font-bold text-indigo-600 dark:text-indigo-400 text-center text-lg">
+                    <p className="mt-2 font-bold text-indigo-600 dark:text-indigo-400 text-center text-lg italic">
                         Ви відчуєте себе Героєм, що розуміє свій шлях.
                     </p>
                 </div>
@@ -136,7 +136,7 @@ const CONSULTATION_TYPES: ConsultationType[] = [
         format: 'Онлайн-зустріч | Цикл сеансів',
         duration: 'Індивідуально',
         price: 'Від 4000 грн',
-        image: 'https://picsum.photos/seed/consult3/600/400',
+        image: '/consultation/karma.webp',
         description: (
             <div className="space-y-3 text-base leading-snug">
                 <p className="text-lg font-medium text-slate-800 dark:text-white">
@@ -199,28 +199,37 @@ export const Consultations: React.FC = () => {
     // Prevent body scroll when modal is open
     useEffect(() => {
         if (selectedId) {
-            document.body.style.overflow = 'hidden';
+            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+            document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
+            document.body.classList.add('modal-open');
         } else {
-            document.body.style.overflow = 'auto';
+            document.body.classList.remove('modal-open');
         }
-        return () => { document.body.style.overflow = 'auto'; }
+        return () => { 
+            document.body.classList.remove('modal-open');
+        }
     }, [selectedId]);
 
     const activeItem = CONSULTATION_TYPES.find(i => i.id === selectedId);
 
     return (
         <div className="min-h-screen pt-24 pb-10 px-2 md:px-4 w-full mx-auto">
-             <h1 className="text-3xl md:text-5xl font-serif font-bold text-center mb-10 text-slate-800 dark:text-white uppercase tracking-widest drop-shadow-sm">
-                КОНСУЛЬТАЦІЇ
-            </h1>
-
-            <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                {CONSULTATION_TYPES.map(item => (
-                    <div key={item.id} className="bg-white dark:bg-slate-900 rounded-[2rem] shadow-xl border border-slate-100 dark:border-slate-800 flex flex-col overflow-hidden group hover:-translate-y-2 transition-transform duration-500 h-full relative -top-[5px]">
+            <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto mt-2">
+                {CONSULTATION_TYPES.map((item, index) => (
+                    <div 
+                        key={item.id} 
+                        className="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 flex flex-col overflow-hidden group hover:border-indigo-300 dark:hover:border-indigo-700 h-full relative opacity-0 animate-fade-in card-lift"
+                        style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'forwards', boxShadow: '0 8px 30px -5px rgba(129, 140, 248, 0.2)' }}
+                        onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 25px 60px -10px rgba(129, 140, 248, 0.4)'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 8px 30px -5px rgba(129, 140, 248, 0.2)'; }}
+                    >
                         {/* Image Section */}
-                        <div className="aspect-square overflow-hidden relative">
+                        <div 
+                            className="aspect-square overflow-hidden relative bg-slate-100 dark:bg-slate-800 cursor-pointer"
+                            onClick={() => setSelectedId(item.id)}
+                        >
                              <div className="absolute inset-0 bg-indigo-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                             <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                             <img loading="lazy" src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                         </div>
 
                         {/* Card Content - Compact */}
@@ -274,7 +283,7 @@ export const Consultations: React.FC = () => {
 
                         {/* Modal Image (Left Side) - Adjusted width ratio */}
                         <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group">
-                            <img src={activeItem.image} alt={activeItem.title} className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
+                            <img loading="lazy" src={activeItem.image} alt={activeItem.title} className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex flex-col justify-end p-8">
                                 <h3 className="text-white font-serif text-3xl font-bold mb-3 leading-tight drop-shadow-lg">{activeItem.title}</h3>
                                 <p className="text-indigo-200 text-lg font-medium flex items-center gap-2"><CreditCard size={18}/> {activeItem.price}</p>

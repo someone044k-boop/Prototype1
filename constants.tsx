@@ -31,8 +31,8 @@ export const MENU_STRUCTURE: MenuItem[] = [
     path: '/master',
     subItems: [
       { label: 'sub_about', path: '/master/about' },
-      { label: 'sub_ask', path: '/master/ask' },
       { label: 'sub_lessons', path: '/master/lessons' },
+      { label: 'sub_ask', path: '/master/ask' },
     ],
   },
   { label: 'menu_consultations', path: '/consultations' },
@@ -111,7 +111,9 @@ export const COURSES: Course[] = [
 ];
 
 export const PRODUCTS: Product[] = [
-  { id: 'p1', category: 'coins', name: 'Монета Фортуни', price: 500, description: 'Притягує удачу.', imageUrl: 'https://picsum.photos/200' },
-  { id: 'p2', category: 'seals', name: 'Печатка Змієносця', price: 1200, description: 'Прихована сила зодіаку.', imageUrl: 'https://picsum.photos/200' },
-  { id: 'p3', category: 'jewelry', name: 'Перстень Сили', price: 16400, description: 'Срібло та Золото.', imageUrl: 'https://picsum.photos/200' },
+  { id: 'p1', category: 'coins', name: 'Монета Фортуни', price: 500, description: 'Притягує удачу та процвітання.', imageUrl: 'https://picsum.photos/200?random=1' },
+  { id: 'p2', category: 'coins', name: 'Монета Достатку', price: 600, description: 'Символ матеріального благополуччя.', imageUrl: 'https://picsum.photos/200?random=2' },
+  { id: 'p3', category: 'coins', name: 'Монета Захисту', price: 550, description: 'Оберіг від негативних впливів.', imageUrl: 'https://picsum.photos/200?random=3' },
+  { id: 'p4', category: 'seals', name: 'Печатка Змієносця', price: 1200, description: 'Прихована сила зодіаку.', imageUrl: 'https://picsum.photos/200?random=4' },
+  { id: 'p5', category: 'jewelry', name: 'Перстень Сили', price: 16400, description: 'Срібло та Золото.', imageUrl: 'https://picsum.photos/200?random=5' },
 ];

@@ -12,7 +12,7 @@ export const translations = {
     menu_login: 'ВХІД | РЕЄСТРАЦІЯ',
     
     // Submenu - Knowledge
-    sub_faq: 'FAQ | Термінологія',
+    sub_faq: 'Термінологія',
     sub_nav: 'Навігація по сайту',
     sub_youtube: 'YOUTUBE канал',
     sub_city: 'Технологія "Місто Богів"',
@@ -31,11 +31,11 @@ export const translations = {
 
     // Submenu - Workshop
     sub_coins: 'INFINITY COINS',
-    sub_proc: 'СЕЗОННІ ПРОЦЕДУРИ',
-    sub_seals: 'ПЕЧАТКИ МАЙСТРА',
-    sub_attr: 'АТРИБУТИКА',
-    sub_jewel: 'ЮВЕЛІРНІ ПРИКРАСИ',
-    sub_myth: 'ОСОБИСТИЙ МІФ | Розрахунок',
+    sub_proc: 'Сезонні процедури',
+    sub_seals: 'Печатки майстра',
+    sub_attr: 'Атрибутика',
+    sub_jewel: 'Ювелірні прикраси',
+    sub_myth: 'Розрахунок особистого міфу',
 
     // Seal Types (Nested)
     seal_trad: 'Традиційна печатка',
@@ -57,9 +57,9 @@ export const translations = {
     btn_shop: 'МАЙСТЕРНЯ',
     btn_knowledge: 'АРХЕТИПИ (ЗОДІАКИ)',
     
-    hero_desc_title: 'Шлях Героя',
-    hero_desc_p1: 'Розкрийте прихований потенціал у матриці вашої душі. Наша методологія поєднує стародавню алхімічну мудрість із сучасним психологічним профайлінгом, щоб допомогти вам орієнтуватися у 12 архетипах сили.',
-    hero_desc_p2: 'Через технологію "Місто Богів" ми ініціюємо якості, які дрімали, дозволяючи вам переписати свій особистий міф.',
+    hero_desc_title: 'Герметична традиція',
+    hero_desc_p1: 'В школі Архетипів пропонується <b>авторська інтерпретація Великого Діяння</b>, заснована не на трактатах минулого, а на <b>власному багаторічному досвіді</b> практик з Архетипами та практиках реінкарнації і занурення у глибини підсвідомості.',
+    hero_desc_p2: 'Ми поділяємо життя людини на 4 сфери: <b>особисте життя, суспільне життя, професійна діяльність</b> та <b>духовна практика</b>. Людина завжди проявлена у всіх 4х сферах. Але <b>людина завжди створює домінанту однієї із сфер</b>. Якщо ці сфери збалансовані у відповідності до архетипу, життя людини гармонійне та цікаве. Тому ми можемо продіагностувати людину, з\'ясувавши як вона себе почуває у 4х сферах життя. Ми також можемо <b>зцілити людину</b>, якщо відновимо баланс 4х сфер у відповідності до архетипу.<br><br>При народженні всесвіт дає нам <b>знак зодіаку</b>, ми Вам пропонуємо <b>набір карт ТАРО до кожного Архетипу</b>. Розуміння архетипів змінить ваше життя на краще, воно відновить гармонію вашого життя та познайомить з <b>бездоганними (містичними) силами алхімії</b>.',
     
     btn_about_master: 'ПРО МАЙСТРА',
     
@@ -128,9 +128,9 @@ export const translations = {
     btn_shop: 'WORKSHOP',
     btn_knowledge: 'ARCHETYPES (ZODIACS)',
 
-    hero_desc_title: 'The Hero\'s Journey',
-    hero_desc_p1: 'Unlock the hidden potential within your soul matrix. Our methodology combines ancient alchemical wisdom with modern psychological profiling to help you navigate the 12 archetypes of power.',
-    hero_desc_p2: 'Through the "City of Gods" technology, we initiate dormant qualities, allowing you to rewrite your personal myth.',
+    hero_desc_title: 'Hermetic Tradition',
+    hero_desc_p1: 'The School of Archetypes offers an <b>author\'s interpretation of the Great Work</b>, based not on treatises of the past, but on <b>years of personal experience</b> with Archetypes and practices of reincarnation and immersion into the depths of the subconscious.',
+    hero_desc_p2: 'We divide human life into 4 spheres: <b>personal life, social life, professional activity</b> and <b>spiritual practice</b>. A person is always manifested in all 4 spheres. But <b>a person always creates a dominance of one sphere</b>. If these spheres are balanced according to the archetype, a person\'s life is harmonious and interesting. Therefore, we can diagnose a person by finding out how they feel in the 4 spheres of life. We can also <b>heal a person</b> if we restore the balance of 4 spheres according to the archetype.<br><br>At birth, the universe gives us a <b>zodiac sign</b>, we offer you a <b>set of TAROT cards for each Archetype</b>. Understanding archetypes will change your life for the better, it will restore harmony to your life and introduce you to the <b>impeccable (mystical) forces of alchemy</b>.',
 
     btn_about_master: 'ABOUT THE MASTER',
     
@@ -197,9 +197,9 @@ export const translations = {
     btn_shop: 'МАСТЕРСКАЯ',
     btn_knowledge: 'АРХЕТИПЫ (ЗОДИАКИ)',
 
-    hero_desc_title: 'Путь Героя',
-    hero_desc_p1: 'Раскройте скрытый потенциал в матрице вашей души. Наша методология сочетает древнюю алхимическую мудрость с современным психологическим профайлингом, чтобы помочь вам ориентироваться в 12 архетипах силы.',
-    hero_desc_p2: 'Через технологию "Город Богов" мы инициируем дремлющие качества, позволяя вам переписать свой личный миф.',
+    hero_desc_title: 'Герметическая традиция',
+    hero_desc_p1: 'В школе Архетипов предлагается <b>авторская интерпретация Великого Делания</b>, основанная не на трактатах прошлого, а на <b>собственном многолетнем опыте</b> практик с Архетипами и практиках реинкарнации и погружения в глубины подсознания.',
+    hero_desc_p2: 'Мы делим жизнь человека на 4 сферы: <b>личная жизнь, общественная жизнь, профессиональная деятельность</b> и <b>духовная практика</b>. Человек всегда проявлен во всех 4х сферах. Но <b>человек всегда создает доминанту одной из сфер</b>. Если эти сферы сбалансированы в соответствии с архетипом, жизнь человека гармонична и интересна. Поэтому мы можем продиагностировать человека, выяснив как он себя чувствует в 4х сферах жизни. Мы также можем <b>исцелить человека</b>, если восстановим баланс 4х сфер в соответствии с архетипом.<br><br>При рождении вселенная дает нам <b>знак зодиака</b>, мы Вам предлагаем <b>набор карт ТАРО к каждому Архетипу</b>. Понимание архетипов изменит вашу жизнь к лучшему, оно восстановит гармонию вашей жизни и познакомит с <b>безупречными (мистическими) силами алхимии</b>.',
 
     btn_about_master: 'О МАСТЕРЕ',
 
