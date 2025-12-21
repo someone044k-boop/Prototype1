@@ -130,6 +130,15 @@ export const Training: React.FC = () => {
                         <span>{t('course1_title').split('|')[1]}</span>
                     </h1>
                     <h2 className="text-xl md:text-2xl font-bold text-slate-700 dark:text-slate-300">{t('course1_subtitle')}</h2>
+                    
+                    {/* Demo Classroom Button */}
+                    <Link
+                        to="/classroom/c1"
+                        className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-lg hover:shadow-amber-500/30 hover:scale-105 transition-all"
+                    >
+                        <Sparkles size={14} />
+                        Демо: Навчальна кімната
+                    </Link>
                 </div>
             </div>
 
@@ -635,29 +644,51 @@ export const Training: React.FC = () => {
 
     // Main render
     return (
-        <div className="min-h-screen pt-20 pb-8 px-4 md:px-8">
-            {/* Fixed Right Sidebar - Course Navigation */}
-            <div className="fixed right-4 top-24 z-40 hidden lg:flex flex-col gap-2">
+        <div className="min-h-screen pt-20 pb-8 px-4 md:px-8 lg:pr-24">
+            {/* Mobile Course Navigation - показується тільки на мобільних */}
+            <div className="lg:hidden flex flex-wrap justify-center gap-2 mb-6 sticky top-20 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md py-3 -mx-4 px-4 border-b border-slate-100 dark:border-slate-800">
                 {[1, 2, 3, 4].map((num) => (
                     <Link
                         key={num}
                         to={`/training/year-${num}`}
-                        className={`px-3 py-2 rounded-xl flex items-center gap-2 font-bold text-sm transition-all duration-300 shadow-lg
+                        className={`px-3 py-2 rounded-xl flex items-center gap-1.5 font-bold text-xs transition-all
+                            ${activeCourse === num 
+                                ? 'bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-white shadow-lg' 
+                                : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700'
+                            }`}
+                    >
+                        <span>{num}</span>
+                        <span className="uppercase tracking-wider">курс</span>
+                    </Link>
+                ))}
+            </div>
+
+            {/* Fixed Right Sidebar - Course Navigation - тільки на десктопі */}
+            <div className="fixed right-4 top-24 z-40 hidden lg:flex flex-col gap-2" style={{ width: 'calc(var(--vw-unit) * 7)' }}>
+                {[1, 2, 3, 4].map((num) => (
+                    <Link
+                        key={num}
+                        to={`/training/year-${num}`}
+                        className={`px-3 py-2 rounded-xl flex items-center gap-2 font-bold transition-all duration-300 shadow-lg
                             ${activeCourse === num 
                                 ? 'bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-white scale-105' 
                                 : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 hover:scale-105'
                             }`}
-                        style={{ boxShadow: activeCourse === num ? '0 4px 20px rgba(129, 140, 248, 0.4)' : '0 2px 10px rgba(0,0,0,0.1)' }}
+                        style={{ 
+                            boxShadow: activeCourse === num ? '0 4px 20px rgba(129, 140, 248, 0.4)' : '0 2px 10px rgba(0,0,0,0.1)',
+                            fontSize: 'var(--text-sm)'
+                        }}
                     >
-                        <span className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center text-xs">{num}</span>
-                        <span className="text-xs uppercase tracking-wider">курс</span>
+                        <span className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center" style={{ fontSize: 'var(--text-xs)' }}>{num}</span>
+                        <span className="uppercase tracking-wider" style={{ fontSize: 'var(--text-xs)' }}>курс</span>
                     </Link>
                 ))}
                 <div className="h-[1px] bg-slate-200 dark:bg-slate-700 my-1"></div>
                 <Link
                     to="/training/map"
-                    className="px-3 py-2 rounded-xl flex items-center justify-center gap-2 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300 shadow-lg hover:scale-105 text-xs font-bold uppercase tracking-wider"
+                    className="px-3 py-2 rounded-xl flex items-center justify-center gap-2 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300 shadow-lg hover:scale-105 font-bold uppercase tracking-wider"
                     title="Повна програма"
+                    style={{ fontSize: 'var(--text-xs)' }}
                 >
                     Програма
                 </Link>

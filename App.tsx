@@ -95,8 +95,8 @@ const ScrollProgress = () => {
     <div 
       className="fixed left-0 right-0 z-[9998] pointer-events-none"
       style={{
-        top: scrolled ? '64px' : '90px',
-        height: isModalOpen ? '0px' : '4px',
+        top: scrolled ? 'calc(var(--vw-unit) * 4.5)' : 'calc(var(--vw-unit) * 6)',
+        height: isModalOpen ? '0px' : 'calc(var(--vw-unit) * 0.25)',
         opacity: shouldShow && !isModalOpen ? 1 : 0,
         transform: isModalOpen ? 'scaleY(0) translateY(-10px)' : 'scaleY(1) translateY(0)',
         transformOrigin: 'top center',

@@ -165,20 +165,30 @@ export const Home: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen pt-16 sm:pt-20 pb-10 overflow-hidden">
+    <div className="min-h-screen pb-10 overflow-hidden" style={{ paddingTop: 'calc(var(--vw-unit) * 5)' }}>
       {/* 1.1 Hero Section with Mandala */}
-      <div className="flex flex-col items-center justify-center mb-4 sm:mb-6 relative">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-indigo-500/10 rounded-full blur-[80px] sm:blur-[100px] pointer-events-none"></div>
+      <div className="flex flex-col items-center justify-center relative" style={{ marginBottom: 'var(--space-lg)' }}>
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none"
+          style={{ width: 'calc(var(--vw-unit) * 35)', height: 'calc(var(--vw-unit) * 35)' }}
+        ></div>
         
         {/* Mandala with entrance animation */}
-        <div className="mt-[19px] animate-fade-in" style={{ animationDuration: '1s' }}>
+        <div className="animate-fade-in" style={{ animationDuration: '1s', marginTop: 'var(--space-lg)' }}>
           <Mandala size="w-48 h-48 sm:w-64 sm:h-64 md:w-96 md:h-96" />
         </div>
         
         {/* Title - drops from mandala with running gradient */}
         <h1 
-            className="mt-2 sm:mt-4 text-2xl sm:text-4xl md:text-6xl font-bold tracking-wider sm:tracking-widest drop-shadow-sm text-center px-4 relative z-10 opacity-0 animate-drop-in"
-            style={{ animationDelay: '500ms', animationFillMode: 'forwards' }}
+            className="font-bold tracking-wider sm:tracking-widest drop-shadow-sm text-center relative z-10 opacity-0 animate-drop-in"
+            style={{ 
+              animationDelay: '500ms', 
+              animationFillMode: 'forwards',
+              marginTop: 'var(--space-md)',
+              fontSize: 'var(--text-5xl)',
+              paddingLeft: 'var(--space-lg)',
+              paddingRight: 'var(--space-lg)'
+            }}
         >
             <span 
               className="bg-clip-text text-transparent animate-text-shimmer"
@@ -201,16 +211,30 @@ export const Home: React.FC = () => {
         
         {/* Subtitle - drops from mandala */}
         <p 
-            className="mt-1 sm:mt-2 text-sm sm:text-lg md:text-xl text-slate-900 dark:text-white font-medium text-center px-4 relative z-10 opacity-0 animate-drop-in"
-            style={{ animationDelay: '650ms', animationFillMode: 'forwards' }}
+            className="text-slate-900 dark:text-white font-medium text-center relative z-10 opacity-0 animate-drop-in"
+            style={{ 
+              animationDelay: '650ms', 
+              animationFillMode: 'forwards',
+              marginTop: 'var(--space-sm)',
+              fontSize: 'var(--text-xl)',
+              paddingLeft: 'var(--space-lg)',
+              paddingRight: 'var(--space-lg)'
+            }}
         >
             {t('hero_subtitle')}
         </p>
 
         {/* Buttons - drop from mandala */}
         <div 
-            className="mt-5 flex flex-wrap justify-center gap-2 sm:gap-4 px-2 relative z-10 opacity-0 animate-drop-in"
-            style={{ animationDelay: '800ms', animationFillMode: 'forwards' }}
+            className="flex flex-wrap justify-center relative z-10 opacity-0 animate-drop-in"
+            style={{ 
+              animationDelay: '800ms', 
+              animationFillMode: 'forwards',
+              marginTop: 'var(--space-xl)',
+              gap: 'var(--space-md)',
+              paddingLeft: 'var(--space-sm)',
+              paddingRight: 'var(--space-sm)'
+            }}
         >
             {[
                 { label: t('btn_courses'), path: '/training', icon: BookOpen },
@@ -221,9 +245,14 @@ export const Home: React.FC = () => {
                 <Link 
                     key={btn.label}
                     to={btn.path}
-                    className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2.5 sm:py-3 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold tracking-wider sm:tracking-widest hover:bg-gradient-to-r hover:from-indigo-500 hover:to-fuchsia-500 hover:text-white dark:hover:text-white transition-all uppercase text-[10px] sm:text-xs shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/40 hover:-translate-y-1"
+                    className="flex items-center rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold tracking-wider sm:tracking-widest hover:bg-gradient-to-r hover:from-indigo-500 hover:to-fuchsia-500 hover:text-white dark:hover:text-white transition-all uppercase shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/40 hover:-translate-y-1"
+                    style={{ 
+                      gap: 'var(--space-sm)', 
+                      padding: 'var(--space-md) var(--space-xl)',
+                      fontSize: 'var(--text-xs)'
+                    }}
                 >
-                    <btn.icon size={14} className="sm:w-4 sm:h-4" />
+                    <btn.icon style={{ width: 'var(--size-icon-sm)', height: 'var(--size-icon-sm)' }} />
                     {btn.label}
                 </Link>
             ))}
@@ -234,29 +263,39 @@ export const Home: React.FC = () => {
       <div 
         ref={(el) => registerElement('about', el)}
         data-reveal="about"
-        className={`w-full px-[38px] py-6 sm:py-10 grid md:grid-cols-2 gap-4 sm:gap-8 items-start ${fadeUp('about')}`}
+        className={`w-full grid md:grid-cols-2 items-start ${fadeUp('about')}`}
+        style={{ padding: 'var(--space-xl) var(--container-padding)', gap: 'var(--space-xl)' }}
       >
         <div 
-          className={`relative rounded-2xl sm:rounded-[2.5rem] overflow-hidden mt-12 sm:mt-14 ${scaleIn('about')}`}
-          style={{ transitionDelay: '100ms' }}
+          className={`relative overflow-hidden ${scaleIn('about')}`}
+          style={{ transitionDelay: '100ms', borderRadius: 'var(--radius-3xl)', marginTop: 'var(--space-2xl)' }}
         >
             <img loading="lazy" src="/logo.png" alt="Dobrev Opus Zodiac" className="w-full h-auto" />
         </div>
         <div className={`${fadeLeft('about')}`} style={{ transitionDelay: '200ms' }}>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-800 dark:text-white relative inline-block mb-4 sm:mb-6">
+            <h2 
+              className="font-bold text-slate-800 dark:text-white relative inline-block"
+              style={{ fontSize: 'var(--text-3xl)', marginBottom: 'var(--space-xl)' }}
+            >
                 {t('hero_desc_title')}
-                <div className="absolute -bottom-2 left-0 w-16 sm:w-20 h-1 bg-gradient-to-r from-indigo-500 to-fuchsia-500 rounded-full"></div>
+                <div 
+                  className="absolute left-0 bg-gradient-to-r from-indigo-500 to-fuchsia-500 rounded-full"
+                  style={{ bottom: 'calc(var(--vw-unit) * -0.5)', width: 'calc(var(--vw-unit) * 5)', height: 'calc(var(--vw-unit) * 0.25)' }}
+                ></div>
             </h2>
             <div 
-              className="text-slate-700 dark:text-slate-300 leading-relaxed text-justify font-medium mb-3 sm:mb-4 text-xs sm:text-sm md:text-base [&_b]:font-bold [&_i]:italic [&_br]:block [&_p]:mb-3"
+              className="text-slate-700 dark:text-slate-300 leading-relaxed text-justify font-medium [&_b]:font-bold [&_i]:italic [&_br]:block [&_p]:mb-3"
+              style={{ fontSize: 'var(--text-base)', marginBottom: 'var(--space-lg)' }}
               dangerouslySetInnerHTML={{ __html: t('hero_desc_p1') }}
             />
             <div 
-              className="text-slate-700 dark:text-slate-300 leading-relaxed text-justify font-medium mb-3 sm:mb-4 text-xs sm:text-sm md:text-base [&_b]:font-bold [&_i]:italic [&_br]:block [&_p]:mb-3"
+              className="text-slate-700 dark:text-slate-300 leading-relaxed text-justify font-medium [&_b]:font-bold [&_i]:italic [&_br]:block [&_p]:mb-3"
+              style={{ fontSize: 'var(--text-base)', marginBottom: 'var(--space-lg)' }}
               dangerouslySetInnerHTML={{ __html: t('hero_desc_p2') }}
             />
             <div 
-              className="text-slate-700 dark:text-slate-300 leading-relaxed text-justify font-medium text-xs sm:text-sm md:text-base [&_b]:font-bold [&_i]:italic [&_br]:block [&_p]:mb-3"
+              className="text-slate-700 dark:text-slate-300 leading-relaxed text-justify font-medium [&_b]:font-bold [&_i]:italic [&_br]:block [&_p]:mb-3"
+              style={{ fontSize: 'var(--text-base)' }}
               dangerouslySetInnerHTML={{ __html: t('hero_desc_p3') }}
             />
         </div>
@@ -266,9 +305,13 @@ export const Home: React.FC = () => {
       <div 
         ref={(el) => registerElement('video', el)}
         data-reveal="video"
-        className={`max-w-5xl mx-auto px-3 sm:px-4 py-6 sm:py-8 ${fadeUp('video')}`}
+        className={`max-w-5xl mx-auto ${fadeUp('video')}`}
+        style={{ padding: 'var(--space-xl) var(--container-padding)' }}
       >
-        <div className={`aspect-video w-full rounded-2xl sm:rounded-[2.5rem] overflow-hidden snake-border ${scaleIn('video')}`} style={{ transitionDelay: '150ms' }}>
+        <div 
+          className={`aspect-video w-full overflow-hidden snake-border ${scaleIn('video')}`} 
+          style={{ transitionDelay: '150ms', borderRadius: 'var(--radius-3xl)' }}
+        >
             <iframe 
                 width="100%" 
                 height="100%" 
@@ -280,8 +323,12 @@ export const Home: React.FC = () => {
             ></iframe>
         </div>
         {/* About Master Button */}
-        <div className={`text-center mt-6 sm:mt-8 ${fadeUp('video')}`} style={{ transitionDelay: '300ms' }}>
-            <Link to="/master/about" className="inline-block px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold uppercase tracking-wider sm:tracking-widest hover:scale-105 transition-transform shadow-xl text-xs sm:text-sm">
+        <div className={`text-center ${fadeUp('video')}`} style={{ transitionDelay: '300ms', marginTop: 'var(--space-xl)' }}>
+            <Link 
+              to="/master/about" 
+              className="inline-block rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold uppercase tracking-wider sm:tracking-widest hover:scale-105 transition-transform shadow-xl"
+              style={{ padding: 'var(--space-md) var(--space-2xl)', fontSize: 'var(--text-sm)' }}
+            >
                 {t('btn_about_master')}
             </Link>
         </div>
@@ -291,52 +338,79 @@ export const Home: React.FC = () => {
       <div 
         ref={(el) => registerElement('telegram', el)}
         data-reveal="telegram"
-        className={`max-w-2xl mx-auto px-3 md:px-4 py-8 mb-12 ${fadeUp('telegram')}`}
+        className={`max-w-2xl mx-auto ${fadeUp('telegram')}`}
+        style={{ padding: 'var(--space-xl) var(--container-padding)', marginBottom: 'var(--space-2xl)' }}
       >
-          <div className={`glass-panel dark:bg-slate-900/70 rounded-3xl p-5 snake-border ${scaleIn('telegram')}`} style={{ transitionDelay: '150ms' }}>
+          <div 
+            className={`glass-panel dark:bg-slate-900/70 snake-border ${scaleIn('telegram')}`} 
+            style={{ transitionDelay: '150ms', borderRadius: 'var(--radius-3xl)', padding: 'var(--space-xl)' }}
+          >
              {/* Header */}
-             <div className="flex items-center gap-3 mb-5 pb-4 border-b border-slate-200/50 dark:border-slate-700/50">
-               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center text-white shadow-lg">
-                 <Send size={20} />
+             <div 
+               className="flex items-center border-b border-slate-200/50 dark:border-slate-700/50"
+               style={{ gap: 'var(--space-md)', marginBottom: 'var(--space-xl)', paddingBottom: 'var(--space-lg)' }}
+             >
+               <div 
+                 className="rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center text-white shadow-lg"
+                 style={{ width: 'calc(var(--vw-unit) * 3)', height: 'calc(var(--vw-unit) * 3)' }}
+               >
+                 <Send style={{ width: 'var(--size-icon-md)', height: 'var(--size-icon-md)' }} />
                </div>
                <div>
-                 <h3 className="font-bold text-slate-800 dark:text-white">Elite Archetypes</h3>
-                 <span className="text-xs text-slate-500">@EliteArchetypes • Telegram</span>
+                 <h3 className="font-bold text-slate-800 dark:text-white" style={{ fontSize: 'var(--text-base)' }}>Elite Archetypes</h3>
+                 <span className="text-slate-500" style={{ fontSize: 'var(--text-xs)' }}>@EliteArchetypes • Telegram</span>
                </div>
-               <a href="https://t.me/EliteArchetypes" target="_blank" rel="noreferrer" className="ml-auto px-4 py-2 rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white text-xs font-bold hover:scale-105 transition-transform shadow-md">
+               <a 
+                 href="https://t.me/EliteArchetypes" 
+                 target="_blank" 
+                 rel="noreferrer" 
+                 className="ml-auto rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white font-bold hover:scale-105 transition-transform shadow-md"
+                 style={{ padding: 'var(--space-sm) var(--space-lg)', fontSize: 'var(--text-xs)' }}
+               >
                  Підписатися
                </a>
              </div>
              
              {/* Posts */}
-             <div className="h-[450px] overflow-y-auto space-y-4 pr-2 custom-scrollbar" onScroll={handleScroll}>
-                 {loading ? (
-                   <div className="flex items-center justify-center h-full">
-                     <Loader2 size={32} className="animate-spin text-indigo-500" />
-                   </div>
-                 ) : posts.length > 0 ? (
-                   <>
-                     {posts.map((post) => (
-                       <div key={post.id} className="p-4 bg-white/50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700/50 hover:shadow-md transition-shadow">
+             <div 
+               className="overflow-y-auto custom-scrollbar" 
+               style={{ height: 'calc(var(--vw-unit) * 30)', paddingRight: 'var(--space-sm)' }}
+               onScroll={handleScroll}
+             >
+                 <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
+                   {loading ? (
+                     <div className="flex items-center justify-center h-full">
+                       <Loader2 className="animate-spin text-indigo-500" style={{ width: 'var(--size-icon-lg)', height: 'var(--size-icon-lg)' }} />
+                     </div>
+                   ) : posts.length > 0 ? (
+                     <>
+                       {posts.map((post) => (
                          <div 
-                           className="font-sans text-slate-900 dark:text-slate-100 text-sm leading-relaxed whitespace-pre-wrap break-words [&_a]:text-indigo-500 [&_a]:underline [&_b]:font-bold [&_i]:italic"
-                           dangerouslySetInnerHTML={{ __html: post.text }}
-                         />
-                         <span className="text-[11px] text-slate-400 mt-3 block">{post.date}</span>
-                       </div>
-                     ))}
-                     {loadingMore && (
-                       <div className="flex justify-center py-4">
-                         <Loader2 size={24} className="animate-spin text-indigo-500" />
-                       </div>
-                     )}
-                   </>
-                 ) : (
-                   <div className="flex flex-col items-center justify-center h-full text-slate-400">
-                     <Send size={40} className="mb-3 opacity-30" />
-                     <p>Перейдіть в канал для перегляду постів</p>
-                   </div>
-                 )}
+                           key={post.id} 
+                           className="bg-white/50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:shadow-md transition-shadow"
+                           style={{ padding: 'var(--space-lg)', borderRadius: 'var(--radius-xl)' }}
+                         >
+                           <div 
+                             className="font-sans text-slate-900 dark:text-slate-100 leading-relaxed whitespace-pre-wrap break-words [&_a]:text-indigo-500 [&_a]:underline [&_b]:font-bold [&_i]:italic"
+                             style={{ fontSize: 'var(--text-sm)' }}
+                             dangerouslySetInnerHTML={{ __html: post.text }}
+                           />
+                           <span className="text-slate-400 block" style={{ fontSize: 'var(--text-xs)', marginTop: 'var(--space-md)' }}>{post.date}</span>
+                         </div>
+                       ))}
+                       {loadingMore && (
+                         <div className="flex justify-center" style={{ padding: 'var(--space-lg)' }}>
+                           <Loader2 className="animate-spin text-indigo-500" style={{ width: 'var(--size-icon-md)', height: 'var(--size-icon-md)' }} />
+                         </div>
+                       )}
+                     </>
+                   ) : (
+                     <div className="flex flex-col items-center justify-center h-full text-slate-400">
+                       <Send className="opacity-30" style={{ width: 'calc(var(--vw-unit) * 2.5)', height: 'calc(var(--vw-unit) * 2.5)', marginBottom: 'var(--space-md)' }} />
+                       <p style={{ fontSize: 'var(--text-sm)' }}>Перейдіть в канал для перегляду постів</p>
+                     </div>
+                   )}
+                 </div>
              </div>
           </div>
       </div>

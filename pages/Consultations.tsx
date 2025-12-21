@@ -214,13 +214,18 @@ export const Consultations: React.FC = () => {
     const activeItem = CONSULTATION_TYPES.find(i => i.id === selectedId);
 
     return (
-        <div className="min-h-screen pt-24 pb-10 px-2 md:px-4 w-full mx-auto">
-            <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto mt-2">
+        <div className="min-h-screen" style={{ paddingTop: 'calc(var(--vw-unit) * 7)', paddingBottom: 'var(--space-xl)', paddingLeft: 'var(--container-padding)', paddingRight: 'var(--container-padding)' }}>
+            <div className="grid md:grid-cols-3 max-w-7xl mx-auto" style={{ gap: 'var(--space-xl)', marginTop: 'var(--space-sm)' }}>
                 {CONSULTATION_TYPES.map((item, index) => (
                     <div 
                         key={item.id} 
-                        className="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 flex flex-col overflow-hidden group hover:border-indigo-300 dark:hover:border-indigo-700 h-full relative opacity-0 animate-fade-in card-lift"
-                        style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'forwards', boxShadow: '0 8px 30px -5px rgba(129, 140, 248, 0.2)' }}
+                        className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex flex-col overflow-hidden group hover:border-indigo-300 dark:hover:border-indigo-700 h-full relative opacity-0 animate-fade-in card-lift"
+                        style={{ 
+                          animationDelay: `${index * 150}ms`, 
+                          animationFillMode: 'forwards', 
+                          boxShadow: '0 8px 30px -5px rgba(129, 140, 248, 0.2)',
+                          borderRadius: 'var(--radius-3xl)'
+                        }}
                         onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 25px 60px -10px rgba(129, 140, 248, 0.4)'; }}
                         onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 8px 30px -5px rgba(129, 140, 248, 0.2)'; }}
                     >
@@ -234,26 +239,41 @@ export const Consultations: React.FC = () => {
                         </div>
 
                         {/* Card Content - Compact */}
-                        <div className="p-3 flex-1 flex flex-col items-center text-center">
-                            <h3 className="text-lg font-bold mb-1 text-slate-800 dark:text-white leading-tight min-h-[2.5rem] flex items-center justify-center">{item.title}</h3>
+                        <div className="flex-1 flex flex-col items-center text-center" style={{ padding: 'var(--space-md)' }}>
+                            <h3 
+                              className="font-bold text-slate-800 dark:text-white leading-tight flex items-center justify-center"
+                              style={{ fontSize: 'var(--text-lg)', marginBottom: 'var(--space-xs)', minHeight: 'calc(var(--vw-unit) * 3)' }}
+                            >
+                              {item.title}
+                            </h3>
                             
-                            <div className="flex flex-wrap justify-center gap-1.5 mb-2">
-                                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded-full text-[9px] font-bold uppercase tracking-wider text-slate-500">
-                                    <Video size={10} /> {item.format}
+                            <div className="flex flex-wrap justify-center" style={{ gap: 'var(--space-xs)', marginBottom: 'var(--space-sm)' }}>
+                                <span 
+                                  className="inline-flex items-center bg-slate-100 dark:bg-slate-800 rounded-full font-bold uppercase tracking-wider text-slate-500"
+                                  style={{ gap: 'var(--space-xs)', padding: 'var(--space-xs) var(--space-sm)', fontSize: 'var(--text-xs)' }}
+                                >
+                                    <Video style={{ width: 'var(--size-icon-sm)', height: 'var(--size-icon-sm)' }} /> {item.format}
                                 </span>
-                                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded-full text-[9px] font-bold uppercase tracking-wider text-slate-500">
-                                    <Clock size={10} /> {item.duration}
+                                <span 
+                                  className="inline-flex items-center bg-slate-100 dark:bg-slate-800 rounded-full font-bold uppercase tracking-wider text-slate-500"
+                                  style={{ gap: 'var(--space-xs)', padding: 'var(--space-xs) var(--space-sm)', fontSize: 'var(--text-xs)' }}
+                                >
+                                    <Clock style={{ width: 'var(--size-icon-sm)', height: 'var(--size-icon-sm)' }} /> {item.duration}
                                 </span>
                             </div>
 
-                            <div className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-fuchsia-600 dark:from-indigo-400 dark:to-fuchsia-400 mb-3">
+                            <div 
+                              className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-fuchsia-600 dark:from-indigo-400 dark:to-fuchsia-400"
+                              style={{ fontSize: 'var(--text-xl)', marginBottom: 'var(--space-md)' }}
+                            >
                                 {item.price}
                             </div>
                             
                             <div className="mt-auto w-full">
                                 <button 
                                     onClick={() => setSelectedId(item.id)}
-                                    className="w-full py-2.5 rounded-xl font-bold uppercase text-[10px] tracking-widest transition-all bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-fuchsia-600 hover:text-white dark:hover:text-white shadow-lg hover:shadow-indigo-500/30"
+                                    className="w-full font-bold uppercase tracking-widest transition-all bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-fuchsia-600 hover:text-white dark:hover:text-white shadow-lg hover:shadow-indigo-500/30"
+                                    style={{ padding: 'var(--space-md)', borderRadius: 'var(--radius-lg)', fontSize: 'var(--text-xs)' }}
                                 >
                                     ДЕТАЛЬНІШЕ
                                 </button>
@@ -266,60 +286,66 @@ export const Consultations: React.FC = () => {
             {/* Modal Popup */}
             {selectedId && activeItem && (
                 <div 
-                    className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in"
+                    className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-md animate-fade-in"
+                    style={{ padding: 'var(--space-lg)' }}
                     onClick={(e) => {
                         if (e.target === e.currentTarget) setSelectedId(null);
                     }}
                 >
                     {/* Increased width to max-w-6xl for better visibility without scrolling */}
-                    <div className="bg-white dark:bg-slate-900 w-full max-w-6xl max-h-[90vh] rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row overflow-hidden border border-white/20 dark:border-slate-700 relative animate-fade-in">
+                    <div 
+                      className="bg-white dark:bg-slate-900 w-full max-w-6xl max-h-[90vh] shadow-2xl flex flex-col md:flex-row overflow-hidden border border-white/20 dark:border-slate-700 relative animate-fade-in"
+                      style={{ borderRadius: 'var(--radius-3xl)' }}
+                    >
                         
                         {/* Close Button */}
                         <button 
                             onClick={() => setSelectedId(null)} 
-                            className="absolute top-4 right-4 z-50 p-2 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md rounded-full text-slate-800 dark:text-white hover:bg-red-500 hover:text-white transition-all shadow-sm"
+                            className="absolute top-4 right-4 z-50 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md rounded-full text-slate-800 dark:text-white hover:bg-red-500 hover:text-white transition-all shadow-sm"
+                            style={{ padding: 'var(--space-sm)' }}
                         >
-                            <X size={24} />
+                            <X style={{ width: 'var(--size-icon-md)', height: 'var(--size-icon-md)' }} />
                         </button>
 
                         {/* Modal Image (Left Side) - Adjusted width ratio */}
                         <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group">
                             <img loading="lazy" src={activeItem.image} alt={activeItem.title} className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex flex-col justify-end p-8">
-                                <h3 className="text-white text-3xl font-bold mb-3 leading-tight drop-shadow-lg">{activeItem.title}</h3>
-                                <p className="text-indigo-200 text-lg font-medium flex items-center gap-2"><CreditCard size={18}/> {activeItem.price}</p>
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex flex-col justify-end" style={{ padding: 'var(--space-xl)' }}>
+                                <h3 className="text-white font-bold leading-tight drop-shadow-lg" style={{ fontSize: 'var(--text-3xl)', marginBottom: 'var(--space-md)' }}>{activeItem.title}</h3>
+                                <p className="text-indigo-200 font-medium flex items-center" style={{ fontSize: 'var(--text-lg)', gap: 'var(--space-sm)' }}><CreditCard style={{ width: 'var(--size-icon-md)', height: 'var(--size-icon-md)' }}/> {activeItem.price}</p>
                             </div>
                         </div>
 
                         {/* Modal Content (Right Side) */}
-                        <div className="flex-1 p-6 md:p-10 overflow-y-auto custom-scrollbar flex flex-col relative bg-white dark:bg-slate-900">
+                        <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col relative bg-white dark:bg-slate-900" style={{ padding: 'var(--space-xl)' }}>
                             {/* Mobile Header (Visible only on small screens) */}
-                            <div className="md:hidden mb-6">
-                                <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">{activeItem.title}</h2>
-                                <div className="text-xl font-bold text-indigo-600 dark:text-indigo-400">{activeItem.price}</div>
+                            <div className="md:hidden" style={{ marginBottom: 'var(--space-xl)' }}>
+                                <h2 className="font-bold text-slate-800 dark:text-white" style={{ fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-sm)' }}>{activeItem.title}</h2>
+                                <div className="font-bold text-indigo-600 dark:text-indigo-400" style={{ fontSize: 'var(--text-xl)' }}>{activeItem.price}</div>
                             </div>
 
                             {/* Main Description Content - Rich Text */}
-                            <div className="text-slate-600 dark:text-slate-300 mb-8 font-medium">
+                            <div className="text-slate-600 dark:text-slate-300 font-medium" style={{ marginBottom: 'var(--space-xl)', fontSize: 'var(--text-base)' }}>
                                 {activeItem.description}
                             </div>
                             
                             {/* Sticky Footer in Modal */}
-                            <div className="mt-auto pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center gap-6">
+                            <div className="mt-auto flex flex-col sm:flex-row items-center border-t border-slate-100 dark:border-slate-800" style={{ paddingTop: 'var(--space-xl)', gap: 'var(--space-xl)' }}>
                                 <div className="flex-1 w-full">
-                                    <div className="flex items-center gap-4 text-sm font-bold text-slate-500 mb-1">
-                                        <span className="flex items-center gap-1.5"><Clock size={16} className="text-indigo-500"/> {activeItem.duration}</span>
-                                        <span className="flex items-center gap-1.5"><CheckCircle2 size={16} className="text-green-500"/> Вільні місця є</span>
+                                    <div className="flex items-center font-bold text-slate-500" style={{ gap: 'var(--space-lg)', fontSize: 'var(--text-sm)', marginBottom: 'var(--space-xs)' }}>
+                                        <span className="flex items-center" style={{ gap: 'var(--space-xs)' }}><Clock style={{ width: 'var(--size-icon-sm)', height: 'var(--size-icon-sm)' }} className="text-indigo-500"/> {activeItem.duration}</span>
+                                        <span className="flex items-center" style={{ gap: 'var(--space-xs)' }}><CheckCircle2 style={{ width: 'var(--size-icon-sm)', height: 'var(--size-icon-sm)' }} className="text-green-500"/> Вільні місця є</span>
                                     </div>
-                                    <p className="text-xs text-slate-400">Попередній запис обов'язковий. Майстер зв'яжеться з вами.</p>
+                                    <p className="text-slate-400" style={{ fontSize: 'var(--text-xs)' }}>Попередній запис обов'язковий. Майстер зв'яжеться з вами.</p>
                                 </div>
                                 <a 
                                     href="https://t.me/dobrevk" 
                                     target="_blank" 
                                     rel="noreferrer"
-                                    className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white font-bold rounded-xl shadow-lg hover:shadow-indigo-500/50 hover:scale-[1.02] transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-2 ring-4 ring-indigo-50 dark:ring-slate-800"
+                                    className="w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white font-bold shadow-lg hover:shadow-indigo-500/50 hover:scale-[1.02] transition-all uppercase tracking-widest flex items-center justify-center ring-4 ring-indigo-50 dark:ring-slate-800"
+                                    style={{ padding: 'var(--space-lg) var(--space-2xl)', borderRadius: 'var(--radius-lg)', fontSize: 'var(--text-sm)', gap: 'var(--space-sm)' }}
                                 >
-                                    <Send size={18} /> ЗАПИСАТИСЬ
+                                    <Send style={{ width: 'var(--size-icon-md)', height: 'var(--size-icon-md)' }} /> ЗАПИСАТИСЬ
                                 </a>
                             </div>
                         </div>

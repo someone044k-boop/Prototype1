@@ -54,45 +54,64 @@ export const Dashboard: React.FC = () => {
     // Redirect if not authenticated
     if (!isAuthenticated || !user) {
         return (
-            <div className="min-h-screen pt-24 pb-12 px-4 flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center" style={{ paddingTop: 'calc(var(--vw-unit) * 7)', paddingBottom: 'var(--space-2xl)', paddingLeft: 'var(--container-padding)', paddingRight: 'var(--container-padding)' }}>
                 <div className="text-center max-w-md">
-                    <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-4">
+                    <h2 className="font-bold text-slate-800 dark:text-white" style={{ fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-lg)' }}>
                         Увійдіть до кабінету
                     </h2>
-                    <p className="text-slate-600 dark:text-slate-400 mb-6">
+                    <p className="text-slate-600 dark:text-slate-400" style={{ marginBottom: 'var(--space-xl)', fontSize: 'var(--text-base)' }}>
                         Для доступу до особистого кабінету необхідно авторизуватися
                     </p>
                     
                     {/* Demo Login Buttons */}
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-lg mb-6">
-                        <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Демо-вхід для тестування</h3>
-                        <div className="grid grid-cols-2 gap-3">
+                    <div 
+                      className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-lg"
+                      style={{ borderRadius: 'var(--radius-2xl)', padding: 'var(--space-xl)', marginBottom: 'var(--space-xl)' }}
+                    >
+                        <h3 className="font-bold text-slate-500 uppercase tracking-wider" style={{ fontSize: 'var(--text-sm)', marginBottom: 'var(--space-lg)' }}>Демо-вхід для тестування</h3>
+                        <div className="grid grid-cols-2" style={{ gap: 'var(--space-md)' }}>
                             <button
                                 onClick={() => demoLogin('listener')}
-                                className="px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex flex-col items-center gap-1"
+                                className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex flex-col items-center"
+                                style={{ padding: 'var(--space-md) var(--space-lg)', borderRadius: 'var(--radius-lg)', gap: 'var(--space-xs)', fontSize: 'var(--text-sm)' }}
                             >
-                                <span className="w-8 h-8 rounded-full bg-slate-500 flex items-center justify-center text-white text-xs font-bold">С</span>
+                                <span 
+                                  className="rounded-full bg-slate-500 flex items-center justify-center text-white font-bold"
+                                  style={{ width: 'calc(var(--vw-unit) * 2)', height: 'calc(var(--vw-unit) * 2)', fontSize: 'var(--text-xs)' }}
+                                >С</span>
                                 <span>Слухач</span>
                             </button>
                             <button
                                 onClick={() => demoLogin('student')}
-                                className="px-4 py-3 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 font-medium text-sm hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all flex flex-col items-center gap-1"
+                                className="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 font-medium hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all flex flex-col items-center"
+                                style={{ padding: 'var(--space-md) var(--space-lg)', borderRadius: 'var(--radius-lg)', gap: 'var(--space-xs)', fontSize: 'var(--text-sm)' }}
                             >
-                                <span className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white text-xs font-bold">С</span>
+                                <span 
+                                  className="rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold"
+                                  style={{ width: 'calc(var(--vw-unit) * 2)', height: 'calc(var(--vw-unit) * 2)', fontSize: 'var(--text-xs)' }}
+                                >С</span>
                                 <span>Студент</span>
                             </button>
                             <button
                                 onClick={() => demoLogin('manager')}
-                                className="px-4 py-3 rounded-xl bg-fuchsia-50 dark:bg-fuchsia-900/30 text-fuchsia-700 dark:text-fuchsia-300 font-medium text-sm hover:bg-fuchsia-100 dark:hover:bg-fuchsia-900/50 transition-all flex flex-col items-center gap-1"
+                                className="bg-fuchsia-50 dark:bg-fuchsia-900/30 text-fuchsia-700 dark:text-fuchsia-300 font-medium hover:bg-fuchsia-100 dark:hover:bg-fuchsia-900/50 transition-all flex flex-col items-center"
+                                style={{ padding: 'var(--space-md) var(--space-lg)', borderRadius: 'var(--radius-lg)', gap: 'var(--space-xs)', fontSize: 'var(--text-sm)' }}
                             >
-                                <span className="w-8 h-8 rounded-full bg-fuchsia-500 flex items-center justify-center text-white text-xs font-bold">М</span>
+                                <span 
+                                  className="rounded-full bg-fuchsia-500 flex items-center justify-center text-white font-bold"
+                                  style={{ width: 'calc(var(--vw-unit) * 2)', height: 'calc(var(--vw-unit) * 2)', fontSize: 'var(--text-xs)' }}
+                                >М</span>
                                 <span>Менеджер</span>
                             </button>
                             <button
                                 onClick={() => demoLogin('admin')}
-                                className="px-4 py-3 rounded-xl bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 font-medium text-sm hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-all flex flex-col items-center gap-1"
+                                className="bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 font-medium hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-all flex flex-col items-center"
+                                style={{ padding: 'var(--space-md) var(--space-lg)', borderRadius: 'var(--radius-lg)', gap: 'var(--space-xs)', fontSize: 'var(--text-sm)' }}
                             >
-                                <span className="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-white text-xs font-bold">А</span>
+                                <span 
+                                  className="rounded-full bg-amber-500 flex items-center justify-center text-white font-bold"
+                                  style={{ width: 'calc(var(--vw-unit) * 2)', height: 'calc(var(--vw-unit) * 2)', fontSize: 'var(--text-xs)' }}
+                                >А</span>
                                 <span>Адмін</span>
                             </button>
                         </div>
@@ -100,7 +119,8 @@ export const Dashboard: React.FC = () => {
 
                     <button
                         onClick={() => navigate('/')}
-                        className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white rounded-full font-bold"
+                        className="bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white rounded-full font-bold"
+                        style={{ padding: 'var(--space-md) var(--space-xl)', fontSize: 'var(--text-sm)' }}
                     >
                         На головну
                     </button>
@@ -117,61 +137,75 @@ export const Dashboard: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen pt-24 pb-12 px-2 md:px-4">
+        <div className="min-h-screen" style={{ paddingTop: 'calc(var(--vw-unit) * 7)', paddingBottom: 'var(--space-2xl)', paddingLeft: 'var(--container-padding)', paddingRight: 'var(--container-padding)' }}>
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
-                <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between" style={{ marginBottom: 'var(--space-xl)', gap: 'var(--space-lg)' }}>
+                    <div className="flex items-center" style={{ gap: 'var(--space-lg)' }}>
+                        <div 
+                          className="rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center text-white font-bold shadow-lg"
+                          style={{ width: 'calc(var(--vw-unit) * 4)', height: 'calc(var(--vw-unit) * 4)', fontSize: 'var(--text-2xl)' }}
+                        >
                             {user.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                            <h1 className="text-2xl font-bold text-slate-800 dark:text-white">
+                            <h1 className="font-bold text-slate-800 dark:text-white" style={{ fontSize: 'var(--text-2xl)' }}>
                                 {user.name}
                             </h1>
-                            <div className="flex items-center gap-2 mt-1">
-                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-white ${roleColors[user.role]}`}>
+                            <div className="flex items-center" style={{ gap: 'var(--space-sm)', marginTop: 'var(--space-xs)' }}>
+                                <span 
+                                  className={`rounded-full font-bold uppercase tracking-wider text-white ${roleColors[user.role]}`}
+                                  style={{ padding: 'var(--space-xs) var(--space-sm)', fontSize: 'var(--text-xs)' }}
+                                >
                                     {roleLabels[user.role]}
                                 </span>
-                                <span className="text-xs text-slate-500">{user.email}</span>
+                                <span className="text-slate-500" style={{ fontSize: 'var(--text-xs)' }}>{user.email}</span>
                             </div>
                         </div>
                     </div>
                     <button
                         onClick={handleLogout}
-                        className="flex items-center gap-2 px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors"
+                        className="flex items-center text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors"
+                        style={{ gap: 'var(--space-sm)', padding: 'var(--space-sm) var(--space-lg)', fontSize: 'var(--text-sm)' }}
                     >
-                        <LogOut size={18} /> Вийти
+                        <LogOut style={{ width: 'var(--size-icon-md)', height: 'var(--size-icon-md)' }} /> Вийти
                     </button>
                 </div>
 
                 {/* Main Grid */}
-                <div className="grid lg:grid-cols-[280px_1fr] gap-6">
+                <div className="grid lg:grid-cols-[280px_1fr]" style={{ gap: 'var(--space-xl)' }}>
                     {/* Sidebar */}
-                    <div className="lg:sticky lg:top-28 lg:h-fit">
-                        <nav className="bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-lg border border-slate-100 dark:border-slate-800">
-                            <ul className="space-y-2">
+                    <div className="lg:sticky lg:h-fit" style={{ top: 'calc(var(--vw-unit) * 7)' }}>
+                        <nav 
+                          className="bg-white dark:bg-slate-900 shadow-lg border border-slate-100 dark:border-slate-800"
+                          style={{ borderRadius: 'var(--radius-3xl)', padding: 'var(--space-lg)' }}
+                        >
+                            <ul style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
                                 {availableMenuItems.map(item => (
                                     <li key={item.id}>
                                         <button
                                             onClick={() => setActiveTab(item.id)}
-                                            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium text-sm transition-all
+                                            className={`w-full flex items-center justify-between font-medium transition-all
                                                 ${activeTab === item.id
                                                     ? 'bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white shadow-lg'
                                                     : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                                                 }`}
+                                            style={{ padding: 'var(--space-md) var(--space-lg)', borderRadius: 'var(--radius-lg)', fontSize: 'var(--text-sm)' }}
                                         >
-                                            <span className="flex items-center gap-3">
-                                                <item.icon size={18} />
+                                            <span className="flex items-center" style={{ gap: 'var(--space-md)' }}>
+                                                <item.icon style={{ width: 'var(--size-icon-md)', height: 'var(--size-icon-md)' }} />
                                                 {item.label}
                                             </span>
-                                            <span className="flex items-center gap-2">
+                                            <span className="flex items-center" style={{ gap: 'var(--space-sm)' }}>
                                                 {item.badge && (
-                                                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${activeTab === item.id ? 'bg-white/20 text-white' : 'bg-red-500 text-white'}`}>
+                                                    <span 
+                                                      className={`rounded-full font-bold ${activeTab === item.id ? 'bg-white/20 text-white' : 'bg-red-500 text-white'}`}
+                                                      style={{ padding: 'var(--space-xs) var(--space-sm)', fontSize: 'var(--text-xs)' }}
+                                                    >
                                                         {item.badge}
                                                     </span>
                                                 )}
-                                                <ChevronRight size={14} className={activeTab === item.id ? 'opacity-100' : 'opacity-0'} />
+                                                <ChevronRight style={{ width: 'var(--size-icon-sm)', height: 'var(--size-icon-sm)' }} className={activeTab === item.id ? 'opacity-100' : 'opacity-0'} />
                                             </span>
                                         </button>
                                     </li>

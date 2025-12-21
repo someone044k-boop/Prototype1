@@ -101,16 +101,20 @@ export const Header: React.FC = () => {
         <header 
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) border-b
             ${scrolled 
-                ? 'h-[64px] bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl shadow-sm border-indigo-50/50 dark:border-slate-800/50' 
-                : 'h-[90px] bg-transparent border-transparent shadow-none'
+                ? 'bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl shadow-sm border-indigo-50/50 dark:border-slate-800/50' 
+                : 'bg-transparent border-transparent shadow-none'
             }
         `}
+        style={{ height: scrolled ? 'calc(var(--vw-unit) * 4.5)' : 'calc(var(--vw-unit) * 6)' }}
         >
-        <div className="w-full max-w-[1600px] mx-auto px-4 md:px-6 h-full flex items-center justify-between relative">
+        <div className="w-full max-w-[1600px] mx-auto h-full flex items-center justify-between relative" style={{ paddingLeft: 'var(--container-padding)', paddingRight: 'var(--container-padding)' }}>
             
             {/* Logo Area */}
-            <Link to="/" className="flex items-center gap-3 z-50 group flex-shrink-0" onClick={() => { setMobileOpen(false); window.scrollTo(0, 0); }}>
-                <div className={`transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) ${scrolled ? 'w-14 h-14' : 'w-16 h-16'} flex items-center justify-center group-hover:scale-110 relative`}>
+            <Link to="/" className="flex items-center z-50 group flex-shrink-0" style={{ gap: 'var(--space-md)' }} onClick={() => { setMobileOpen(false); window.scrollTo(0, 0); }}>
+                <div 
+                    className="transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) flex items-center justify-center group-hover:scale-110 relative"
+                    style={{ width: scrolled ? 'calc(var(--vw-unit) * 3.5)' : 'calc(var(--vw-unit) * 4)', height: scrolled ? 'calc(var(--vw-unit) * 3.5)' : 'calc(var(--vw-unit) * 4)' }}
+                >
                     <img 
                         src="/mandala.png" 
                         alt="Dobrev Opus Zodiac" 
@@ -118,7 +122,10 @@ export const Header: React.FC = () => {
                     />
                 </div>
                 {/* Visible on Tablet (md) and Desktop (lg) */}
-                <span className={`font-bold tracking-wider transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) hidden md:inline ${scrolled ? 'text-sm' : 'text-lg'}`}>
+                <span 
+                    className="font-bold tracking-wider transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) hidden md:inline"
+                    style={{ fontSize: scrolled ? 'var(--text-sm)' : 'var(--text-lg)' }}
+                >
                     <span className="bg-gradient-to-r from-indigo-900 to-fuchsia-800 dark:from-indigo-300 dark:to-fuchsia-300 bg-clip-text text-transparent">Dobrev</span>
                     <span className="text-slate-900 dark:text-white"> Opus Zodiac</span>
                 </span>
@@ -126,46 +133,55 @@ export const Header: React.FC = () => {
 
             {/* Desktop Menu - Centered & Single Line */}
             <nav className="hidden lg:flex items-center justify-center absolute left-1/2 -translate-x-1/2 top-0 h-full w-auto">
-                <div className="flex items-center justify-center gap-0 h-full px-0">
+                <div className="flex items-center justify-center h-full" style={{ gap: 'var(--space-xs)' }}>
                     {MENU_STRUCTURE.map((item) => (
-                        <div key={item.label} className="relative group h-full flex items-center px-1 xl:px-1.5">
+                        <div key={item.label} className="relative group h-full flex items-center" style={{ paddingLeft: 'var(--space-sm)', paddingRight: 'var(--space-sm)' }}>
                         {item.subItems ? (
                             <>
                             <Link 
                                 to={item.path} 
-                                className={`relative flex items-center gap-0.5 text-[13px] font-bold tracking-wide uppercase py-2 transition-colors duration-300
+                                className={`relative flex items-center font-bold tracking-wide uppercase py-2 transition-colors duration-300
                                     ${location.pathname.startsWith(item.path) 
                                         ? 'text-indigo-600 dark:text-indigo-400' 
                                         : 'text-slate-900 dark:text-white'
                                     }
                                     group-hover:text-indigo-600 dark:group-hover:text-indigo-400
                                 `}
+                                style={{ fontSize: 'var(--text-sm)', gap: 'calc(var(--vw-unit) * 0.2)' }}
                             >
-                                {getLabel(item.label)} <ChevronDown size={10} className="group-hover:rotate-180 transition-transform duration-300 opacity-50" />
+                                {getLabel(item.label)} <ChevronDown style={{ width: 'var(--size-icon-sm)', height: 'var(--size-icon-sm)' }} className="group-hover:rotate-180 transition-transform duration-300 opacity-50" />
                             </Link>
                             
                             {/* Dropdown Level 1 */}
                             <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 perspective-[1000px]">
-                                <div className="bg-white/90 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl border border-indigo-50 dark:border-slate-800 rounded-2xl p-2 w-72 origin-top rotate-x-0 mt-[-10px]">
+                                <div 
+                                    className="bg-white/90 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl border border-indigo-50 dark:border-slate-800 origin-top rotate-x-0 mt-[-10px]"
+                                    style={{ borderRadius: 'var(--radius-xl)', padding: 'var(--space-sm)', width: 'calc(var(--vw-unit) * 18)' }}
+                                >
                                     {item.subItems.map(sub => (
                                         <div key={sub.path} className="relative group/sub">
                                             <Link 
                                                 to={sub.path}
-                                                className="flex items-center justify-between px-4 py-3 text-sm font-bold text-slate-700 dark:text-slate-200 rounded-xl hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                                                className="flex items-center justify-between font-bold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                                                style={{ padding: 'var(--space-md) var(--space-lg)', borderRadius: 'var(--radius-lg)', fontSize: 'var(--text-sm)' }}
                                             >
                                                 {getLabel(sub.label)}
-                                                {sub.subItems && <ChevronRight size={14} className="opacity-50" />}
+                                                {sub.subItems && <ChevronRight style={{ width: 'var(--size-icon-sm)', height: 'var(--size-icon-sm)' }} className="opacity-50" />}
                                             </Link>
 
                                             {/* Dropdown Level 2 */}
                                             {sub.subItems && (
                                                 <div className="absolute top-0 left-full pl-2 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300">
-                                                    <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl border border-indigo-50 dark:border-slate-800 rounded-2xl p-2 w-64">
+                                                    <div 
+                                                        className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl border border-indigo-50 dark:border-slate-800"
+                                                        style={{ borderRadius: 'var(--radius-xl)', padding: 'var(--space-sm)', width: 'calc(var(--vw-unit) * 16)' }}
+                                                    >
                                                         {sub.subItems.map(nested => (
                                                             <Link
                                                                 key={nested.path}
                                                                 to={nested.path}
-                                                                className="block px-4 py-2.5 text-xs font-bold text-slate-600 dark:text-slate-300 rounded-lg hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                                                                className="block font-bold text-slate-600 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                                                                style={{ padding: 'var(--space-sm) var(--space-lg)', borderRadius: 'var(--radius-md)', fontSize: 'var(--text-xs)' }}
                                                             >
                                                                 {getLabel(nested.label)}
                                                             </Link>
@@ -181,12 +197,13 @@ export const Header: React.FC = () => {
                         ) : (
                             <Link 
                             to={item.path}
-                            className={`relative text-[13px] font-bold tracking-wide uppercase py-2 transition-colors duration-300
+                            className={`relative font-bold tracking-wide uppercase py-2 transition-colors duration-300
                                 ${location.pathname === item.path 
                                     ? 'text-indigo-600 dark:text-indigo-400' 
                                     : 'text-slate-900 dark:text-white'
                                 } 
                                 hover:text-indigo-600 dark:hover:text-indigo-400 group`}
+                            style={{ fontSize: 'var(--text-sm)' }}
                             >
                             {getLabel(item.label)}
                             </Link>
@@ -197,15 +214,16 @@ export const Header: React.FC = () => {
             </nav>
 
             {/* Desktop Right Actions */}
-            <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
+            <div className="hidden lg:flex items-center flex-shrink-0" style={{ gap: 'var(--space-sm)' }}>
                 
                 {/* Language Selector - Compact */}
-                <div className="flex bg-slate-100 dark:bg-slate-800 rounded-full p-0.5" ref={langRef}>
+                <div className="flex bg-slate-100 dark:bg-slate-800 rounded-full" style={{ padding: 'calc(var(--vw-unit) * 0.1)' }} ref={langRef}>
                     {['UA', 'EN', 'RU'].map((lang) => (
                         <button
                             key={lang}
                             onClick={() => setLanguage(lang as Language)}
-                            className={`text-[10px] font-bold px-2 py-1 rounded-full transition-all ${language === lang ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+                            className={`font-bold rounded-full transition-all ${language === lang ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+                            style={{ fontSize: 'var(--text-xs)', padding: 'var(--space-xs) var(--space-sm)' }}
                         >
                             {lang}
                         </button>
@@ -218,15 +236,20 @@ export const Header: React.FC = () => {
                 {/* Login Button */}
                 <button 
                     onClick={() => setAuthModalOpen(true)}
-                    className={`flex items-center gap-2 rounded-full font-bold text-xs uppercase tracking-widest hover:shadow-lg hover:scale-105 transition-all duration-700
+                    className={`flex items-center rounded-full font-bold uppercase tracking-widest hover:shadow-lg hover:scale-105 transition-all duration-700
                         bg-slate-900 text-white dark:bg-white dark:text-slate-900
                         ${scrolled 
-                            ? 'px-5 py-2.5 hover:shadow-indigo-500/20' 
-                            : 'px-6 py-3 shadow-sm'
+                            ? 'hover:shadow-indigo-500/20' 
+                            : 'shadow-sm'
                         }
                     `}
+                    style={{ 
+                        gap: 'var(--space-sm)', 
+                        fontSize: 'var(--text-xs)',
+                        padding: scrolled ? 'var(--space-sm) var(--space-lg)' : 'var(--space-md) var(--space-xl)'
+                    }}
                 >
-                    <LogIn size={14} strokeWidth={2.5} />
+                    <LogIn style={{ width: 'var(--size-icon-sm)', height: 'var(--size-icon-sm)' }} strokeWidth={2.5} />
                     <span>{t('menu_login')}</span>
                 </button>
             </div>
