@@ -36,21 +36,68 @@ const roleColors: Record<UserRole, string> = {
 };
 
 export const Dashboard: React.FC = () => {
-    const { user, logout, isAuthenticated } = useAuth();
+    const { user, logout, isAuthenticated, login } = useAuth();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('courses');
+
+    // Demo login handlers
+    const demoLogin = async (role: UserRole) => {
+        const emails: Record<UserRole, string> = {
+            listener: 'listener@demo.com',
+            student: 'student@demo.com',
+            manager: 'manager@demo.com',
+            admin: 'admin@demo.com',
+        };
+        await login(emails[role], 'demo');
+    };
 
     // Redirect if not authenticated
     if (!isAuthenticated || !user) {
         return (
             <div className="min-h-screen pt-24 pb-12 px-4 flex items-center justify-center">
-                <div className="text-center">
+                <div className="text-center max-w-md">
                     <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-4">
                         Увійдіть до кабінету
                     </h2>
                     <p className="text-slate-600 dark:text-slate-400 mb-6">
                         Для доступу до особистого кабінету необхідно авторизуватися
                     </p>
+                    
+                    {/* Demo Login Buttons */}
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-lg mb-6">
+                        <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Демо-вхід для тестування</h3>
+                        <div className="grid grid-cols-2 gap-3">
+                            <button
+                                onClick={() => demoLogin('listener')}
+                                className="px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex flex-col items-center gap-1"
+                            >
+                                <span className="w-8 h-8 rounded-full bg-slate-500 flex items-center justify-center text-white text-xs font-bold">С</span>
+                                <span>Слухач</span>
+                            </button>
+                            <button
+                                onClick={() => demoLogin('student')}
+                                className="px-4 py-3 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 font-medium text-sm hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all flex flex-col items-center gap-1"
+                            >
+                                <span className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white text-xs font-bold">С</span>
+                                <span>Студент</span>
+                            </button>
+                            <button
+                                onClick={() => demoLogin('manager')}
+                                className="px-4 py-3 rounded-xl bg-fuchsia-50 dark:bg-fuchsia-900/30 text-fuchsia-700 dark:text-fuchsia-300 font-medium text-sm hover:bg-fuchsia-100 dark:hover:bg-fuchsia-900/50 transition-all flex flex-col items-center gap-1"
+                            >
+                                <span className="w-8 h-8 rounded-full bg-fuchsia-500 flex items-center justify-center text-white text-xs font-bold">М</span>
+                                <span>Менеджер</span>
+                            </button>
+                            <button
+                                onClick={() => demoLogin('admin')}
+                                className="px-4 py-3 rounded-xl bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 font-medium text-sm hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-all flex flex-col items-center gap-1"
+                            >
+                                <span className="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-white text-xs font-bold">А</span>
+                                <span>Адмін</span>
+                            </button>
+                        </div>
+                    </div>
+
                     <button
                         onClick={() => navigate('/')}
                         className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white rounded-full font-bold"
