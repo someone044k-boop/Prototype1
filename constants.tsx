@@ -1801,8 +1801,33 @@ export const COURSES: Course[] = [
         title: 'Визначення Архетипів',
         description: 'Теоретичний Модуль',
         slides: [
-          { id: 's1', title: 'Вступ', type: 'theory', content: 'Вітаємо на першому курсі...', audioUrl: 'mock.mp3' },
-          { id: 's2', title: 'Скорпіон, Телець та Діва', type: 'theory', content: 'Аналіз фіксованого хреста...', audioUrl: 'mock.mp3' }
+          { id: 's1', title: 'Вступ до курсу', type: 'theory', content: 'Вітаємо на першому курсі...', audioUrl: 'audio1.mp3', imageUrl: 'https://picsum.photos/800/450?random=1' },
+          { id: 's2', title: 'Що таке архетип', type: 'theory', content: 'Архетип — це первинний образ...', audioUrl: 'audio2.mp3', imageUrl: 'https://picsum.photos/800/450?random=2' },
+          { id: 's3', title: 'Зодіакальне коло', type: 'theory', content: 'Зодіак як карта душі...', audioUrl: 'audio3.mp3', imageUrl: 'https://picsum.photos/800/450?random=3' },
+          { id: 's4', title: 'Овен — Початок', type: 'theory', content: 'Архетип Овна символізує...', audioUrl: 'audio4.mp3', imageUrl: 'https://picsum.photos/800/450?random=4' },
+          { id: 's5', title: 'Телець — Стабільність', type: 'theory', content: 'Телець втілює принцип...', audioUrl: 'audio5.mp3', imageUrl: 'https://picsum.photos/800/450?random=5' },
+          { id: 's6', title: 'Близнюки — Комунікація', type: 'theory', content: 'Близнюки відкривають...', audioUrl: 'audio6.mp3', imageUrl: 'https://picsum.photos/800/450?random=6' },
+          { id: 's7', title: 'Рак — Емоційність', type: 'theory', content: 'Рак занурює нас у глибини...', audioUrl: 'audio7.mp3', imageUrl: 'https://picsum.photos/800/450?random=7' },
+          { id: 's8', title: 'Лев — Творчість', type: 'theory', content: 'Лев випромінює творчу силу...', audioUrl: 'audio8.mp3', imageUrl: 'https://picsum.photos/800/450?random=8' },
+          { id: 's9', title: 'Діва — Аналіз', type: 'theory', content: 'Діва вчить нас розрізняти...', audioUrl: 'audio9.mp3', imageUrl: 'https://picsum.photos/800/450?random=9' },
+          { id: 's10', title: 'Терези — Баланс', type: 'theory', content: 'Терези шукають гармонію...', audioUrl: 'audio10.mp3', imageUrl: 'https://picsum.photos/800/450?random=10' },
+          { id: 's11', title: 'Скорпіон — Трансформація', type: 'theory', content: 'Скорпіон веде через смерть...', audioUrl: 'audio11.mp3', imageUrl: 'https://picsum.photos/800/450?random=11' },
+          { id: 's12', title: 'Стрілець — Експансія', type: 'theory', content: 'Стрілець розширює горизонти...', audioUrl: 'audio12.mp3', imageUrl: 'https://picsum.photos/800/450?random=12' },
+          { id: 's13', title: 'Козеріг — Структура', type: 'theory', content: 'Козеріг будує фундамент...', audioUrl: 'audio13.mp3', imageUrl: 'https://picsum.photos/800/450?random=13' },
+          { id: 's14', title: 'Водолій — Інновація', type: 'theory', content: 'Водолій руйнує старе...', audioUrl: 'audio14.mp3', imageUrl: 'https://picsum.photos/800/450?random=14' },
+          { id: 's15', title: 'Риби — Розчинення', type: 'theory', content: 'Риби завершують цикл...', audioUrl: 'audio15.mp3', imageUrl: 'https://picsum.photos/800/450?random=15' },
+          { id: 's16', title: 'Медитація: Овен', type: 'practice', content: 'Практика ініціації Овна...', audioUrl: 'meditation1.mp3', imageUrl: 'https://picsum.photos/800/450?random=16' },
+          { id: 's17', title: 'Медитація: Телець', type: 'practice', content: 'Практика ініціації Тельця...', audioUrl: 'meditation2.mp3', imageUrl: 'https://picsum.photos/800/450?random=17' },
+          { id: 's18', title: 'Медитація: Близнюки', type: 'practice', content: 'Практика ініціації Близнюків...', audioUrl: 'meditation3.mp3', imageUrl: 'https://picsum.photos/800/450?random=18' },
+          { id: 's19', title: 'Медитація: Рак', type: 'practice', content: 'Практика ініціації Рака...', audioUrl: 'meditation4.mp3', imageUrl: 'https://picsum.photos/800/450?random=19' },
+          { id: 's20', title: 'Медитація: Лев', type: 'practice', content: 'Практика ініціації Лева...', audioUrl: 'meditation5.mp3', imageUrl: 'https://picsum.photos/800/450?random=20' },
+          { id: 's21', title: 'Медитація: Діва', type: 'practice', content: 'Практика ініціації Діви...', audioUrl: 'meditation6.mp3', imageUrl: 'https://picsum.photos/800/450?random=21' },
+          { id: 's22', title: 'Інтеграція: Вогонь', type: 'integration', content: 'Об\'єднання вогняних знаків...', audioUrl: 'integration1.mp3', imageUrl: 'https://picsum.photos/800/450?random=22' },
+          { id: 's23', title: 'Інтеграція: Земля', type: 'integration', content: 'Об\'єднання земних знаків...', audioUrl: 'integration2.mp3', imageUrl: 'https://picsum.photos/800/450?random=23' },
+          { id: 's24', title: 'Інтеграція: Повітря', type: 'integration', content: 'Об\'єднання повітряних знаків...', audioUrl: 'integration3.mp3', imageUrl: 'https://picsum.photos/800/450?random=24' },
+          { id: 's25', title: 'Інтеграція: Вода', type: 'integration', content: 'Об\'єднання водних знаків...', audioUrl: 'integration4.mp3', imageUrl: 'https://picsum.photos/800/450?random=25' },
+          { id: 's26', title: 'Фінальна медитація', type: 'practice', content: 'Завершальна практика курсу...', audioUrl: 'final.mp3', imageUrl: 'https://picsum.photos/800/450?random=26' },
+          { id: 's27', title: 'Підсумки та екзамен', type: 'exam', content: 'Перевірка засвоєного матеріалу...', audioUrl: 'exam.mp3', imageUrl: 'https://picsum.photos/800/450?random=27' }
         ]
       }
     ]

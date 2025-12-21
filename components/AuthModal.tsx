@@ -181,14 +181,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
     return (
         <div 
-            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md transition-all duration-150"
-            style={{ animation: 'fadeIn 0.15s ease-out' }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md animate-fade-in"
+            style={{ animationDuration: '0.15s' }}
             onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
         >
             <div 
                 ref={modalRef}
-                className="bg-white dark:bg-slate-900 w-full max-w-md max-h-[90vh] rounded-[2rem] shadow-2xl border border-white/20 dark:border-slate-700 relative overflow-hidden flex flex-col"
-                style={{ animation: 'fadeIn 0.2s ease-out' }}
+                className="bg-white dark:bg-slate-900 w-full max-w-md max-h-[90vh] rounded-[2rem] shadow-2xl border border-white/20 dark:border-slate-700 relative overflow-hidden flex flex-col animate-drop-in"
+                style={{ animationDuration: '0.2s' }}
             >
                 {/* Close Button */}
                 <button 

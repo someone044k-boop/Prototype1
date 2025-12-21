@@ -1,12 +1,92 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     User, BookOpen, Bell, MessageCircle, Sparkles, Send, 
     ShoppingBag, Users, Settings, LogOut, ChevronRight,
-    Calendar, Clock, CheckCircle, AlertCircle
+    Calendar, Clock, CheckCircle, AlertCircle, Lock, Check
 } from 'lucide-react';
 import { useAuth, hasPermission, UserRole } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+
+// Progress tracking interfaces (same as Training.tsx)
+interface LessonProgress {
+    completed: boolean;
+    progress: number;
+}
+
+interface ModuleProgress {
+    [lessonId: string]: LessonProgress;
+}
+
+interface CourseProgress {
+    [moduleId: string]: ModuleProgress;
+}
+
+interface UserProgress {
+    courses: {
+        [courseId: string]: CourseProgress;
+    };
+    purchasedCourses: string[];
+}
+
+// Get progress from localStorage
+const getTrainingProgress = (): UserProgress => {
+    const saved = localStorage.getItem('trainingProgress');
+    if (saved) {
+        return JSON.parse(saved);
+    }
+    return {
+        courses: {
+            course1: {
+                archetypes: {
+                    scorpio: { completed: true, progress: 100 },
+                    aries: { completed: true, progress: 100 },
+                    sagittarius: { completed: false, progress: 60 },
+                    aquarius: { completed: false, progress: 0 },
+                },
+                meditation: {
+                    libido: { completed: false, progress: 0 },
+                    feelings: { completed: false, progress: 0 },
+                    mind: { completed: false, progress: 0 },
+                    attention: { completed: false, progress: 0 },
+                },
+                exam: {
+                    needs: { completed: false, progress: 0 },
+                    exchange: { completed: false, progress: 0 },
+                    rules: { completed: false, progress: 0 },
+                    society: { completed: false, progress: 0 },
+                    family: { completed: false, progress: 0 },
+                },
+            },
+            course2: {
+                space: { scorpio: { completed: false, progress: 0 }, aries: { completed: false, progress: 0 }, sagittarius: { completed: false, progress: 0 }, aquarius: { completed: false, progress: 0 } },
+                heroes: { scorpio: { completed: false, progress: 0 }, aries: { completed: false, progress: 0 }, sagittarius: { completed: false, progress: 0 }, aquarius: { completed: false, progress: 0 } },
+                weight: { scorpio: { completed: false, progress: 0 }, aries: { completed: false, progress: 0 }, sagittarius: { completed: false, progress: 0 }, aquarius: { completed: false, progress: 0 } },
+                influence: { scorpio: { completed: false, progress: 0 }, aries: { completed: false, progress: 0 }, sagittarius: { completed: false, progress: 0 }, aquarius: { completed: false, progress: 0 } },
+                exam: { scorpio: { completed: false, progress: 0 }, aries: { completed: false, progress: 0 }, sagittarius: { completed: false, progress: 0 }, aquarius: { completed: false, progress: 0 } },
+            },
+        },
+        purchasedCourses: ['course1', 'course2', 'course3'],
+    };
+};
+
+// Calculate module progress
+const calculateModuleProgress = (module: ModuleProgress | undefined): number => {
+    if (!module) return 0;
+    const lessons = Object.values(module);
+    if (lessons.length === 0) return 0;
+    const totalProgress = lessons.reduce((sum, l) => sum + l.progress, 0);
+    return Math.round(totalProgress / lessons.length);
+};
+
+// Calculate course progress
+const calculateCourseProgress = (course: CourseProgress | undefined): number => {
+    if (!course) return 0;
+    const modules = Object.values(course);
+    if (modules.length === 0) return 0;
+    const totalProgress = modules.reduce((sum, m) => sum + calculateModuleProgress(m), 0);
+    return Math.round(totalProgress / modules.length);
+};
 
 // Menu items based on permissions
 const menuItems = [
@@ -235,48 +315,196 @@ export const Dashboard: React.FC = () => {
 // Tab Components
 const CoursesTab: React.FC = () => {
     const { user } = useAuth();
-    const courses = [
-        { id: 'course1', title: '1й Курс Архетипів', progress: 75, lessons: 12, completed: 9 },
-        { id: 'course2', title: '2й Курс ТАРО', progress: 30, lessons: 16, completed: 5 },
+    const [progress, setProgress] = useState<UserProgress>(getTrainingProgress);
+
+    // Reload progress on mount
+    useEffect(() => {
+        setProgress(getTrainingProgress());
+    }, []);
+
+    // Course info
+    const coursesInfo = [
+        { 
+            id: 'course1', 
+            title: '1й КУРС | ІНІЦІАЦІЯ ЯКОСТЕЙ', 
+            subtitle: 'Знайомство з архетипами',
+            color: 'indigo',
+            modules: [
+                { id: 'archetypes', name: 'Знайомство з архетипами', lessons: 4 },
+                { id: 'meditation', name: 'Медитації ініціації', lessons: 4 },
+                { id: 'exam', name: 'Екзаменація', lessons: 5 },
+            ]
+        },
+        { 
+            id: 'course2', 
+            title: '2й КУРС | ПРАКТИКА ГЕРОЯ', 
+            subtitle: 'Практика архетипів у суспільстві',
+            color: 'amber',
+            modules: [
+                { id: 'space', name: 'Простір подвигів', lessons: 4 },
+                { id: 'heroes', name: 'Герої та їх сила', lessons: 4 },
+                { id: 'weight', name: 'Власна вага', lessons: 4 },
+                { id: 'influence', name: 'Вплив на середовище', lessons: 4 },
+                { id: 'exam', name: 'Екзаменація', lessons: 4 },
+            ]
+        },
+        { 
+            id: 'course3', 
+            title: '3й КУРС | ЗВ\'ЯЗОК ІЗ СТИХІЯМИ', 
+            subtitle: 'Поглиблена робота зі стихіями',
+            color: 'emerald',
+            modules: []
+        },
+        { 
+            id: 'course4', 
+            title: '4й КУРС | ПРОБУДЖЕННЯ БЕЗДОГАННИХ СИЛ', 
+            subtitle: 'Майстерський рівень',
+            color: 'violet',
+            modules: []
+        },
     ];
 
-    const userCourses = courses.filter(c => user?.courses.includes(c.id));
+    const purchasedCourses = progress.purchasedCourses || [];
+    const userCourses = coursesInfo.filter(c => purchasedCourses.includes(c.id) || user?.courses.includes(c.id));
+
+    // Get color classes
+    const getColorClasses = (color: string) => ({
+        bg: `bg-${color}-500`,
+        bgLight: `bg-${color}-50 dark:bg-${color}-900/20`,
+        text: `text-${color}-600 dark:text-${color}-400`,
+        border: `border-${color}-200 dark:border-${color}-800`,
+        gradient: color === 'indigo' ? 'from-indigo-500 to-fuchsia-500' : 
+                  color === 'amber' ? 'from-amber-500 to-orange-500' :
+                  color === 'emerald' ? 'from-emerald-500 to-teal-500' :
+                  'from-violet-500 to-purple-500'
+    });
 
     return (
         <div className="space-y-6 animate-fade-in">
-            <h2 className="text-xl font-bold text-slate-800 dark:text-white">Мої курси</h2>
+            <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold text-slate-800 dark:text-white">Мої курси</h2>
+                <Link 
+                    to="/training" 
+                    className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline"
+                >
+                    Всі курси →
+                </Link>
+            </div>
             
             {userCourses.length === 0 ? (
                 <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 text-center border border-slate-100 dark:border-slate-800">
                     <BookOpen className="w-16 h-16 mx-auto mb-4 text-slate-300 dark:text-slate-700" />
                     <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2">У вас ще немає курсів</h3>
                     <p className="text-slate-500 mb-4">Придбайте курс, щоб почати навчання</p>
-                    <a href="/training" className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white rounded-full font-bold">
+                    <Link to="/training" className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white rounded-full font-bold">
                         Переглянути курси
-                    </a>
+                    </Link>
                 </div>
             ) : (
-                <div className="grid gap-4">
-                    {userCourses.map(course => (
-                        <div key={course.id} className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-lg">
-                            <div className="flex items-start justify-between mb-4">
-                                <div>
-                                    <h3 className="font-bold text-slate-800 dark:text-white">{course.title}</h3>
-                                    <p className="text-sm text-slate-500">{course.completed} з {course.lessons} уроків</p>
+                <div className="grid gap-6">
+                    {userCourses.map(course => {
+                        const courseProgress = calculateCourseProgress(progress.courses[course.id]);
+                        const colors = getColorClasses(course.color);
+                        const isLocked = courseProgress === 0 && course.id !== 'course1';
+                        
+                        return (
+                            <div 
+                                key={course.id} 
+                                className={`bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-lg overflow-hidden ${isLocked ? 'opacity-60' : ''}`}
+                            >
+                                {/* Course Header */}
+                                <div className={`p-6 bg-gradient-to-r ${colors.gradient} text-white`}>
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <h3 className="font-bold text-lg">{course.title}</h3>
+                                            <p className="text-white/80 text-sm">{course.subtitle}</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <div className="text-3xl font-bold">{courseProgress}%</div>
+                                            <div className="text-white/80 text-xs uppercase tracking-wider">Прогрес</div>
+                                        </div>
+                                    </div>
+                                    {/* Progress Bar */}
+                                    <div className="mt-4 w-full h-2 bg-white/20 rounded-full overflow-hidden">
+                                        <div 
+                                            className="h-full bg-white rounded-full transition-all duration-500"
+                                            style={{ width: `${courseProgress}%` }}
+                                        />
+                                    </div>
                                 </div>
-                                <span className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{course.progress}%</span>
+
+                                {/* Modules */}
+                                {course.modules.length > 0 ? (
+                                    <div className="p-4">
+                                        <div className="grid gap-2">
+                                            {course.modules.map((module, idx) => {
+                                                const moduleProgress = calculateModuleProgress(progress.courses[course.id]?.[module.id]);
+                                                const isModuleLocked = idx > 0 && calculateModuleProgress(progress.courses[course.id]?.[course.modules[idx - 1].id]) < 100;
+                                                const isCompleted = moduleProgress === 100;
+                                                
+                                                return (
+                                                    <div 
+                                                        key={module.id}
+                                                        className={`flex items-center gap-3 p-3 rounded-xl transition-all ${
+                                                            isModuleLocked 
+                                                                ? 'bg-slate-50 dark:bg-slate-800/50 opacity-50' 
+                                                                : isCompleted
+                                                                    ? 'bg-green-50 dark:bg-green-900/20'
+                                                                    : 'bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800'
+                                                        }`}
+                                                    >
+                                                        {/* Status Icon */}
+                                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                                                            isModuleLocked 
+                                                                ? 'bg-slate-200 dark:bg-slate-700 text-slate-400'
+                                                                : isCompleted
+                                                                    ? 'bg-green-500 text-white'
+                                                                    : `bg-${course.color}-100 dark:bg-${course.color}-900/30 text-${course.color}-600 dark:text-${course.color}-400`
+                                                        }`}>
+                                                            {isModuleLocked ? <Lock size={14} /> : isCompleted ? <Check size={14} /> : <span className="text-xs font-bold">{idx + 1}</span>}
+                                                        </div>
+                                                        
+                                                        {/* Module Info */}
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className="flex items-center justify-between">
+                                                                <span className={`font-medium text-sm ${isModuleLocked ? 'text-slate-400' : 'text-slate-800 dark:text-white'}`}>
+                                                                    {module.name}
+                                                                </span>
+                                                                <span className={`text-xs font-bold ${isCompleted ? 'text-green-600 dark:text-green-400' : 'text-slate-500'}`}>
+                                                                    {moduleProgress}%
+                                                                </span>
+                                                            </div>
+                                                            {/* Mini Progress Bar */}
+                                                            <div className="mt-1 w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                                                                <div 
+                                                                    className={`h-full rounded-full transition-all ${isCompleted ? 'bg-green-500' : `bg-${course.color}-500`}`}
+                                                                    style={{ width: `${moduleProgress}%` }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                        
+                                        {/* Continue Button */}
+                                        <Link 
+                                            to="/training"
+                                            className={`mt-4 w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all bg-gradient-to-r ${colors.gradient} text-white hover:shadow-lg`}
+                                        >
+                                            {courseProgress === 0 ? 'Почати навчання' : courseProgress === 100 ? 'Переглянути курс' : 'Продовжити навчання'}
+                                            <ChevronRight size={16} />
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    <div className="p-6 text-center">
+                                        <Lock className="w-12 h-12 mx-auto mb-3 text-slate-300 dark:text-slate-600" />
+                                        <p className="text-slate-500 text-sm">Курс знаходиться у розробці</p>
+                                    </div>
+                                )}
                             </div>
-                            <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                <div 
-                                    className="h-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 rounded-full transition-all"
-                                    style={{ width: `${course.progress}%` }}
-                                />
-                            </div>
-                            <button className="mt-4 w-full py-2 rounded-xl font-bold text-sm bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-indigo-500 hover:text-white transition-all">
-                                Продовжити навчання
-                            </button>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
         </div>

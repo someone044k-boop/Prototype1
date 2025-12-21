@@ -245,10 +245,10 @@ export const Master: React.FC = () => {
                     className={`grid md:grid-cols-[auto_1fr] gap-4 md:gap-6 items-start mb-10 ${fadeUp('block1')}`}
                 >
                     <div 
-                        className={`rounded-[2.5rem] overflow-hidden border border-indigo-200 dark:border-indigo-900/30 group w-fit mx-auto md:mx-0 ${scaleIn('block1')}`} 
+                        className={`rounded-[2.5rem] overflow-hidden border border-indigo-200 dark:border-indigo-900/30 group w-fit mx-auto md:mx-0 card-img-hover ${scaleIn('block1')}`} 
                         style={{ boxShadow: '0 15px 40px -10px rgba(255, 255, 255, 0.5), 0 8px 20px -5px rgba(129, 140, 248, 0.15)' }}
                     >
-                        <img loading="eager" src="/master/aboutmaster1.webp" alt="Костянтин Добрев" className="w-72 md:w-80 lg:w-96 h-auto transition-transform duration-300 group-hover:scale-105" style={{ marginTop: '-2cm', marginBottom: '0' }} />
+                        <img loading="eager" src="/master/aboutmaster1.webp" alt="Костянтин Добрев" className="w-72 md:w-80 lg:w-96 h-auto" style={{ marginTop: '-2cm', marginBottom: '0' }} />
                     </div>
                     <div className={`space-y-3 text-base leading-relaxed text-slate-700 dark:text-slate-300 text-justify ${fadeLeft('block1')}`} style={{ transitionDelay: '100ms' }}>
                         <h1 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white uppercase tracking-widest mb-4">
@@ -293,10 +293,10 @@ export const Master: React.FC = () => {
                         </p>
                     </div>
                     <div 
-                        className={`rounded-[2.5rem] overflow-hidden border border-indigo-200 dark:border-indigo-900/30 group w-fit mx-auto md:mx-0 order-1 md:order-2 md:-mt-32 ${scaleIn('block2')}`} 
+                        className={`rounded-[2.5rem] overflow-hidden border border-indigo-200 dark:border-indigo-900/30 group w-fit mx-auto md:mx-0 order-1 md:order-2 md:-mt-32 card-img-hover ${scaleIn('block2')}`} 
                         style={{ boxShadow: '0 15px 40px -10px rgba(255, 255, 255, 0.5), 0 8px 20px -5px rgba(129, 140, 248, 0.15)' }}
                     >
-                        <img loading="lazy" src="/master/aboutmaster2.webp" alt="Костянтин Добрев з картами ТАРО" className="w-72 md:w-80 lg:w-96 h-auto transition-transform duration-300 group-hover:scale-105" style={{ marginTop: '0', marginBottom: '-2cm' }} />
+                        <img loading="lazy" src="/master/aboutmaster2.webp" alt="Костянтин Добрев з картами ТАРО" className="w-72 md:w-80 lg:w-96 h-auto" style={{ marginTop: '0', marginBottom: '-2cm' }} />
                     </div>
                 </div>
 
@@ -391,11 +391,11 @@ export const Master: React.FC = () => {
                             )}
                             
                             <div 
-                                className="aspect-square overflow-hidden relative bg-slate-100 dark:bg-slate-800 cursor-pointer"
+                                className="aspect-square overflow-hidden relative bg-slate-100 dark:bg-slate-800 cursor-pointer card-img-hover"
                                 onClick={() => setSelectedId(item.id)}
                             >
                                 <div className="absolute inset-0 bg-indigo-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                                <img src={item.image} alt={item.title} className={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 ${item.id === 'nastavnictvo' ? '' : 'object-center'}`} style={item.id === 'nastavnictvo' ? { objectPosition: 'center -1cm' } : {}} />
+                                <img src={item.image} alt={item.title} className={`w-full h-full object-cover ${item.id === 'nastavnictvo' ? '' : 'object-center'}`} style={item.id === 'nastavnictvo' ? { objectPosition: 'center -1cm' } : {}} />
                             </div>
 
                             <div className="p-3 flex-1 flex flex-col items-center text-center">
@@ -488,8 +488,8 @@ export const Master: React.FC = () => {
                             <X size={24} />
                         </button>
 
-                        <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group">
-                            <img src={activeItem.image} alt={activeItem.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                        <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group card-img-hover">
+                            <img src={activeItem.image} alt={activeItem.title} className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex flex-col justify-end p-8">
                                 <h3 className="text-white text-3xl font-bold mb-3 leading-tight drop-shadow-lg">{activeItem.title}</h3>
                                 <p className="text-indigo-200 text-lg font-medium flex items-center gap-2"><CreditCard size={18}/> {activeItem.price}</p>

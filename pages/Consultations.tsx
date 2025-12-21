@@ -231,11 +231,11 @@ export const Consultations: React.FC = () => {
                     >
                         {/* Image Section */}
                         <div 
-                            className="aspect-square overflow-hidden relative bg-slate-100 dark:bg-slate-800 cursor-pointer"
+                            className="aspect-square overflow-hidden relative bg-slate-100 dark:bg-slate-800 cursor-pointer card-img-hover"
                             onClick={() => setSelectedId(item.id)}
                         >
                              <div className="absolute inset-0 bg-indigo-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                             <img loading="lazy" src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                             <img loading="lazy" src={item.image} alt={item.title} className="w-full h-full object-cover" />
                         </div>
 
                         {/* Card Content - Compact */}
@@ -308,8 +308,8 @@ export const Consultations: React.FC = () => {
                         </button>
 
                         {/* Modal Image (Left Side) - Adjusted width ratio */}
-                        <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group">
-                            <img loading="lazy" src={activeItem.image} alt={activeItem.title} className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
+                        <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group card-img-hover">
+                            <img loading="lazy" src={activeItem.image} alt={activeItem.title} className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex flex-col justify-end" style={{ padding: 'var(--space-xl)' }}>
                                 <h3 className="text-white font-bold leading-tight drop-shadow-lg" style={{ fontSize: 'var(--text-3xl)', marginBottom: 'var(--space-md)' }}>{activeItem.title}</h3>
                                 <p className="text-indigo-200 font-medium flex items-center" style={{ fontSize: 'var(--text-lg)', gap: 'var(--space-sm)' }}><CreditCard style={{ width: 'var(--size-icon-md)', height: 'var(--size-icon-md)' }}/> {activeItem.price}</p>

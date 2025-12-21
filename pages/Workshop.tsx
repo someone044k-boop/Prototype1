@@ -493,6 +493,47 @@ export const Workshop: React.FC = () => {
 
     const getLabel = (key: string) => t(key as any);
 
+    // Determine current season based on month
+    const getCurrentSeason = () => {
+        const month = new Date().getMonth(); // 0-11
+        if (month >= 2 && month <= 4) return 'spring'; // March-May
+        if (month >= 5 && month <= 7) return 'summer'; // June-August
+        if (month >= 8 && month <= 10) return 'autumn'; // September-November
+        return 'winter'; // December-February
+    };
+
+    const currentSeason = getCurrentSeason();
+
+    // Season-based button colors - matching seasonal blocks exactly (same for light and dark themes)
+    const seasonButtonStyles: Record<string, { gradient: string; ring: string; shadow: string; textColor: string }> = {
+        spring: {
+            gradient: 'from-rose-300 via-orange-300 to-rose-300',
+            ring: 'ring-rose-200',
+            shadow: '0 10px 40px -5px rgba(253, 164, 175, 0.6), 0 4px 20px -2px rgba(253, 186, 116, 0.5)',
+            textColor: 'text-white'
+        },
+        summer: {
+            gradient: 'from-emerald-300 via-cyan-300 to-emerald-300',
+            ring: 'ring-emerald-200',
+            shadow: '0 10px 40px -5px rgba(110, 231, 183, 0.6), 0 4px 20px -2px rgba(103, 232, 249, 0.5)',
+            textColor: 'text-white'
+        },
+        autumn: {
+            gradient: 'from-pink-300 via-violet-300 to-pink-300',
+            ring: 'ring-violet-200',
+            shadow: '0 10px 40px -5px rgba(249, 168, 212, 0.6), 0 4px 20px -2px rgba(196, 181, 253, 0.5)',
+            textColor: 'text-white'
+        },
+        winter: {
+            gradient: 'from-slate-200 via-slate-300 to-slate-200',
+            ring: 'ring-slate-200',
+            shadow: '0 10px 40px -5px rgba(203, 213, 225, 0.6), 0 4px 20px -2px rgba(148, 163, 184, 0.5)',
+            textColor: 'text-slate-700'
+        }
+    };
+
+    const btnStyle = seasonButtonStyles[currentSeason];
+
     // Scroll to top on navigation
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -556,7 +597,7 @@ export const Workshop: React.FC = () => {
                 onClick={() => setSelectedItem(item)}
             >
                 <div className="absolute inset-0 bg-indigo-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                <img loading="lazy" src={item.image} alt={item.title} className={`w-full h-full object-cover ${item.imagePosition || 'object-top'} transition-transform duration-700 group-hover:scale-110`} />
+                <img loading="lazy" src={item.image} alt={item.title} className={`w-full h-full object-cover card-img-hover ${item.imagePosition || 'object-top'}`} />
                 {item.zodiac && (
                     <div className="absolute top-3 right-3 w-10 h-10 rounded-full bg-gradient-to-br from-amber-200 to-amber-600 flex items-center justify-center text-amber-900 font-bold text-xl shadow-lg z-20">
                         {item.zodiac}
@@ -610,8 +651,8 @@ export const Workshop: React.FC = () => {
                     </button>
 
                     {/* Modal Image (Left Side) */}
-                    <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group">
-                        <img loading="lazy" src={selectedItem.image} alt={selectedItem.title} className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
+                    <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group card-img-hover">
+                        <img loading="lazy" src={selectedItem.image} alt={selectedItem.title} className="w-full h-full object-cover" />
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex flex-col justify-end p-8">
                             <h3 className="text-white text-3xl font-bold mb-3 leading-tight drop-shadow-lg">{selectedItem.title}</h3>
                             {selectedItem.price && <p className="text-indigo-200 text-lg font-medium">{selectedItem.price}</p>}
@@ -741,8 +782,8 @@ export const Workshop: React.FC = () => {
 
                 {/* Section 4 - School examination */}
                 <div className="flex flex-col md:flex-row gap-6 items-center opacity-0 animate-fade-in" style={{ animationDelay: '1150ms', animationFillMode: 'forwards' }}>
-                    <div className="w-80 h-64 md:w-[28rem] md:h-80 flex-shrink-0 rounded-2xl overflow-hidden shadow-xl group">
-                        <img src="/sigil/examsigil.jpg" alt="Екзаменація" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <div className="w-80 h-64 md:w-[28rem] md:h-80 flex-shrink-0 rounded-2xl overflow-hidden shadow-xl card-img-hover">
+                        <img src="/sigil/examsigil.jpg" alt="Екзаменація" className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
                         <p className="text-slate-700 dark:text-slate-300 mb-3">
@@ -789,9 +830,9 @@ export const Workshop: React.FC = () => {
             date: '19-23 грудня',
             title: 'ЕВОЛЮЦІЯ',
             window: 'четверте вікно бездоганності',
-            color: 'from-white to-slate-50 dark:from-slate-800 dark:to-slate-700',
-            borderColor: 'border-slate-200 dark:border-slate-600',
-            textColor: 'text-slate-700 dark:text-slate-300',
+            color: 'from-white to-slate-50',
+            borderColor: 'border-slate-200',
+            textColor: 'text-slate-700',
             position: 'top',
             description: 'Зимове сонцестояння відкриває <strong>четверте вікно бездоганності - ЕВОЛЮЦІЯ</strong>. У цей період працює камертон який вмикає <strong>механізми еволюції</strong>. Він штовхає вас до <strong>набору нових якостей</strong>. За допомогою цього камертону ми всі дивимось у наступний рік як на <strong>простір набору нових якостей</strong>.',
         },
@@ -800,9 +841,9 @@ export const Workshop: React.FC = () => {
             date: '20-23 березня',
             title: 'НАРОДЖЕННЯ',
             window: 'перше вікно бездоганності',
-            color: 'from-rose-100 to-orange-100 dark:from-rose-900/30 dark:to-orange-900/30',
-            borderColor: 'border-rose-200 dark:border-rose-700',
-            textColor: 'text-rose-700 dark:text-rose-300',
+            color: 'from-rose-100 to-orange-100',
+            borderColor: 'border-rose-200',
+            textColor: 'text-rose-700',
             position: 'right',
             description: 'Весняне рівнодення відкриває <strong>перше вікно бездоганності - НАРОДЖЕННЯ</strong>. У цей період працює камертон який вмикає <strong>статеву (червону) енергію</strong> та всі Ваші <strong>генетичні програми</strong>. Він дозволяє Вам реалізувати усі свої особливі властивості та таланти. За допомогою цього камертону ми всі <strong>намагаємося утворити щось нове у своєму житті, що покращить наше життя впродовж всього року</strong>.',
         },
@@ -811,9 +852,9 @@ export const Workshop: React.FC = () => {
             date: '20-23 вересня',
             title: 'ПРОСВІТЛЕННЯ',
             window: 'третє вікно бездоганності',
-            color: 'from-pink-50 to-violet-50 dark:from-pink-900/20 dark:to-violet-900/20',
-            borderColor: 'border-violet-100 dark:border-violet-700',
-            textColor: 'text-violet-700 dark:text-violet-300',
+            color: 'from-pink-50 to-violet-50',
+            borderColor: 'border-violet-100',
+            textColor: 'text-violet-700',
             position: 'left',
             description: 'Осіннє рівнодення відкриває <strong>третє вікно бездоганності - ПРОСВІТЛЕННЯ</strong>. У цей період працює камертон який вмикає <strong>розум</strong> та всі Ваші <strong>програми підсвідомості</strong>. Він відчищає програми поведінки та світобачення через які ви взаємодієте із об\'єктивною дійсністю. <strong>За допомогою цього камертону ми збільшуємо прибуток у житті та утворення життєвої сили, що потрібна для повсякденних справ</strong>.',
             note: 'Особливість нашої біосфери вимагає додаткових зусиль для синхронізації із цим камертоном. Тому більшість людей не встигають самостійно синхронізуватись із цим вікном бездоганності. У цей період потрібно більше зусиль майстра на те щоб поєднати Вас із камертоном 3го вікна бездоганності.',
@@ -823,9 +864,9 @@ export const Workshop: React.FC = () => {
             date: '19-23 червня',
             title: 'ПРОБУДЖЕННЯ',
             window: 'друге вікно бездоганності',
-            color: 'from-emerald-100 to-cyan-100 dark:from-emerald-900/30 dark:to-cyan-900/30',
-            borderColor: 'border-emerald-200 dark:border-emerald-700',
-            textColor: 'text-emerald-700 dark:text-emerald-300',
+            color: 'from-emerald-100 to-cyan-100',
+            borderColor: 'border-emerald-200',
+            textColor: 'text-emerald-700',
             position: 'bottom',
             description: 'Літнє сонцестояння відкриває <strong>друге вікно бездоганності - ПРОБУДЖЕННЯ</strong>. У цей період працює камертон який вмикає <strong>почуття та збільшує глибину ваших взаємодій у суспільстві</strong>. Він збільшує вашу вагу та вплив у суспільстві завдяки вагомості почуттів які є навколо вас та у ваших справах. <strong>За допомогою цього камертону ми збільшуємо добробут у своєму житті що дозволяє нам знайти нові сенси життя (пробудитись та сформувати нові цілі)</strong>.',
         },
@@ -895,11 +936,15 @@ export const Workshop: React.FC = () => {
                         href="https://t.me/dobrevk" 
                         target="_blank" 
                         rel="noreferrer"
-                        className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-indigo-500 text-white font-bold rounded-full hover:scale-105 transition-all uppercase tracking-wider text-sm ring-4 ring-indigo-100 dark:ring-indigo-900/50"
-                        style={{ boxShadow: '0 10px 40px -5px rgba(129, 140, 248, 0.5), 0 4px 20px -2px rgba(192, 132, 252, 0.4)' }}
+                        className={`relative inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r ${btnStyle.gradient} ${btnStyle.textColor} font-bold rounded-full hover:scale-105 transition-all uppercase tracking-wider text-sm ${btnStyle.ring} ring-4 overflow-hidden`}
+                        style={{ boxShadow: btnStyle.shadow }}
                     >
-                        <Send size={20} />
-                        ЗАМОВИТИ СЕЗОННУ ПРОЦЕДУРУ
+                        {/* Neon sweep animation */}
+                        <span className="absolute inset-0 overflow-hidden rounded-full">
+                            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-neon-sweep"></span>
+                        </span>
+                        <Send size={20} className="relative z-10" />
+                        <span className="relative z-10">ЗАМОВИТИ СЕЗОННУ ПРОЦЕДУРУ</span>
                     </a>
                 </div>
             </div>
@@ -913,8 +958,34 @@ export const Workshop: React.FC = () => {
                     </div>
                 </div>
 
+                {/* Element symbols on diagonals - positioned at 45° angles from center */}
+                {/* Top-Right (45°): Sword (Air) */}
+                <div className={`absolute top-1/2 left-1/2 z-30 transition-all duration-700 ${mandalaVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`} style={{ transform: 'translate(calc(200px - 24px), calc(-160px - 24px))', animationDelay: '600ms' }}>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-100 to-slate-200 dark:from-cyan-900/50 dark:to-slate-800 flex items-center justify-center shadow-lg border-2 border-cyan-300 dark:border-cyan-700">
+                        <span className="text-2xl">⚔️</span>
+                    </div>
+                </div>
+                {/* Top-Left (135°): Cup (Water) */}
+                <div className={`absolute top-1/2 left-1/2 z-30 transition-all duration-700 ${mandalaVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`} style={{ transform: 'translate(calc(-200px - 24px), calc(-160px - 24px))', animationDelay: '700ms' }}>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-100 to-indigo-200 dark:from-blue-900/50 dark:to-indigo-800 flex items-center justify-center shadow-lg border-2 border-blue-300 dark:border-blue-700">
+                        <span className="text-2xl">🏆</span>
+                    </div>
+                </div>
+                {/* Bottom-Left (225°): Pentacle (Earth) */}
+                <div className={`absolute top-1/2 left-1/2 z-30 transition-all duration-700 ${mandalaVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`} style={{ transform: 'translate(calc(-200px - 24px), calc(160px - 24px))', animationDelay: '800ms' }}>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-100 to-amber-200 dark:from-emerald-900/50 dark:to-amber-800 flex items-center justify-center shadow-lg border-2 border-emerald-300 dark:border-emerald-700">
+                        <span className="text-2xl">⭐</span>
+                    </div>
+                </div>
+                {/* Bottom-Right (315°): Wand (Fire) */}
+                <div className={`absolute top-1/2 left-1/2 z-30 transition-all duration-700 ${mandalaVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`} style={{ transform: 'translate(calc(200px - 24px), calc(160px - 24px))', animationDelay: '900ms' }}>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-100 to-red-200 dark:from-orange-900/50 dark:to-red-800 flex items-center justify-center shadow-lg border-2 border-orange-300 dark:border-orange-700">
+                        <span className="text-2xl">🪄</span>
+                    </div>
+                </div>
+
                 {/* Top - Winter (White) */}
-                <div className={`absolute top-10 left-1/2 w-[520px] ${mandalaVisible ? 'opacity-0 animate-slide-from-top' : 'opacity-0'}`} style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
+                <div className={`absolute top-16 left-1/2 w-[520px] ${mandalaVisible ? 'opacity-0 animate-slide-from-top' : 'opacity-0'}`} style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
                     <div className="rounded-3xl gradient-border-winter shadow-lg">
                         <div className={`bg-gradient-to-br ${seasonalProcedures[0].color} rounded-3xl p-8`}>
                             <div className={`text-center font-bold text-sm mb-3 ${seasonalProcedures[0].textColor}`}>{seasonalProcedures[0].date}</div>
@@ -922,16 +993,16 @@ export const Workshop: React.FC = () => {
                         </div>
                     </div>
                     {/* Connector line */}
-                    <div className="w-1 h-20 bg-gradient-to-b from-slate-500 to-indigo-400 mx-auto rounded-full"></div>
+                    <div className="w-1 h-28 bg-gradient-to-b from-slate-500 to-indigo-400 mx-auto rounded-full"></div>
                 </div>
 
                 {/* Right - Spring (Rose-Orange) */}
-                <div className={`absolute top-1/2 -right-24 w-[520px] ${mandalaVisible ? 'opacity-0 animate-slide-from-right' : 'opacity-0'}`} style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
+                <div className={`absolute top-1/2 -right-40 w-[520px] ${mandalaVisible ? 'opacity-0 animate-slide-from-right' : 'opacity-0'}`} style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
                     <div className="flex items-center">
-                        <div className="w-20 h-1 bg-gradient-to-r from-indigo-400 to-rose-500 rounded-full"></div>
+                        <div className="w-36 h-1 bg-gradient-to-r from-indigo-400 to-rose-500 rounded-full"></div>
                         <div className="rounded-3xl gradient-border-spring shadow-lg flex-1">
-                            <div className={`bg-gradient-to-br ${seasonalProcedures[1].color} rounded-3xl px-8 py-6`}>
-                                <div className={`text-center font-bold text-sm mb-2 ${seasonalProcedures[1].textColor}`}>{seasonalProcedures[1].date}</div>
+                            <div className={`bg-gradient-to-br ${seasonalProcedures[1].color} rounded-3xl p-8`}>
+                                <div className={`text-center font-bold text-sm mb-3 ${seasonalProcedures[1].textColor}`}>{seasonalProcedures[1].date}</div>
                                 <div className="text-slate-700 dark:text-slate-200 text-sm leading-relaxed text-justify" dangerouslySetInnerHTML={{ __html: seasonalProcedures[1].description }} />
                             </div>
                         </div>
@@ -939,12 +1010,12 @@ export const Workshop: React.FC = () => {
                 </div>
 
                 {/* Left - Autumn (Pink-Violet) */}
-                <div className={`absolute top-1/2 -left-24 w-[520px] ${mandalaVisible ? 'opacity-0 animate-slide-from-left' : 'opacity-0'}`} style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
+                <div className={`absolute top-1/2 -left-40 w-[520px] ${mandalaVisible ? 'opacity-0 animate-slide-from-left' : 'opacity-0'}`} style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
                     <div className="flex items-center">
                         <div className="rounded-3xl gradient-border-autumn shadow-lg flex-1">
-                            <div className={`bg-gradient-to-br ${seasonalProcedures[2].color} rounded-3xl px-8 py-3`}>
-                                <div className={`text-center font-bold text-sm mb-2 ${seasonalProcedures[2].textColor}`}>{seasonalProcedures[2].date}</div>
-                                <div className="text-slate-700 dark:text-slate-200 text-sm leading-snug text-justify" dangerouslySetInnerHTML={{ __html: seasonalProcedures[2].description }} />
+                            <div className={`bg-gradient-to-br ${seasonalProcedures[2].color} rounded-3xl p-8`}>
+                                <div className={`text-center font-bold text-sm mb-3 ${seasonalProcedures[2].textColor}`}>{seasonalProcedures[2].date}</div>
+                                <div className="text-slate-700 dark:text-slate-200 text-sm leading-relaxed text-justify" dangerouslySetInnerHTML={{ __html: seasonalProcedures[2].description }} />
                                 {seasonalProcedures[2].note && (
                                     <div className="mt-2 pt-2 border-t border-violet-200/50 dark:border-violet-600/50">
                                         <p className="text-xs text-slate-600 dark:text-slate-400 italic leading-snug">{seasonalProcedures[2].note}</p>
@@ -952,14 +1023,14 @@ export const Workshop: React.FC = () => {
                                 )}
                             </div>
                         </div>
-                        <div className="w-20 h-1 bg-gradient-to-l from-indigo-400 to-violet-500 rounded-full"></div>
+                        <div className="w-36 h-1 bg-gradient-to-l from-indigo-400 to-violet-500 rounded-full"></div>
                     </div>
                 </div>
 
                 {/* Bottom - Summer (Emerald-Cyan) */}
                 <div className={`absolute bottom-0 left-1/2 w-[520px] ${mandalaVisible ? 'opacity-0 animate-slide-from-bottom' : 'opacity-0'}`} style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
                     {/* Connector line */}
-                    <div className="w-1 h-20 bg-gradient-to-t from-emerald-500 to-indigo-400 mx-auto rounded-full"></div>
+                    <div className="w-1 h-28 bg-gradient-to-t from-emerald-500 to-indigo-400 mx-auto rounded-full"></div>
                     <div className="rounded-3xl gradient-border-summer shadow-lg">
                         <div className={`bg-gradient-to-br ${seasonalProcedures[3].color} rounded-3xl p-8`}>
                             <div className={`text-center font-bold text-sm mb-3 ${seasonalProcedures[3].textColor}`}>{seasonalProcedures[3].date}</div>

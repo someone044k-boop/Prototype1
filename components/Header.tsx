@@ -6,6 +6,7 @@ import { ThemeToggle } from './ThemeToggle';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Language } from '../translations';
 import { AuthModal } from './AuthModal';
+import { useAuth, UserRole } from '../contexts/AuthContext';
 
 export const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -17,6 +18,22 @@ export const Header: React.FC = () => {
   
   const location = useLocation();
   const { language, setLanguage, t } = useLanguage();
+  const { user, isAuthenticated, logout } = useAuth();
+
+  // Debug: Quick role switch
+  const setDebugRole = (role: UserRole) => {
+    const debugUser = {
+      id: 'debug-user',
+      email: `${role}@debug.com`,
+      name: role.charAt(0).toUpperCase() + role.slice(1),
+      role,
+      courses: role !== 'listener' ? ['course1', 'course2'] : [],
+      createdAt: new Date(),
+    };
+    localStorage.setItem('user', JSON.stringify(debugUser));
+    // Navigate to dashboard after setting role
+    window.location.href = window.location.origin + window.location.pathname + '#/dashboard';
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -233,25 +250,58 @@ export const Header: React.FC = () => {
                 {/* Theme Toggle */}
                 <ThemeToggle />
 
-                {/* Login Button */}
-                <button 
-                    onClick={() => setAuthModalOpen(true)}
-                    className={`flex items-center rounded-full font-bold uppercase tracking-widest hover:shadow-lg hover:scale-105 transition-all duration-700
-                        bg-slate-900 text-white dark:bg-white dark:text-slate-900
-                        ${scrolled 
-                            ? 'hover:shadow-indigo-500/20' 
-                            : 'shadow-sm'
-                        }
-                    `}
-                    style={{ 
-                        gap: 'var(--space-sm)', 
-                        fontSize: 'var(--text-xs)',
-                        padding: scrolled ? 'var(--space-sm) var(--space-lg)' : 'var(--space-md) var(--space-xl)'
-                    }}
-                >
-                    <LogIn style={{ width: 'var(--size-icon-sm)', height: 'var(--size-icon-sm)' }} strokeWidth={2.5} />
-                    <span>{t('menu_login')}</span>
-                </button>
+                {/* Login Button + Debug Buttons Container */}
+                <div className="flex flex-col items-end" style={{ gap: 'var(--space-xs)' }}>
+                    {/* Login Button */}
+                    <button 
+                        onClick={() => setAuthModalOpen(true)}
+                        className={`flex items-center rounded-full font-bold uppercase tracking-widest hover:shadow-lg hover:scale-105 transition-all duration-700
+                            bg-slate-900 text-white dark:bg-white dark:text-slate-900
+                            ${scrolled 
+                                ? 'hover:shadow-indigo-500/20' 
+                                : 'shadow-sm'
+                            }
+                        `}
+                        style={{ 
+                            gap: 'var(--space-sm)', 
+                            fontSize: 'var(--text-xs)',
+                            padding: scrolled ? 'var(--space-sm) var(--space-lg)' : 'var(--space-md) var(--space-xl)'
+                        }}
+                    >
+                        <LogIn style={{ width: 'var(--size-icon-sm)', height: 'var(--size-icon-sm)' }} strokeWidth={2.5} />
+                        <span>{t('menu_login')}</span>
+                    </button>
+
+                    {/* Debug Role Buttons - Below Login */}
+                    <div className="flex bg-amber-100 dark:bg-amber-900/30 rounded-full" style={{ padding: 'calc(var(--vw-unit) * 0.1)' }}>
+                        {[
+                            { role: 'admin' as UserRole, label: 'А', title: 'Адмін' },
+                            { role: 'manager' as UserRole, label: 'М', title: 'Менеджер' },
+                            { role: 'student' as UserRole, label: 'С', title: 'Студент' },
+                            { role: 'listener' as UserRole, label: 'Сл', title: 'Слухач' },
+                        ].map(({ role, label, title }) => (
+                            <button
+                                key={role}
+                                onClick={() => setDebugRole(role)}
+                                title={title}
+                                className={`font-bold rounded-full transition-all ${user?.role === role ? 'bg-amber-500 text-white shadow-sm' : 'text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-800/50'}`}
+                                style={{ fontSize: 'var(--text-xs)', padding: 'var(--space-xs) var(--space-sm)', minWidth: 'calc(var(--vw-unit) * 2)' }}
+                            >
+                                {label}
+                            </button>
+                        ))}
+                        {isAuthenticated && (
+                            <button
+                                onClick={logout}
+                                title="Вийти"
+                                className="font-bold rounded-full transition-all text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30"
+                                style={{ fontSize: 'var(--text-xs)', padding: 'var(--space-xs) var(--space-sm)' }}
+                            >
+                                ✕
+                            </button>
+                        )}
+                    </div>
+                </div>
             </div>
 
             {/* Mobile Controls */}
@@ -288,6 +338,35 @@ export const Header: React.FC = () => {
 
             {/* Mobile Bottom Dock */}
             <div className="absolute bottom-8 left-4 right-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+                {/* Debug Role Buttons - Mobile */}
+                <div className="bg-amber-100 dark:bg-amber-900/30 rounded-2xl p-2 flex items-center justify-center gap-1 mb-2">
+                    <span className="text-[9px] text-amber-600 dark:text-amber-400 font-bold mr-1">DEBUG:</span>
+                    {[
+                        { role: 'admin' as UserRole, label: 'А', title: 'Адмін' },
+                        { role: 'manager' as UserRole, label: 'М', title: 'Менеджер' },
+                        { role: 'student' as UserRole, label: 'С', title: 'Студент' },
+                        { role: 'listener' as UserRole, label: 'Сл', title: 'Слухач' },
+                    ].map(({ role, label, title }) => (
+                        <button
+                            key={role}
+                            onClick={() => setDebugRole(role)}
+                            title={title}
+                            className={`text-[10px] font-bold px-2 py-1.5 rounded-full transition-all ${user?.role === role ? 'bg-amber-500 text-white shadow-sm' : 'text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-800/50'}`}
+                        >
+                            {label}
+                        </button>
+                    ))}
+                    {isAuthenticated && (
+                        <button
+                            onClick={logout}
+                            title="Вийти"
+                            className="text-[10px] font-bold px-2 py-1.5 rounded-full text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30"
+                        >
+                            ✕
+                        </button>
+                    )}
+                </div>
+                
                 <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-[2rem] p-2 flex items-center justify-between shadow-2xl border border-white/20 dark:border-slate-800">
                     
                     {/* Language Selector */}

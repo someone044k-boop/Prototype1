@@ -315,7 +315,7 @@ export const Home: React.FC = () => {
             <iframe 
                 width="100%" 
                 height="100%" 
-                src="https://www.youtube.com/watch?v=i10Snd9se2Q" 
+                src="https://www.youtube.com/embed/i10Snd9se2Q" 
                 title="Intro Video" 
                 frameBorder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
