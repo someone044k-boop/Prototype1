@@ -59,6 +59,7 @@ export const Training: React.FC = () => {
     const [activeTab1, setActiveTab1] = useState('archetypes');
     const [activeTab2, setActiveTab2] = useState('space');
     const [mandalaAnimated, setMandalaAnimated] = useState(false);
+    const [showProgram, setShowProgram] = useState(false);
 
     // Determine active course from URL
     useEffect(() => {
@@ -67,6 +68,14 @@ export const Training: React.FC = () => {
         window.scrollTo(0, 0);
         document.documentElement.scrollTop = 0;
         document.body.scrollTop = 0;
+        
+        // Check if showing full program
+        if (path.includes('/map') || path.includes('/program')) {
+            setShowProgram(true);
+            return;
+        } else {
+            setShowProgram(false);
+        }
         
         if (path.includes('/year-2') || path.includes('/course2')) setActiveCourse(2);
         else if (path.includes('/year-3') || path.includes('/course3')) setActiveCourse(3);
@@ -642,64 +651,219 @@ export const Training: React.FC = () => {
         </div>
     );
 
-    // Main render
-    return (
-        <div className="min-h-screen pt-20 pb-8 px-4 md:px-8 lg:pr-24">
-            {/* Mobile Course Navigation - показується тільки на мобільних */}
-            <div className="lg:hidden flex flex-wrap justify-center gap-2 mb-6 sticky top-20 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md py-3 -mx-4 px-4 border-b border-slate-100 dark:border-slate-800">
-                {[1, 2, 3, 4].map((num) => (
-                    <Link
-                        key={num}
-                        to={`/training/year-${num}`}
-                        className={`px-3 py-2 rounded-xl flex items-center gap-1.5 font-bold text-xs transition-all
-                            ${activeCourse === num 
-                                ? 'bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-white shadow-lg' 
-                                : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700'
-                            }`}
-                    >
-                        <span>{num}</span>
-                        <span className="uppercase tracking-wider">курс</span>
-                    </Link>
-                ))}
+    // Render Full Program - Повна програма навчання
+    const renderProgram = () => (
+        <div className="animate-fade-in">
+            {/* Header */}
+            <div className="text-center mb-12">
+                <Link 
+                    to="/training" 
+                    className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 mb-6 transition-colors"
+                >
+                    <ChevronRight size={16} className="rotate-180" />
+                    Назад до курсів
+                </Link>
+                <h1 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-white mb-4">
+                    <span className="text-indigo-600 dark:text-indigo-400">ПОВНА ПРОГРАМА</span>
+                    <span className="text-slate-400 mx-3">|</span>
+                    <span>ШКОЛА АРХЕТИПІВ</span>
+                </h1>
+                <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                    4 роки навчання від базового рівня до майстерності. Кожен курс — це новий етап духовного розвитку.
+                </p>
             </div>
 
-            {/* Fixed Right Sidebar - Course Navigation - тільки на десктопі */}
-            <div className="fixed right-4 top-24 z-40 hidden lg:flex flex-col gap-2" style={{ width: 'calc(var(--vw-unit) * 7)' }}>
-                {[1, 2, 3, 4].map((num) => (
-                    <Link
-                        key={num}
-                        to={`/training/year-${num}`}
-                        className={`px-3 py-2 rounded-xl flex items-center gap-2 font-bold transition-all duration-300 shadow-lg
-                            ${activeCourse === num 
-                                ? 'bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-white scale-105' 
-                                : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 hover:scale-105'
-                            }`}
-                        style={{ 
-                            boxShadow: activeCourse === num ? '0 4px 20px rgba(129, 140, 248, 0.4)' : '0 2px 10px rgba(0,0,0,0.1)',
-                            fontSize: 'var(--text-sm)'
-                        }}
-                    >
-                        <span className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center" style={{ fontSize: 'var(--text-xs)' }}>{num}</span>
-                        <span className="uppercase tracking-wider" style={{ fontSize: 'var(--text-xs)' }}>курс</span>
-                    </Link>
-                ))}
-                <div className="h-[1px] bg-slate-200 dark:bg-slate-700 my-1"></div>
-                <Link
-                    to="/training/map"
-                    className="px-3 py-2 rounded-xl flex items-center justify-center gap-2 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300 shadow-lg hover:scale-105 font-bold uppercase tracking-wider"
-                    title="Повна програма"
-                    style={{ fontSize: 'var(--text-xs)' }}
+            {/* Program Grid */}
+            <div className="grid md:grid-cols-2 gap-8">
+                {/* Course 1 */}
+                <Link 
+                    to="/training/year-1"
+                    className="group bg-gradient-to-br from-white to-indigo-50 dark:from-slate-900 dark:to-indigo-950/20 rounded-[2rem] p-6 border border-indigo-100 dark:border-indigo-900/30 shadow-lg hover:shadow-xl hover:border-indigo-300 dark:hover:border-indigo-700 transition-all hover:-translate-y-1"
                 >
-                    Програма
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                            1
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-bold text-slate-800 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                                ЗНАЙОМСТВО З АРХЕТИПАМИ
+                            </h3>
+                            <p className="text-sm text-slate-500">Перший рік навчання</p>
+                        </div>
+                    </div>
+                    <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                        <li className="flex items-center gap-2"><Clock size={14} className="text-indigo-500" /> 12 архетипів зодіаку</li>
+                        <li className="flex items-center gap-2"><Sparkles size={14} className="text-fuchsia-500" /> 4 медитації ініціації</li>
+                        <li className="flex items-center gap-2"><ChevronRight size={14} className="text-indigo-500" /> Екзаменація: Архетип сім'ї</li>
+                    </ul>
+                </Link>
+
+                {/* Course 2 */}
+                <Link 
+                    to="/training/year-2"
+                    className="group bg-gradient-to-br from-white to-amber-50 dark:from-slate-900 dark:to-amber-950/20 rounded-[2rem] p-6 border border-amber-100 dark:border-amber-900/30 shadow-lg hover:shadow-xl hover:border-amber-300 dark:hover:border-amber-700 transition-all hover:-translate-y-1"
+                >
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                            2
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-bold text-slate-800 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                                ПРАКТИКА ГЕРОЯ
+                            </h3>
+                            <p className="text-sm text-slate-500">Другий рік навчання</p>
+                        </div>
+                    </div>
+                    <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                        <li className="flex items-center gap-2"><Clock size={14} className="text-amber-500" /> Простір подвигів</li>
+                        <li className="flex items-center gap-2"><Sparkles size={14} className="text-orange-500" /> Герої та їх сила</li>
+                        <li className="flex items-center gap-2"><ChevronRight size={14} className="text-amber-500" /> Екзаменація: Архетип бізнесу</li>
+                    </ul>
+                </Link>
+
+                {/* Course 3 */}
+                <Link 
+                    to="/training/year-3"
+                    className="group bg-gradient-to-br from-white to-emerald-50 dark:from-slate-900 dark:to-emerald-950/20 rounded-[2rem] p-6 border border-emerald-100 dark:border-emerald-900/30 shadow-lg hover:shadow-xl hover:border-emerald-300 dark:hover:border-emerald-700 transition-all hover:-translate-y-1"
+                >
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                            3
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-bold text-slate-800 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                                ЗВ'ЯЗОК ІЗ СТИХІЯМИ
+                            </h3>
+                            <p className="text-sm text-slate-500">Третій рік навчання</p>
+                        </div>
+                    </div>
+                    <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                        <li className="flex items-center gap-2"><Clock size={14} className="text-emerald-500" /> Практика з ТАРО</li>
+                        <li className="flex items-center gap-2"><Sparkles size={14} className="text-teal-500" /> Підкорення стихій</li>
+                        <li className="flex items-center gap-2"><ChevronRight size={14} className="text-emerald-500" /> Екзаменація: Ототожнення зі стихією</li>
+                    </ul>
+                    <div className="mt-3 inline-block px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold rounded-full">
+                        Незабаром
+                    </div>
+                </Link>
+
+                {/* Course 4 */}
+                <Link 
+                    to="/training/year-4"
+                    className="group bg-gradient-to-br from-white to-violet-50 dark:from-slate-900 dark:to-violet-950/20 rounded-[2rem] p-6 border border-violet-100 dark:border-violet-900/30 shadow-lg hover:shadow-xl hover:border-violet-300 dark:hover:border-violet-700 transition-all hover:-translate-y-1"
+                >
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                            4
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-bold text-slate-800 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
+                                ПРОБУДЖЕННЯ БЕЗДОГАННИХ СИЛ
+                            </h3>
+                            <p className="text-sm text-slate-500">Четвертий рік навчання</p>
+                        </div>
+                    </div>
+                    <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                        <li className="flex items-center gap-2"><Clock size={14} className="text-violet-500" /> Алхімічні константи</li>
+                        <li className="flex items-center gap-2"><Sparkles size={14} className="text-purple-500" /> Магічний простір</li>
+                        <li className="flex items-center gap-2"><ChevronRight size={14} className="text-violet-500" /> Екзаменація: Майстер сили</li>
+                    </ul>
+                    <div className="mt-3 inline-block px-3 py-1 bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 text-xs font-bold rounded-full">
+                        Незабаром
+                    </div>
                 </Link>
             </div>
 
+            {/* Additional Info */}
+            <div className="mt-12 bg-gradient-to-r from-indigo-50 to-fuchsia-50 dark:from-slate-800 dark:to-indigo-900/30 rounded-[2rem] p-8 text-center">
+                <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-4">Готові почати навчання?</h3>
+                <p className="text-slate-600 dark:text-slate-400 mb-6 max-w-xl mx-auto">
+                    Зв'яжіться з майстром для отримання доступу до курсів та індивідуальної консультації.
+                </p>
+                <a 
+                    href="https://t.me/dobrevk" 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white font-bold rounded-full shadow-lg hover:shadow-indigo-500/30 hover:scale-105 transition-all uppercase tracking-wider text-sm"
+                >
+                    Написати майстру
+                </a>
+            </div>
+        </div>
+    );
+
+    // Main render
+    return (
+        <div className="min-h-screen pt-20 pb-8 px-4 md:px-8 lg:pr-24">
+            {/* Mobile Course Navigation - показується тільки на мобільних і не на сторінці програми */}
+            {!showProgram && (
+                <div className="lg:hidden flex flex-wrap justify-center gap-2 mb-6 sticky top-20 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md py-3 -mx-4 px-4 border-b border-slate-100 dark:border-slate-800">
+                    {[1, 2, 3, 4].map((num) => (
+                        <Link
+                            key={num}
+                            to={`/training/year-${num}`}
+                            className={`px-3 py-2 rounded-xl flex items-center gap-1.5 font-bold text-xs transition-all
+                                ${activeCourse === num 
+                                    ? 'bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-white shadow-lg' 
+                                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700'
+                                }`}
+                        >
+                            <span>{num}</span>
+                            <span className="uppercase tracking-wider">курс</span>
+                        </Link>
+                    ))}
+                    <Link
+                        to="/training/map"
+                        className="px-3 py-2 rounded-xl flex items-center gap-1.5 font-bold text-xs bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700"
+                    >
+                        Програма
+                    </Link>
+                </div>
+            )}
+
+            {/* Fixed Right Sidebar - Course Navigation - тільки на десктопі і не на сторінці програми */}
+            {!showProgram && (
+                <div className="fixed right-4 top-24 z-40 hidden lg:flex flex-col gap-2" style={{ width: 'calc(var(--vw-unit) * 7)' }}>
+                    {[1, 2, 3, 4].map((num) => (
+                        <Link
+                            key={num}
+                            to={`/training/year-${num}`}
+                            className={`px-3 py-2 rounded-xl flex items-center gap-2 font-bold transition-all duration-300 shadow-lg
+                                ${activeCourse === num 
+                                    ? 'bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-white scale-105' 
+                                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 hover:scale-105'
+                                }`}
+                            style={{ 
+                                boxShadow: activeCourse === num ? '0 4px 20px rgba(129, 140, 248, 0.4)' : '0 2px 10px rgba(0,0,0,0.1)',
+                                fontSize: 'var(--text-sm)'
+                            }}
+                        >
+                            <span className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center" style={{ fontSize: 'var(--text-xs)' }}>{num}</span>
+                            <span className="uppercase tracking-wider" style={{ fontSize: 'var(--text-xs)' }}>курс</span>
+                        </Link>
+                    ))}
+                    <div className="h-[1px] bg-slate-200 dark:bg-slate-700 my-1"></div>
+                    <Link
+                        to="/training/map"
+                        className="px-3 py-2 rounded-xl flex items-center justify-center gap-2 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300 shadow-lg hover:scale-105 font-bold uppercase tracking-wider"
+                        title="Повна програма"
+                        style={{ fontSize: 'var(--text-xs)' }}
+                    >
+                        Програма
+                    </Link>
+                </div>
+            )}
+
             <div className="max-w-6xl mx-auto">
                 {/* Course Content */}
-                {activeCourse === 1 && renderCourse1()}
-                {activeCourse === 2 && renderCourse2()}
-                {activeCourse === 3 && renderCourse3()}
-                {activeCourse === 4 && renderCourse4()}
+                {showProgram ? renderProgram() : (
+                    <>
+                        {activeCourse === 1 && renderCourse1()}
+                        {activeCourse === 2 && renderCourse2()}
+                        {activeCourse === 3 && renderCourse3()}
+                        {activeCourse === 4 && renderCourse4()}
+                    </>
+                )}
             </div>
         </div>
     );
