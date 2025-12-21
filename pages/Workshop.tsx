@@ -493,6 +493,13 @@ export const Workshop: React.FC = () => {
 
     const getLabel = (key: string) => t(key as any);
 
+    // Scroll to top on navigation
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+    }, [location.pathname]);
+
     // Prevent body scroll when modal is open
     useEffect(() => {
         if (selectedItem) {
@@ -564,7 +571,7 @@ export const Workshop: React.FC = () => {
 
             {/* Card Content */}
             <div className="p-3 flex-1 flex flex-col items-center text-center">
-                <h3 className="text-lg font-bold font-serif mb-1 text-slate-800 dark:text-white leading-tight min-h-[2.5rem] flex items-center justify-center">{item.title}</h3>
+                <h3 className="text-lg font-bold mb-1 text-slate-800 dark:text-white leading-tight min-h-[2.5rem] flex items-center justify-center">{item.title}</h3>
                 
                 {showPrice && item.price && (
                     <div className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-fuchsia-600 dark:from-indigo-400 dark:to-fuchsia-400 mb-3">
@@ -606,7 +613,7 @@ export const Workshop: React.FC = () => {
                     <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group">
                         <img loading="lazy" src={selectedItem.image} alt={selectedItem.title} className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex flex-col justify-end p-8">
-                            <h3 className="text-white font-serif text-3xl font-bold mb-3 leading-tight drop-shadow-lg">{selectedItem.title}</h3>
+                            <h3 className="text-white text-3xl font-bold mb-3 leading-tight drop-shadow-lg">{selectedItem.title}</h3>
                             {selectedItem.price && <p className="text-indigo-200 text-lg font-medium">{selectedItem.price}</p>}
                             {selectedItem.zodiac && <p className="text-amber-300 text-4xl mt-2">{selectedItem.zodiac}</p>}
                         </div>
@@ -616,7 +623,7 @@ export const Workshop: React.FC = () => {
                     <div className="flex-1 p-6 md:p-10 overflow-y-auto custom-scrollbar flex flex-col relative bg-white dark:bg-slate-900">
                         {/* Mobile Header */}
                         <div className="md:hidden mb-6">
-                            <h2 className="text-2xl font-serif font-bold text-slate-800 dark:text-white mb-2">{selectedItem.title}</h2>
+                            <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">{selectedItem.title}</h2>
                             {selectedItem.price && <div className="text-xl font-bold text-indigo-600 dark:text-indigo-400">{selectedItem.price}</div>}
                         </div>
 
@@ -650,7 +657,7 @@ export const Workshop: React.FC = () => {
         <div className="animate-fade-in space-y-12">
             {/* Rings Section */}
             <div>
-                <h2 className="text-xl md:text-2xl font-serif font-bold text-center mb-6 text-slate-800 dark:text-white uppercase tracking-widest">
+                <h2 className="text-xl md:text-2xl font-bold text-center mb-6 text-slate-800 dark:text-white uppercase tracking-widest">
                     Перстні сили
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-6xl mx-auto">
@@ -660,7 +667,7 @@ export const Workshop: React.FC = () => {
 
             {/* Pendants Section */}
             <div>
-                <h2 className="text-xl md:text-2xl font-serif font-bold text-center mb-6 text-slate-800 dark:text-white uppercase tracking-widest">
+                <h2 className="text-xl md:text-2xl font-bold text-center mb-6 text-slate-800 dark:text-white uppercase tracking-widest">
                     Підвіска бездоганності
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
@@ -763,7 +770,7 @@ export const Workshop: React.FC = () => {
                 </div>
 
                 {/* Title before cards */}
-                <h2 className="text-2xl md:text-3xl font-serif font-bold text-center text-slate-800 dark:text-white uppercase tracking-widest pt-4 opacity-0 animate-fade-in" style={{ animationDelay: '1300ms', animationFillMode: 'forwards' }}>
+                <h2 className="text-2xl md:text-3xl font-bold text-center text-slate-800 dark:text-white uppercase tracking-widest pt-4 opacity-0 animate-fade-in" style={{ animationDelay: '1300ms', animationFillMode: 'forwards' }}>
                     Види печатки
                 </h2>
             </div>
@@ -852,7 +859,7 @@ export const Workshop: React.FC = () => {
         <div>
             {/* Header Section */}
             <div className="max-w-4xl mx-auto mb-16">
-                <h2 className="text-2xl md:text-3xl font-serif font-bold text-center mb-8 opacity-0 animate-fade-in" style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}>
+                <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 opacity-0 animate-fade-in" style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}>
                     <span className="text-indigo-600 dark:text-indigo-400">ВІКНА БЕЗДОГАННОСТІ</span>
                     <span className="text-slate-300 dark:text-slate-600 mx-3">|</span>
                     <span className="text-slate-600 dark:text-slate-400">КОЛЕСО РОКУ</span>
@@ -867,8 +874,8 @@ export const Workshop: React.FC = () => {
                     </p>
                 </div>
                 
-                {/* Scroll down chevrons */}
-                <div className={`flex flex-col items-center mt-8 opacity-0 animate-fade-in ${mandalaVisible ? 'hidden' : ''}`} style={{ animationDelay: '700ms', animationFillMode: 'forwards' }}>
+                {/* Scroll down chevrons - показуються поки не прокрутили */}
+                <div className={`flex flex-col items-center mt-8 opacity-0 animate-fade-in transition-all duration-500 ${mandalaVisible ? 'hidden' : ''}`} style={{ animationDelay: '700ms', animationFillMode: 'forwards' }}>
                     <div className="animate-bounce-slow">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-24 text-indigo-500 dark:text-indigo-400 animate-chevron-wave" style={{ animationDelay: '0s' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -881,12 +888,26 @@ export const Workshop: React.FC = () => {
                         </svg>
                     </div>
                 </div>
+
+                {/* Order Button - з'являється після прокрутки */}
+                <div className={`flex flex-col items-center mt-8 transition-all duration-500 ${mandalaVisible ? 'opacity-100' : 'opacity-0 hidden'}`}>
+                    <a 
+                        href="https://t.me/dobrevk" 
+                        target="_blank" 
+                        rel="noreferrer"
+                        className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-indigo-500 text-white font-bold rounded-full hover:scale-105 transition-all uppercase tracking-wider text-sm ring-4 ring-indigo-100 dark:ring-indigo-900/50"
+                        style={{ boxShadow: '0 10px 40px -5px rgba(129, 140, 248, 0.5), 0 4px 20px -2px rgba(192, 132, 252, 0.4)' }}
+                    >
+                        <Send size={20} />
+                        ЗАМОВИТИ СЕЗОННУ ПРОЦЕДУРУ
+                    </a>
+                </div>
             </div>
 
             {/* Desktop Layout - Cross pattern with mandala center */}
             <div ref={mandalaRef} className="hidden lg:block relative max-w-6xl mx-auto mb-32" style={{ minHeight: '1050px' }}>
                 {/* Center Mandala */}
-                <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 md:w-80 md:h-80 z-20 transition-opacity duration-500 ${mandalaVisible ? 'opacity-100' : 'opacity-0'}`}>
+                <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 md:w-96 md:h-96 z-20 transition-opacity duration-500 ${mandalaVisible ? 'opacity-100' : 'opacity-0'}`}>
                     <div className="w-full h-full rounded-full snake-border-round overflow-hidden shadow-xl flex items-center justify-center">
                         <img src="/infinity coins/infynityWP.webp" alt="Infinity" className={`w-[105%] h-[105%] object-cover drop-shadow-xl ${mandalaVisible ? 'animate-spin-once' : ''}`} />
                     </div>
@@ -977,29 +998,31 @@ export const Workshop: React.FC = () => {
     );
 
     // Render Attributes (1 horizontal card with mandala)
+    // Render Attributes - горизонтальна картка з мандалою
     const renderAttributes = () => (
         <div className="animate-fade-in">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
                 <div
-                    className="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 overflow-hidden group hover:border-indigo-300 dark:hover:border-indigo-700 card-lift card-reveal flex flex-col md:flex-row"
+                    className="snake-border-round bg-white dark:bg-slate-900 rounded-[2rem] overflow-hidden group card-lift flex flex-col md:flex-row shadow-lg"
                     style={{ boxShadow: '0 8px 30px -5px rgba(129, 140, 248, 0.2)' }}
                     onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 25px 60px -10px rgba(129, 140, 248, 0.4)'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 8px 30px -5px rgba(129, 140, 248, 0.2)'; }}
                 >
                     {/* Mandala Image - Left side */}
-                    <div className="w-full md:w-1/3 aspect-square md:aspect-auto overflow-hidden relative bg-gradient-to-br from-indigo-50 to-fuchsia-50 dark:from-slate-800 dark:to-indigo-950 flex items-center justify-center p-8">
-                        <img src="/mandala.png" alt="Мандала" className="w-full h-full object-contain drop-shadow-2xl animate-spin-slow max-w-[200px]" />
+                    <div className="w-full md:w-2/5 aspect-square md:aspect-auto overflow-hidden relative bg-gradient-to-br from-indigo-50 to-fuchsia-50 dark:from-slate-800 dark:to-indigo-950 flex items-center justify-center p-10 md:p-12">
+                        <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 via-fuchsia-500/5 to-indigo-500/5"></div>
+                        <img src="/mandala.png" alt={t('mandala_title')} className="w-full h-full object-contain drop-shadow-2xl max-w-[280px] relative z-10" />
                     </div>
                     {/* Content - Right side */}
-                    <div className="flex-1 p-6 md:p-8 flex flex-col justify-center">
-                        <h3 className="text-2xl md:text-3xl font-bold font-serif mb-3 text-slate-800 dark:text-white">Мандала Архетипів</h3>
-                        <p className="text-slate-600 dark:text-slate-400 text-base mb-4 leading-relaxed">
-                            Сакральний символ для медитації та духовної практики. Мандала допомагає зосередитись на внутрішньому світі та гармонізувати енергетичні потоки.
+                    <div className="flex-1 p-8 md:p-10 flex flex-col justify-center">
+                        <h3 className="text-2xl md:text-3xl font-bold mb-4 text-slate-800 dark:text-white">{t('mandala_title')}</h3>
+                        <p className="text-slate-600 dark:text-slate-400 text-base mb-6 leading-relaxed">
+                            {t('mandala_desc')}
                         </p>
                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                            <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-fuchsia-600">2000 грн</div>
-                            <a href="https://t.me/dobrevk" target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white rounded-full font-bold shadow-lg hover:shadow-indigo-500/50 hover:scale-105 transition-all uppercase tracking-wider text-sm">
-                                <Send size={16} /> ЗАМОВИТИ
+                            <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-fuchsia-600">2000 {t('currency')}</div>
+                            <a href="https://t.me/dobrevk" target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white rounded-full font-bold shadow-lg hover:shadow-indigo-500/50 hover:scale-105 transition-all uppercase tracking-wider text-sm">
+                                <Send size={16} /> {t('order_btn')}
                             </a>
                         </div>
                     </div>
@@ -1008,60 +1031,187 @@ export const Workshop: React.FC = () => {
         </div>
     );
 
-    // Render Coins (12 cards)
-    const renderCoins = () => (
-        <div className="animate-fade-in space-y-10">
-            <p className="text-center text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                12 унікальних монет, кожна з яких несе енергію свого знаку зодіаку.
-            </p>
+    // Render Coins - новий layout з зодіакальним колесом
+    const renderCoins = () => {
+        // Zodiac symbols for outer ring
+        const zodiacSymbols = ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'];
+        
+        return (
+            <div className="animate-fade-in space-y-12">
+                {/* Rich Text Description - Техніка медитації */}
+                <div className="max-w-5xl mx-auto">
+                    {/* Main gradient block */}
+                    <div className="bg-gradient-to-r from-cyan-100 via-fuchsia-50 to-amber-100 dark:from-cyan-900/30 dark:via-fuchsia-900/20 dark:to-amber-900/30 rounded-3xl p-8 md:p-10 shadow-lg">
+                        {/* Title */}
+                        <h3 className="text-center text-lg md:text-xl font-bold mb-6">
+                            <span className="text-indigo-600 dark:text-indigo-400">{t('coins_title')}</span>
+                            <span className="text-slate-400 mx-2">|</span>
+                            <span className="text-slate-700 dark:text-slate-300">{t('coins_meditation')}</span>
+                        </h3>
 
-            {/* Zodiac Circle Animation */}
-            <div className="relative flex items-center justify-center py-8">
-                <div className="relative w-[280px] h-[280px] md:w-[400px] md:h-[400px]">
-                    <div className="absolute inset-0 animate-coins-intro" style={{ transformOrigin: 'center center' }}>
-                        {COINS_DATA.map((coin, i) => {
-                            const angle = i * 30;
-                            const radius = 42;
-                            const angleRad = (angle - 90) * (Math.PI / 180);
-                            const x = 50 + radius * Math.cos(angleRad);
-                            const y = 50 + radius * Math.sin(angleRad);
-                            return (
-                                <div
-                                    key={coin.id}
-                                    className="absolute w-8 h-8 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-amber-200 via-amber-400 to-amber-600 shadow-lg flex items-center justify-center text-amber-900 font-bold text-sm md:text-xl border-2 border-amber-300 cursor-pointer hover:scale-125 transition-transform"
-                                    style={{ left: `${x}%`, top: `${y}%`, transform: 'translate(-50%, -50%)', boxShadow: '0 4px 15px rgba(217, 119, 6, 0.4)' }}
-                                    onClick={() => setSelectedItem(coin)}
-                                >
-                                    {coin.zodiac}
-                                </div>
-                            );
-                        })}
-                    </div>
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50%] h-[50%] animate-mandala-intro">
-                        <img loading="lazy" src="/master/shrtr.svg" alt="Zodiac Wheel" className="w-full h-full object-contain drop-shadow-2xl" />
+                        {/* Intro paragraph */}
+                        <p className="text-center text-slate-700 dark:text-slate-300 mb-6 leading-relaxed">
+                            Медитація на монету нескінченності - створює у середньому мозку <strong className="text-slate-900 dark:text-white">камертон</strong>, що резонує із фізичним принципом (астрологічною планетою). <strong className="text-cyan-700 dark:text-cyan-400">Цей камертон є один із принципів життєдіяльності людини.</strong>
+                        </p>
+
+                        {/* Instruction block */}
+                        <div className="bg-white/70 dark:bg-slate-800/70 rounded-2xl p-6 mb-6 border border-slate-200/50 dark:border-slate-700/50">
+                            <p className="text-center font-bold text-slate-800 dark:text-white mb-4">
+                                Ви маєте створити образи великих арканів у великих півкулях головного мозку:
+                            </p>
+                            <div className="space-y-2 text-center text-slate-700 dark:text-slate-300">
+                                <p>
+                                    Аркани <strong className="text-indigo-600 dark:text-indigo-400">з 1 по 12 слід</strong> поміщати (проекція) <strong className="text-cyan-600 dark:text-cyan-400">ліву півкулю як причину</strong> архетипічної сили.
+                                </p>
+                                <p>
+                                    Аркани <strong className="text-indigo-600 dark:text-indigo-400">з 22 по 12 слід</strong> поміщати (проекція) у <strong className="text-fuchsia-600 dark:text-fuchsia-400">праву півкулю як наслідок</strong> архетипічної сили.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Middle paragraph */}
+                        <p className="text-center text-slate-700 dark:text-slate-300 mb-8 leading-relaxed">
+                            Під час медитації ви маєте упорядкувати зміст середнього мозку поки в ньому не утвориться камертон сили відповідної планети. <strong className="text-slate-900 dark:text-white">Камертон відчувається як жива сутність,</strong> оскільки він є принципом життєдіяльності вашого тіла. Він наповнить вашу голову та буде наповнювати органи тіла, відновлюючи в них гармонію.
+                        </p>
+
+                        {/* Bottom section title */}
+                        <div className="text-center mb-6">
+                            <p className="font-bold text-slate-800 dark:text-white uppercase tracking-wider text-sm">
+                                Камертонну силу що була утворена в середньому мозку можна витрачати на:
+                            </p>
+                        </div>
+
+                        {/* Three cards */}
+                        <div className="grid md:grid-cols-3 gap-4">
+                            {/* Card 1 */}
+                            <div className="bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-900/40 dark:to-cyan-800/40 rounded-2xl p-5 border border-cyan-200 dark:border-cyan-700">
+                                <h4 className="font-bold text-center text-slate-800 dark:text-white mb-3 text-sm">
+                                    Гармонізацію роботи організму
+                                </h4>
+                                <p className="text-sm text-slate-600 dark:text-slate-400 text-center leading-relaxed">
+                                    Кожна сила пов'язана із певним органом. Але благодійно впливає на усі органи
+                                </p>
+                            </div>
+
+                            {/* Card 2 */}
+                            <div className="bg-gradient-to-br from-fuchsia-50 to-violet-100 dark:from-fuchsia-900/40 dark:to-violet-800/40 rounded-2xl p-5 border border-fuchsia-200 dark:border-fuchsia-700">
+                                <h4 className="font-bold text-center text-slate-800 dark:text-white mb-3 text-sm">
+                                    На гармонізацію простору життя
+                                </h4>
+                                <p className="text-sm text-slate-600 dark:text-slate-400 text-center leading-relaxed">
+                                    Кожна сила пов'язана із певним типом подій. Але благодійно впливає на усі події вашого простору життя.
+                                </p>
+                            </div>
+
+                            {/* Card 3 */}
+                            <div className="bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-900/40 dark:to-orange-800/40 rounded-2xl p-5 border border-amber-200 dark:border-amber-700">
+                                <h4 className="font-bold text-center text-slate-800 dark:text-white mb-3 text-sm">
+                                    Архетипічну силу можна застосовувати для духовних практик:
+                                </h4>
+                                <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-amber-500 mt-0.5">•</span>
+                                        <span>Подорожі в астралі</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-amber-500 mt-0.5">•</span>
+                                        <span>Снобачення</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-amber-500 mt-0.5">•</span>
+                                        <span>Взаємодію із містичними сутностями.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Cards Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
-                {COINS_DATA.map((item, i) => <ProductCard key={item.id} item={item} index={i} />)}
+                {/* Main Zodiac Wheel Layout */}
+                <div className="relative flex items-center justify-center py-8">
+                    <div className="relative w-[320px] h-[320px] md:w-[550px] md:h-[550px] lg:w-[650px] lg:h-[650px]">
+                        
+                        {/* Outer ring - Zodiac Symbols */}
+                        <div className="absolute inset-0">
+                            {zodiacSymbols.map((symbol, i) => {
+                                const angle = i * 30;
+                                const radius = 48;
+                                const angleRad = (angle - 90) * (Math.PI / 180);
+                                const x = 50 + radius * Math.cos(angleRad);
+                                const y = 50 + radius * Math.sin(angleRad);
+                                return (
+                                    <div
+                                        key={`symbol-${i}`}
+                                        className="absolute w-8 h-8 md:w-10 md:h-10 rounded-lg bg-slate-900 dark:bg-slate-800 flex items-center justify-center text-amber-400 font-bold text-lg md:text-xl shadow-lg"
+                                        style={{ left: `${x}%`, top: `${y}%`, transform: 'translate(-50%, -50%)' }}
+                                    >
+                                        {symbol}
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Middle ring - Coins with images */}
+                        <div className="absolute inset-0">
+                            {COINS_DATA.map((coin, i) => {
+                                const angle = i * 30;
+                                const radius = 35;
+                                const angleRad = (angle - 90) * (Math.PI / 180);
+                                const x = 50 + radius * Math.cos(angleRad);
+                                const y = 50 + radius * Math.sin(angleRad);
+                                return (
+                                    <div
+                                        key={coin.id}
+                                        className="absolute w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden shadow-xl cursor-pointer hover:scale-110 transition-transform border-2 border-amber-400"
+                                        style={{ left: `${x}%`, top: `${y}%`, transform: 'translate(-50%, -50%)', boxShadow: '0 4px 20px rgba(217, 119, 6, 0.4)' }}
+                                        onClick={() => setSelectedItem(coin)}
+                                    >
+                                        <img src={coin.image} alt={coin.title} className="w-full h-full object-cover" />
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Center - Mandala with rainbow border and BUY button */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[45%] h-[45%]">
+                            <div className="w-full h-full rounded-full snake-border-round overflow-hidden shadow-2xl flex items-center justify-center relative">
+                                <img src="/infinity coins/infynityWP.webp" alt="Infinity Mandala" className="w-full h-full object-cover" />
+                                {/* КУПИТИ button overlay */}
+                                <a 
+                                    href="https://t.me/dobrevk" 
+                                    target="_blank" 
+                                    rel="noreferrer"
+                                    className="absolute inset-0 flex items-center justify-center bg-black/40 hover:bg-black/60 transition-colors group"
+                                >
+                                    <span className="px-6 py-3 bg-slate-900 text-white font-bold rounded-full text-sm md:text-base uppercase tracking-wider shadow-lg group-hover:scale-105 transition-transform">
+                                        КУПИТИ
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Cards Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
+                    {COINS_DATA.map((item, i) => <ProductCard key={item.id} item={item} index={i} />)}
+                </div>
             </div>
-        </div>
-    );
+        );
+    };
 
     // Landing page content - full width, no sidebar
     const renderLanding = () => (
         <div className="animate-fade-in max-w-5xl mx-auto">
             {/* Header */}
             <div className="text-center mb-10">
-                <h1 className="text-2xl md:text-4xl font-serif font-bold mb-4">
-                    <span className="text-indigo-600 dark:text-indigo-400">МАЙСТЕРНЯ</span>
+                <h1 className="text-2xl md:text-4xl font-bold mb-4">
+                    <span className="text-indigo-600 dark:text-indigo-400">{t('workshop_title')}</span>
                     <span className="text-slate-400 mx-3">|</span>
-                    <span className="text-slate-700 dark:text-slate-300">МАГІЧНІ АРТЕФАКТИ</span>
+                    <span className="text-slate-700 dark:text-slate-300">{t('workshop_subtitle')}</span>
                 </h1>
                 <p className="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
-                    Унікальні предмети сили, створені майстром для вашого духовного розвитку та захисту.
+                    {t('workshop_desc')}
                 </p>
             </div>
 
@@ -1071,7 +1221,7 @@ export const Workshop: React.FC = () => {
                     <Link
                         key={cat.id}
                         to={cat.path}
-                        className="p-8 bg-white dark:bg-slate-800 rounded-3xl shadow-lg hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-1 text-center group card-reveal"
+                        className={`p-8 bg-white dark:bg-slate-800 rounded-3xl shadow-lg hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-1 text-center group card-reveal ${cat.id === 'attributes' ? 'snake-border-round' : ''}`}
                         style={{ animationDelay: `${i * 80}ms`, boxShadow: '0 4px 20px -5px rgba(129, 140, 248, 0.15)' }}
                     >
                         <div className="w-20 h-20 mx-auto mb-5 rounded-full bg-gradient-to-br from-indigo-50 to-fuchsia-50 dark:from-indigo-900/30 dark:to-fuchsia-900/30 flex items-center justify-center border border-indigo-100 dark:border-indigo-800">
@@ -1089,13 +1239,19 @@ export const Workshop: React.FC = () => {
     // Get dynamic page title
     const getPageTitle = () => {
         if (!activeCategory) return t('menu_workshop');
-        if (activeCategory === 'coins') return 'INFINITY COINS';
-        if (activeCategory === 'procedures') return 'СЕЗОННІ ПРОЦЕДУРИ';
-        if (activeCategory === 'seals') return 'ПЕЧАТКИ МАЙСТРА';
-        if (activeCategory === 'attributes') return 'АТРИБУТИКА';
-        if (activeCategory === 'jewelry') return 'ЮВЕЛІРНІ ПРИКРАСИ';
-        if (activeCategory === 'myth') return 'ПЕРСОНАЛЬНИЙ МІФ';
+        if (activeCategory === 'coins') return t('coins_title');
+        if (activeCategory === 'procedures') return t('procedures_title');
+        if (activeCategory === 'seals') return t('seals_title');
+        if (activeCategory === 'attributes') return t('attributes_title');
+        if (activeCategory === 'jewelry') return t('jewelry_title');
+        if (activeCategory === 'myth') return t('myth_title');
         return getLabel(categories.find(c => c.id === activeCategory)?.label || 'menu_workshop');
+    };
+
+    // Get subtitle for page
+    const getPageSubtitle = () => {
+        if (activeCategory === 'coins') return t('coins_subtitle');
+        return null;
     };
 
     // Landing page - full width without sidebar
@@ -1111,9 +1267,22 @@ export const Workshop: React.FC = () => {
     // Category pages - with horizontal tabs and title
     return (
         <div className="min-h-screen pt-24 pb-12 px-2 md:px-4 w-full mx-auto">
-            <h1 className="text-3xl md:text-5xl font-serif font-bold text-center mb-8 text-slate-800 dark:text-white tracking-widest uppercase">
-                {getPageTitle()}
+            <h1 className="text-3xl md:text-5xl font-bold text-center mb-2 tracking-widest uppercase">
+                <span className="text-slate-800 dark:text-white">{t('workshop_title')}</span>
+                <span className="text-slate-400 mx-2">|</span>
+                <span 
+                    className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-fuchsia-500 to-indigo-600 dark:from-indigo-400 dark:via-fuchsia-400 dark:to-indigo-400 animate-gradient-flow"
+                    style={{ backgroundSize: '200% 200%' }}
+                >
+                    {getPageTitle()}
+                </span>
             </h1>
+            {getPageSubtitle() && (
+                <p className="text-lg md:text-xl font-bold text-center mb-8 text-slate-600 dark:text-slate-400 uppercase tracking-wider">
+                    {getPageSubtitle()}
+                </p>
+            )}
+            {!getPageSubtitle() && <div className="mb-8" />}
 
             {/* Horizontal Navigation Tabs with underline animation - single row */}
             <div className="flex justify-center gap-8 md:gap-12 mb-10 overflow-x-auto pb-2">

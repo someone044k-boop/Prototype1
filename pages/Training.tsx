@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronRight, Sparkles, Clock } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Course data structure
 interface CourseTab {
@@ -53,6 +54,7 @@ const course2Tabs: CourseTab[] = [
 
 export const Training: React.FC = () => {
     const location = useLocation();
+    const { t } = useLanguage();
     const [activeCourse, setActiveCourse] = useState<number>(1);
     const [activeTab1, setActiveTab1] = useState('archetypes');
     const [activeTab2, setActiveTab2] = useState('space');
@@ -61,9 +63,15 @@ export const Training: React.FC = () => {
     // Determine active course from URL
     useEffect(() => {
         const path = location.pathname;
-        if (path.includes('/course2')) setActiveCourse(2);
-        else if (path.includes('/course3')) setActiveCourse(3);
-        else if (path.includes('/course4')) setActiveCourse(4);
+        // Scroll to top on navigation
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        
+        if (path.includes('/year-2') || path.includes('/course2')) setActiveCourse(2);
+        else if (path.includes('/year-3') || path.includes('/course3')) setActiveCourse(3);
+        else if (path.includes('/year-4') || path.includes('/course4')) setActiveCourse(4);
+        else if (path.includes('/year-1') || path.includes('/course1') || path === '/training') setActiveCourse(1);
         else setActiveCourse(1);
         
         // Reset animation on course change
@@ -92,17 +100,15 @@ export const Training: React.FC = () => {
         </button>
     );
 
-    // Course Button Component
+    // Course Button Component - простий вертикальний список
     const CourseButton: React.FC<{ btn: CourseButton; index: number }> = ({ btn, index }) => (
         <Link
             to={btn.path}
-            className="block w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium hover:border-indigo-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all hover:shadow-md opacity-0 animate-fade-in"
+            className="flex items-center gap-2 px-4 py-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium hover:border-indigo-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all hover:shadow-md opacity-0 animate-fade-in"
             style={{ animationDelay: `${300 + index * 100}ms`, animationFillMode: 'forwards' }}
         >
-            <span className="flex items-center gap-2">
-                <ChevronRight size={14} className="text-indigo-500" />
-                {btn.label}
-            </span>
+            <ChevronRight size={14} className="text-indigo-500 flex-shrink-0" />
+            <span>{btn.label}</span>
         </Link>
     );
 
@@ -111,19 +117,19 @@ export const Training: React.FC = () => {
         <div className="animate-fade-in">
             {/* Header with Mandala */}
             <div className="flex flex-col md:flex-row items-center gap-6 mb-10">
-                {/* Mandala */}
-                <div className={`w-32 h-32 md:w-40 md:h-40 flex-shrink-0 ${mandalaAnimated ? 'animate-spin-once' : ''}`}>
+                {/* Mandala - збільшений розмір */}
+                <div className={`w-48 h-48 md:w-64 md:h-64 flex-shrink-0 ${mandalaAnimated ? 'animate-spin-once' : ''}`}>
                     <img src="/mandala.png" alt="Mandala" className="w-full h-full object-contain drop-shadow-2xl" />
                 </div>
                 
                 {/* Title */}
                 <div className={`text-center md:text-left transition-all duration-1000 ${mandalaAnimated ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
-                    <h1 className="text-2xl md:text-4xl font-serif font-bold text-slate-800 dark:text-white mb-2">
-                        <span className="text-indigo-600 dark:text-indigo-400">1й КУРС</span>
+                    <h1 className="text-2xl md:text-4xl font-bold text-slate-800 dark:text-white mb-2">
+                        <span className="text-indigo-600 dark:text-indigo-400">{t('course1_title').split('|')[0]}</span>
                         <span className="text-slate-400 mx-2">|</span>
-                        <span>ІНІЦІАЦІЯ ЯКОСТЕЙ</span>
+                        <span>{t('course1_title').split('|')[1]}</span>
                     </h1>
-                    <p className="text-lg text-slate-600 dark:text-slate-400 font-medium">ЗБІР ЦІЛІСНОСТІ</p>
+                    <h2 className="text-xl md:text-2xl font-bold text-slate-700 dark:text-slate-300">{t('course1_subtitle')}</h2>
                 </div>
             </div>
 
@@ -139,13 +145,14 @@ export const Training: React.FC = () => {
                 {activeTab1 === 'archetypes' && (
                     <div className="animate-fade-in">
                         {/* Rich Text Header */}
-                        <div className="text-center mb-8 max-w-3xl mx-auto">
-                            <h2 className="text-xl md:text-2xl font-serif font-bold mb-4">
+                        <div className="mb-8 max-w-3xl">
+                            <h2 className="text-xl md:text-2xl font-bold mb-4 text-left">
                                 <span className="text-indigo-600 dark:text-indigo-400">ТЕОРЕТИЧНИЙ МОДУЛЬ</span>
                                 <span className="text-slate-400 mx-2">|</span>
                                 <span className="text-slate-800 dark:text-white">ВИЗНАЧЕННЯ АРХЕТИПІВ</span>
                             </h2>
-                            <div className="space-y-2 text-slate-600 dark:text-slate-400">
+                            <div className="space-y-2 text-slate-600 dark:text-slate-400 text-left">
+                                <p><strong className="text-slate-800 dark:text-white">Визначення:</strong> Архетипи — це універсальні первинні образи та патерни поведінки, що існують у колективному несвідомому людства.</p>
                                 <p>Профайлінг та деталізація архетипів (зодіак).</p>
                                 <p>Функції та призначення архетипів.</p>
                                 <p>Стадії розвитку архетипу.</p>
@@ -154,18 +161,20 @@ export const Training: React.FC = () => {
 
                         {/* Content Grid */}
                         <div className="grid md:grid-cols-2 gap-8">
-                            {/* Left: Buttons */}
-                            <div className="space-y-3">
+                            {/* Left: Buttons - вертикальний список */}
+                            <div className="space-y-4">
                                 <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Програма модуля</h3>
-                                {course1ArchetypesButtons.map((btn, i) => <CourseButton key={btn.path} btn={btn} index={i} />)}
+                                <div className="space-y-2">
+                                    {course1ArchetypesButtons.map((btn, i) => <CourseButton key={btn.path} btn={btn} index={i} />)}
+                                </div>
                             </div>
 
                             {/* Right: Image + Program */}
-                            <div>
-                                <div className="rounded-2xl overflow-hidden shadow-xl mb-4">
+                            <div className="bg-white dark:bg-slate-800/50 rounded-2xl p-4 shadow-lg border border-slate-100 dark:border-slate-700">
+                                <div className="rounded-xl overflow-hidden shadow-md mb-4">
                                     <img src="/master/3kurs.webp" alt="Course" className="w-full h-48 object-cover" />
                                 </div>
-                                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700">
+                                <div className="p-2">
                                     <h4 className="font-bold text-sm text-slate-800 dark:text-white mb-2">Програма курсу</h4>
                                     <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
                                         <li className="flex items-center gap-2"><Clock size={12} className="text-indigo-500" /> 12 відео-уроків</li>
@@ -179,25 +188,27 @@ export const Training: React.FC = () => {
 
                 {activeTab1 === 'meditation' && (
                     <div className="animate-fade-in">
-                        <div className="text-center mb-8 max-w-3xl mx-auto">
-                            <h2 className="text-xl md:text-2xl font-serif font-bold mb-4">
+                        <div className="mb-8 max-w-3xl">
+                            <h2 className="text-xl md:text-2xl font-bold mb-4 text-left">
                                 <span className="text-fuchsia-600 dark:text-fuchsia-400">ПРАКТИЧНИЙ МОДУЛЬ</span>
                                 <span className="text-slate-400 mx-2">|</span>
                                 <span className="text-slate-800 dark:text-white">4 ВІКНО БЕЗДОГАННОСТІ</span>
                             </h2>
-                            <p className="text-slate-600 dark:text-slate-400">Медитації що ініціюють частини матриці душі.</p>
+                            <p className="text-slate-600 dark:text-slate-400 text-left">Медитації що ініціюють частини матриці душі.</p>
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-8">
-                            <div className="space-y-3">
+                            <div className="space-y-4">
                                 <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Програма модуля</h3>
-                                {course1MeditationButtons.map((btn, i) => <CourseButton key={btn.path} btn={btn} index={i} />)}
-                            </div>
-                            <div>
-                                <div className="rounded-2xl overflow-hidden shadow-xl mb-4">
-                                    <img src="/master/shrtr.svg" alt="Meditation" className="w-full h-48 object-contain bg-gradient-to-br from-indigo-100 to-fuchsia-100 dark:from-slate-800 dark:to-indigo-900 p-8" />
+                                <div className="space-y-2">
+                                    {course1MeditationButtons.map((btn, i) => <CourseButton key={btn.path} btn={btn} index={i} />)}
                                 </div>
-                                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700">
+                            </div>
+                            <div className="bg-white dark:bg-slate-800/50 rounded-2xl p-4 shadow-lg border border-slate-100 dark:border-slate-700">
+                                <div className="rounded-xl overflow-hidden shadow-md mb-4 bg-gradient-to-br from-indigo-100 to-fuchsia-100 dark:from-slate-800 dark:to-indigo-900 p-8">
+                                    <img src="/master/shrtr.svg" alt="Meditation" className="w-full h-48 object-contain" />
+                                </div>
+                                <div className="p-2">
                                     <h4 className="font-bold text-sm text-slate-800 dark:text-white mb-2">Програма курсу</h4>
                                     <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
                                         <li className="flex items-center gap-2"><Clock size={12} className="text-indigo-500" /> 4 медитації</li>
@@ -211,18 +222,18 @@ export const Training: React.FC = () => {
 
                 {activeTab1 === 'exam' && (
                     <div className="animate-fade-in">
-                        <div className="text-center mb-8 max-w-3xl mx-auto">
-                            <h2 className="text-xl md:text-2xl font-serif font-bold mb-4">
+                        <div className="mb-8 max-w-3xl">
+                            <h2 className="text-xl md:text-2xl font-bold mb-4 text-left">
                                 <span className="text-amber-600 dark:text-amber-400">ЕКЗАМЕНАЦІЯ</span>
                                 <span className="text-slate-400 mx-2">|</span>
                                 <span className="text-slate-800 dark:text-white">ПОБУДОВА ВЛАСНОГО СУБ'ЄКТИВНОГО ПРОСТОРУ</span>
                             </h2>
-                            <p className="text-slate-600 dark:text-slate-400 font-medium">ПРОСТОРУ АРХЕТИПУ СІМ'Ї</p>
+                            <p className="text-slate-600 dark:text-slate-400 font-medium text-left">ПРОСТОРУ АРХЕТИПУ СІМ'Ї</p>
                         </div>
 
                         {/* Info Block */}
                         <div className="grid md:grid-cols-2 gap-6 mb-8">
-                            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700">
+                            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-slate-100 dark:border-slate-700">
                                 <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-4">
                                     Ви можете безкоштовно ознайомитись із ключами екзаменації.
                                 </p>
@@ -246,15 +257,17 @@ export const Training: React.FC = () => {
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-8">
-                            <div className="space-y-3">
+                            <div className="space-y-4">
                                 <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Програма модуля</h3>
-                                {course1ExamButtons.map((btn, i) => <CourseButton key={btn.path} btn={btn} index={i} />)}
+                                <div className="space-y-2">
+                                    {course1ExamButtons.map((btn, i) => <CourseButton key={btn.path} btn={btn} index={i} />)}
+                                </div>
                             </div>
-                            <div>
-                                <div className="rounded-2xl overflow-hidden shadow-xl mb-4">
+                            <div className="bg-white dark:bg-slate-800/50 rounded-2xl p-4 shadow-lg border border-slate-100 dark:border-slate-700">
+                                <div className="rounded-xl overflow-hidden shadow-md mb-4">
                                     <img src="/master/aboutmaster2.webp" alt="Exam" className="w-full h-48 object-cover" />
                                 </div>
-                                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700">
+                                <div className="p-2">
                                     <h4 className="font-bold text-sm text-slate-800 dark:text-white mb-2">Програма курсу</h4>
                                     <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
                                         <li className="flex items-center gap-2"><Clock size={12} className="text-indigo-500" /> 5 тем</li>
@@ -288,16 +301,16 @@ export const Training: React.FC = () => {
     // Render Course 2
     const renderCourse2 = () => (
         <div className="animate-fade-in">
-            {/* Header with Mandala */}
+            {/* Header with Mandala - збільшений розмір */}
             <div className="flex flex-col md:flex-row items-center gap-6 mb-10">
-                <div className={`w-32 h-32 md:w-40 md:h-40 flex-shrink-0 ${mandalaAnimated ? 'animate-spin-once' : ''}`}>
+                <div className={`w-40 h-40 md:w-56 md:h-56 flex-shrink-0 ${mandalaAnimated ? 'animate-spin-once' : ''}`}>
                     <div className="w-full h-full rounded-full bg-gradient-to-br from-amber-400 to-orange-500 p-4 shadow-2xl">
                         <img src="/mandala.png" alt="Mandala" className="w-full h-full object-contain drop-shadow-xl" style={{ filter: 'hue-rotate(30deg)' }} />
                     </div>
                 </div>
                 
                 <div className={`text-center md:text-left transition-all duration-1000 ${mandalaAnimated ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
-                    <h1 className="text-2xl md:text-4xl font-serif font-bold text-slate-800 dark:text-white mb-2">
+                    <h1 className="text-2xl md:text-4xl font-bold text-slate-800 dark:text-white mb-2">
                         <span className="text-amber-600 dark:text-amber-400">2й КУРС</span>
                         <span className="text-slate-400 mx-2">|</span>
                         <span>ПРАКТИКА ГЕРОЯ</span>
@@ -333,7 +346,7 @@ export const Training: React.FC = () => {
                 {activeTab2 === 'space' && (
                     <div className="animate-fade-in">
                         <div className="text-center mb-8 max-w-3xl mx-auto">
-                            <h2 className="text-xl md:text-2xl font-serif font-bold mb-4">
+                            <h2 className="text-xl md:text-2xl font-bold mb-4">
                                 <span className="text-amber-600 dark:text-amber-400">ТЕОРЕТИЧНИЙ МОДУЛЬ</span>
                                 <span className="text-slate-400 mx-2">|</span>
                                 <span className="text-slate-800 dark:text-white">ПРОСТІР ПОДВИГІВ</span>
@@ -368,7 +381,7 @@ export const Training: React.FC = () => {
                 {activeTab2 === 'heroes' && (
                     <div className="animate-fade-in">
                         <div className="text-center mb-8 max-w-3xl mx-auto">
-                            <h2 className="text-xl md:text-2xl font-serif font-bold mb-4">
+                            <h2 className="text-xl md:text-2xl font-bold mb-4">
                                 <span className="text-amber-600 dark:text-amber-400">ТЕОРЕТИЧНИЙ МОДУЛЬ</span>
                                 <span className="text-slate-400 mx-2">|</span>
                                 <span className="text-slate-800 dark:text-white">ГЕРОЇ ТА ЇХ СИЛА</span>
@@ -403,7 +416,7 @@ export const Training: React.FC = () => {
                 {activeTab2 === 'weight' && (
                     <div className="animate-fade-in">
                         <div className="text-center mb-8 max-w-3xl mx-auto">
-                            <h2 className="text-xl md:text-2xl font-serif font-bold mb-4">
+                            <h2 className="text-xl md:text-2xl font-bold mb-4">
                                 <span className="text-orange-600 dark:text-orange-400">ПРАКТИЧНИЙ МОДУЛЬ</span>
                                 <span className="text-slate-400 mx-2">|</span>
                                 <span className="text-slate-800 dark:text-white">1 ВІКНО БЕЗДОГАННОСТІ</span>
@@ -438,7 +451,7 @@ export const Training: React.FC = () => {
                 {activeTab2 === 'influence' && (
                     <div className="animate-fade-in">
                         <div className="text-center mb-8 max-w-3xl mx-auto">
-                            <h2 className="text-xl md:text-2xl font-serif font-bold mb-4">
+                            <h2 className="text-xl md:text-2xl font-bold mb-4">
                                 <span className="text-orange-600 dark:text-orange-400">ПРАКТИЧНИЙ МОДУЛЬ</span>
                                 <span className="text-slate-400 mx-2">|</span>
                                 <span className="text-slate-800 dark:text-white">1 ВІКНО БЕЗДОГАННОСТІ</span>
@@ -473,7 +486,7 @@ export const Training: React.FC = () => {
                 {activeTab2 === 'exam' && (
                     <div className="animate-fade-in">
                         <div className="text-center mb-8 max-w-3xl mx-auto">
-                            <h2 className="text-xl md:text-2xl font-serif font-bold mb-4">
+                            <h2 className="text-xl md:text-2xl font-bold mb-4">
                                 <span className="text-amber-600 dark:text-amber-400">ЕКЗАМЕНАЦІЯ</span>
                                 <span className="text-slate-400 mx-2">|</span>
                                 <span className="text-slate-800 dark:text-white">ПРОФІЛЬ ГЕРОЯ</span>
@@ -508,7 +521,7 @@ export const Training: React.FC = () => {
         </div>
     );
 
-    // Render Course 3 - Coming Soon
+    // Render Course 3 - Coming Soon - елегантна анімація
     const renderCourse3 = () => (
         <div className="animate-fade-in min-h-[60vh] flex flex-col items-center justify-center">
             {/* Header with Mandala */}
@@ -520,7 +533,7 @@ export const Training: React.FC = () => {
                 </div>
                 
                 <div className={`text-center transition-all duration-1000 ${mandalaAnimated ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                    <h1 className="text-2xl md:text-4xl font-serif font-bold text-slate-800 dark:text-white mb-2">
+                    <h1 className="text-2xl md:text-4xl font-bold text-slate-800 dark:text-white mb-2">
                         <span className="text-emerald-600 dark:text-emerald-400">3й КУРС</span>
                         <span className="text-slate-400 mx-2">|</span>
                         <span>ЗВ'ЯЗОК ІЗ СТИХІЯМИ</span>
@@ -528,41 +541,43 @@ export const Training: React.FC = () => {
                 </div>
             </div>
 
-            {/* Coming Soon Animation */}
+            {/* Elegant Coming Soon */}
             <div className="relative">
-                {/* Animated rings */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-64 h-64 rounded-full border-2 border-emerald-300/30 dark:border-emerald-500/20 animate-pulse-slow"></div>
-                </div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-48 h-48 rounded-full border-2 border-teal-300/40 dark:border-teal-500/30 animate-pulse-slow" style={{ animationDelay: '0.5s' }}></div>
-                </div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-32 h-32 rounded-full border-2 border-emerald-400/50 dark:border-emerald-400/40 animate-pulse-slow" style={{ animationDelay: '1s' }}></div>
+                {/* Floating particles */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    {[...Array(6)].map((_, i) => (
+                        <div 
+                            key={i}
+                            className="absolute w-2 h-2 rounded-full bg-emerald-400/40 animate-float"
+                            style={{ 
+                                left: `${20 + i * 15}%`, 
+                                top: `${10 + (i % 3) * 30}%`,
+                                animationDelay: `${i * 0.5}s`,
+                                animationDuration: `${3 + i * 0.5}s`
+                            }}
+                        />
+                    ))}
                 </div>
 
                 {/* Center content */}
-                <div className="relative z-10 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-slate-800 dark:to-emerald-950/30 rounded-[3rem] p-12 md:p-16 text-center shadow-2xl border border-emerald-100 dark:border-emerald-900/50">
-                    <div className="flex items-center justify-center gap-3 mb-4">
-                        <Sparkles className="text-emerald-500 animate-pulse" size={28} />
-                        <span className="text-3xl md:text-5xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400">
-                            COMING SOON
-                        </span>
-                        <Sparkles className="text-teal-500 animate-pulse" size={28} />
+                <div className="relative z-10 bg-gradient-to-br from-emerald-50/80 to-teal-50/80 dark:from-slate-800/80 dark:to-emerald-950/50 backdrop-blur-sm rounded-[3rem] px-16 py-12 text-center shadow-2xl border border-emerald-200/50 dark:border-emerald-800/50">
+                    <div className="flex items-center justify-center gap-4 mb-3">
+                        <div className="w-12 h-[2px] bg-gradient-to-r from-transparent to-emerald-400"></div>
+                        <Sparkles className="text-emerald-500" size={20} />
+                        <div className="w-12 h-[2px] bg-gradient-to-l from-transparent to-emerald-400"></div>
                     </div>
-                    <p className="text-slate-600 dark:text-slate-400 text-lg">
+                    <span className="text-2xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 tracking-wider">
+                        НЕЗАБАРОМ
+                    </span>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm mt-4 tracking-wide">
                         Курс знаходиться у розробці
                     </p>
-                    <div className="mt-6 flex items-center justify-center gap-2 text-emerald-600 dark:text-emerald-400">
-                        <Clock size={16} />
-                        <span className="text-sm font-medium">Очікуйте незабаром</span>
-                    </div>
                 </div>
             </div>
         </div>
     );
 
-    // Render Course 4 - Coming Soon
+    // Render Course 4 - Coming Soon - елегантна анімація
     const renderCourse4 = () => (
         <div className="animate-fade-in min-h-[60vh] flex flex-col items-center justify-center">
             {/* Header with Mandala */}
@@ -574,7 +589,7 @@ export const Training: React.FC = () => {
                 </div>
                 
                 <div className={`text-center transition-all duration-1000 ${mandalaAnimated ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                    <h1 className="text-2xl md:text-4xl font-serif font-bold text-slate-800 dark:text-white mb-2">
+                    <h1 className="text-2xl md:text-4xl font-bold text-slate-800 dark:text-white mb-2">
                         <span className="text-violet-600 dark:text-violet-400">4й КУРС</span>
                         <span className="text-slate-400 mx-2">|</span>
                         <span>ПРОБУДЖЕННЯ БЕЗДОГАННИХ СИЛ</span>
@@ -582,35 +597,37 @@ export const Training: React.FC = () => {
                 </div>
             </div>
 
-            {/* Coming Soon Animation */}
+            {/* Elegant Coming Soon */}
             <div className="relative">
-                {/* Animated rings */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-64 h-64 rounded-full border-2 border-violet-300/30 dark:border-violet-500/20 animate-pulse-slow"></div>
-                </div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-48 h-48 rounded-full border-2 border-purple-300/40 dark:border-purple-500/30 animate-pulse-slow" style={{ animationDelay: '0.5s' }}></div>
-                </div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-32 h-32 rounded-full border-2 border-violet-400/50 dark:border-violet-400/40 animate-pulse-slow" style={{ animationDelay: '1s' }}></div>
+                {/* Floating particles */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    {[...Array(6)].map((_, i) => (
+                        <div 
+                            key={i}
+                            className="absolute w-2 h-2 rounded-full bg-violet-400/40 animate-float"
+                            style={{ 
+                                left: `${20 + i * 15}%`, 
+                                top: `${10 + (i % 3) * 30}%`,
+                                animationDelay: `${i * 0.5}s`,
+                                animationDuration: `${3 + i * 0.5}s`
+                            }}
+                        />
+                    ))}
                 </div>
 
                 {/* Center content */}
-                <div className="relative z-10 bg-gradient-to-br from-violet-50 to-purple-50 dark:from-slate-800 dark:to-violet-950/30 rounded-[3rem] p-12 md:p-16 text-center shadow-2xl border border-violet-100 dark:border-violet-900/50">
-                    <div className="flex items-center justify-center gap-3 mb-4">
-                        <Sparkles className="text-violet-500 animate-pulse" size={28} />
-                        <span className="text-3xl md:text-5xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-purple-600 dark:from-violet-400 dark:to-purple-400">
-                            COMING SOON
-                        </span>
-                        <Sparkles className="text-purple-500 animate-pulse" size={28} />
+                <div className="relative z-10 bg-gradient-to-br from-violet-50/80 to-purple-50/80 dark:from-slate-800/80 dark:to-violet-950/50 backdrop-blur-sm rounded-[3rem] px-16 py-12 text-center shadow-2xl border border-violet-200/50 dark:border-violet-800/50">
+                    <div className="flex items-center justify-center gap-4 mb-3">
+                        <div className="w-12 h-[2px] bg-gradient-to-r from-transparent to-violet-400"></div>
+                        <Sparkles className="text-violet-500" size={20} />
+                        <div className="w-12 h-[2px] bg-gradient-to-l from-transparent to-violet-400"></div>
                     </div>
-                    <p className="text-slate-600 dark:text-slate-400 text-lg">
+                    <span className="text-2xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-purple-600 dark:from-violet-400 dark:to-purple-400 tracking-wider">
+                        НЕЗАБАРОМ
+                    </span>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm mt-4 tracking-wide">
                         Курс знаходиться у розробці
                     </p>
-                    <div className="mt-6 flex items-center justify-center gap-2 text-violet-600 dark:text-violet-400">
-                        <Clock size={16} />
-                        <span className="text-sm font-medium">Очікуйте незабаром</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -619,6 +636,33 @@ export const Training: React.FC = () => {
     // Main render
     return (
         <div className="min-h-screen pt-20 pb-8 px-4 md:px-8">
+            {/* Fixed Right Sidebar - Course Navigation */}
+            <div className="fixed right-4 top-24 z-40 hidden lg:flex flex-col gap-2">
+                {[1, 2, 3, 4].map((num) => (
+                    <Link
+                        key={num}
+                        to={`/training/year-${num}`}
+                        className={`px-3 py-2 rounded-xl flex items-center gap-2 font-bold text-sm transition-all duration-300 shadow-lg
+                            ${activeCourse === num 
+                                ? 'bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-white scale-105' 
+                                : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 hover:scale-105'
+                            }`}
+                        style={{ boxShadow: activeCourse === num ? '0 4px 20px rgba(129, 140, 248, 0.4)' : '0 2px 10px rgba(0,0,0,0.1)' }}
+                    >
+                        <span className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center text-xs">{num}</span>
+                        <span className="text-xs uppercase tracking-wider">курс</span>
+                    </Link>
+                ))}
+                <div className="h-[1px] bg-slate-200 dark:bg-slate-700 my-1"></div>
+                <Link
+                    to="/training/map"
+                    className="px-3 py-2 rounded-xl flex items-center justify-center gap-2 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300 shadow-lg hover:scale-105 text-xs font-bold uppercase tracking-wider"
+                    title="Повна програма"
+                >
+                    Програма
+                </Link>
+            </div>
+
             <div className="max-w-6xl mx-auto">
                 {/* Course Content */}
                 {activeCourse === 1 && renderCourse1()}

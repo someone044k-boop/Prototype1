@@ -56,11 +56,17 @@
               'slide-from-right': 'slideFromRight 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
               'chevron-wave': 'chevronWave 1.5s ease-in-out infinite',
               'bounce-slow': 'bounceSlow 2s ease-in-out infinite',
+              'gradient-flow': 'gradientFlow 4s ease infinite',
             },
             keyframes: {
               spinOnce: {
                 '0%': { transform: 'rotate(0deg)' },
                 '100%': { transform: 'rotate(360deg)' },
+              },
+              gradientFlow: {
+                '0%': { backgroundPosition: '0% 50%' },
+                '50%': { backgroundPosition: '100% 50%' },
+                '100%': { backgroundPosition: '0% 50%' },
               },
               mandalaIntro: {
                 '0%': { transform: 'scale(0.3) rotate(0deg)', opacity: '0' },
@@ -278,11 +284,11 @@
         border: 1px solid rgba(255, 255, 255, 0.05);
       }
       
-      /* Rainbow animated border */
+      /* Rainbow animated border - pastel version */
       .rainbow-border {
         position: relative;
         background: linear-gradient(var(--bg-color, white), var(--bg-color, white)) padding-box,
-                    linear-gradient(var(--angle, 0deg), #ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0080ff, #8000ff, #ff0080, #ff0000) border-box;
+                    linear-gradient(var(--angle, 0deg), #fca5a5, #fdba74, #fde047, #bef264, #86efac, #67e8f9, #a5b4fc, #c4b5fd, #f0abfc, #fda4af, #fca5a5) border-box;
         border: 3px solid transparent;
         animation: rainbow-rotate 3s linear infinite;
       }
@@ -299,13 +305,13 @@
         inherits: false;
       }
       
-      /* Snake border animation */
+      /* Snake border animation - pastel version */
       .snake-border {
         position: relative;
         background: linear-gradient(var(--bg-color, white), var(--bg-color, white)) padding-box,
                     conic-gradient(from var(--snake-angle, 0deg), 
-                      #6366f1, #8b5cf6, #d946ef, #ec4899, #f97316, 
-                      #eab308, #22c55e, #06b6d4, #3b82f6, #6366f1
+                      #fca5a5, #fdba74, #fde047, #bef264, #86efac, 
+                      #67e8f9, #a5b4fc, #c4b5fd, #f0abfc, #fda4af, #fca5a5
                     ) border-box;
         border: 3px solid transparent;
         animation: snake-rotate 3s linear infinite;
@@ -323,26 +329,55 @@
         inherits: false;
       }
       
-      /* Elegant block styling */
+      /* Elegant block styling with pastel animated border */
       .elegant-block {
+        position: relative;
         background: linear-gradient(to bottom right, white, #eef2ff);
-        border: 1px solid rgba(255, 255, 255, 0.5);
         box-shadow: 0 25px 50px -12px rgba(129, 140, 248, 0.2);
+      }
+      .elegant-block::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 2px;
+        background: conic-gradient(
+          from var(--pastel-angle, 0deg),
+          #fca5a5, #fdba74, #fde047, #bef264, #86efac, 
+          #67e8f9, #a5b4fc, #c4b5fd, #f0abfc, #fda4af, #fca5a5
+        );
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        animation: pastel-rotate 6s linear infinite;
+        opacity: 0.8;
       }
       .dark .elegant-block {
         background: linear-gradient(to bottom right, rgb(15, 23, 42), rgba(49, 46, 129, 0.2));
-        border: 1px solid rgba(255, 255, 255, 0.05);
         box-shadow: 0 25px 50px -12px rgba(129, 140, 248, 0.15);
       }
+      .dark .elegant-block::before {
+        opacity: 0.6;
+      }
+      @keyframes pastel-rotate {
+        0% { --pastel-angle: 0deg; }
+        100% { --pastel-angle: 360deg; }
+      }
+      @property --pastel-angle {
+        syntax: '<angle>';
+        initial-value: 0deg;
+        inherits: false;
+      }
       
-      /* Snake border for round elements */
+      /* Snake border for round elements - thick pastel */
       .snake-border-round {
         position: relative;
         box-sizing: content-box;
         background: linear-gradient(var(--bg-color, white), var(--bg-color, white)) padding-box,
                     conic-gradient(from var(--snake-angle, 0deg), 
-                      #6366f1, #8b5cf6, #d946ef, #ec4899, #f97316, 
-                      #eab308, #22c55e, #06b6d4, #3b82f6, #6366f1
+                      #fca5a5, #fdba74, #fde047, #bef264, #86efac, 
+                      #67e8f9, #a5b4fc, #c4b5fd, #f0abfc, #fda4af, #fca5a5
                     ) border-box;
         border: 16px solid transparent;
         margin: -16px;
@@ -350,6 +385,31 @@
       }
       .dark .snake-border-round {
         --bg-color: rgb(15, 23, 42);
+      }
+      
+      /* Snake border thin with glow - pastel for cards */
+      .snake-border-thin {
+        position: relative;
+        box-sizing: content-box;
+        background: linear-gradient(var(--bg-color, white), var(--bg-color, white)) padding-box,
+                    conic-gradient(from var(--snake-angle, 0deg), 
+                      #fca5a5, #fdba74, #fde047, #bef264, #86efac, 
+                      #67e8f9, #a5b4fc, #c4b5fd, #f0abfc, #fda4af, #fca5a5
+                    ) border-box;
+        border: 3px solid transparent;
+        animation: snake-rotate 4s linear infinite, snake-glow-pastel 2s ease-in-out infinite;
+      }
+      .dark .snake-border-thin {
+        --bg-color: rgb(15, 23, 42);
+      }
+      
+      @keyframes snake-glow-pastel {
+        0%, 100% { 
+          filter: drop-shadow(0 0 4px rgba(196, 181, 253, 0.4)) drop-shadow(0 0 8px rgba(240, 171, 252, 0.3));
+        }
+        50% { 
+          filter: drop-shadow(0 0 8px rgba(196, 181, 253, 0.6)) drop-shadow(0 0 16px rgba(240, 171, 252, 0.4));
+        }
       }
       
       /* Animated gradient borders for seasonal blocks */

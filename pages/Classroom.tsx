@@ -40,7 +40,7 @@ const AudioPlayer: React.FC<{ src?: string }> = ({ src }) => {
 
                     <div className="max-w-5xl w-full bg-white dark:bg-slate-800 p-8 md:p-12 shadow-2xl rounded-3xl min-h-[60vh] flex items-center justify-center border border-indigo-50 dark:border-slate-700 relative overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-fuchsia-500/5 pointer-events-none" />
-                        <h2 className="text-3xl md:text-4xl font-serif text-center bg-gradient-to-r from-indigo-600 to-fuchsia-600 bg-clip-text text-transparent drop-shadow-sm">
+                        <h2 className="text-3xl md:text-4xl font-bold text-center bg-gradient-to-r from-indigo-600 to-fuchsia-600 bg-clip-text text-transparent drop-shadow-sm">
                             Слайд презентації (Повноекранний режим)
                         </h2>
                     </div>
@@ -123,7 +123,7 @@ export const Classroom: React.FC = () => {
                     <div className="w-20 h-20 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-6 text-red-500">
                         <Lock size={40} />
                     </div>
-                    <h1 className="text-2xl font-serif font-bold mb-4">{t('access_denied_title')}</h1>
+                    <h1 className="text-2xl font-bold mb-4">{t('access_denied_title')}</h1>
                     <p className="text-slate-600 dark:text-slate-400 mb-8">{t('access_denied_desc')}</p>
                     <div className="flex flex-col gap-3">
                         <Link 
@@ -152,7 +152,7 @@ export const Classroom: React.FC = () => {
                     </Link>
                     
                     <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-6 rounded-3xl shadow-xl border border-white/20 dark:border-slate-800 sticky top-28">
-                        <h3 className="font-serif font-bold text-lg mb-6 text-slate-800 dark:text-white text-center border-b border-slate-100 dark:border-slate-800 pb-4">{course.title}</h3>
+                        <h3 className="font-bold text-lg mb-6 text-slate-800 dark:text-white text-center border-b border-slate-100 dark:border-slate-800 pb-4">{course.title}</h3>
                         
                         <div className="space-y-3 mb-8 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
                             {course.modules[0]?.slides.map((slide, idx) => (
@@ -201,7 +201,7 @@ export const Classroom: React.FC = () => {
                              <div className="mb-6 inline-block p-4 rounded-full bg-indigo-50 dark:bg-slate-800 text-indigo-500 shadow-inner">
                                 <Maximize size={32} strokeWidth={1.5} />
                              </div>
-                            <h2 className="text-3xl font-serif text-slate-800 dark:text-white font-bold mb-2">
+                            <h2 className="text-3xl font-bold text-slate-800 dark:text-white mb-2">
                                 {t('slide_materials')}
                             </h2>
                             <p className="text-slate-500 dark:text-slate-400 font-medium tracking-wide">

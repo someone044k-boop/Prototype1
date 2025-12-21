@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Clock, CreditCard, Video, Send, CheckCircle2 } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Define structure for rich text content
 interface ConsultationType {
@@ -234,7 +235,7 @@ export const Consultations: React.FC = () => {
 
                         {/* Card Content - Compact */}
                         <div className="p-3 flex-1 flex flex-col items-center text-center">
-                            <h3 className="text-lg font-bold font-serif mb-1 text-slate-800 dark:text-white leading-tight min-h-[2.5rem] flex items-center justify-center">{item.title}</h3>
+                            <h3 className="text-lg font-bold mb-1 text-slate-800 dark:text-white leading-tight min-h-[2.5rem] flex items-center justify-center">{item.title}</h3>
                             
                             <div className="flex flex-wrap justify-center gap-1.5 mb-2">
                                 <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded-full text-[9px] font-bold uppercase tracking-wider text-slate-500">
@@ -285,7 +286,7 @@ export const Consultations: React.FC = () => {
                         <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group">
                             <img loading="lazy" src={activeItem.image} alt={activeItem.title} className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex flex-col justify-end p-8">
-                                <h3 className="text-white font-serif text-3xl font-bold mb-3 leading-tight drop-shadow-lg">{activeItem.title}</h3>
+                                <h3 className="text-white text-3xl font-bold mb-3 leading-tight drop-shadow-lg">{activeItem.title}</h3>
                                 <p className="text-indigo-200 text-lg font-medium flex items-center gap-2"><CreditCard size={18}/> {activeItem.price}</p>
                             </div>
                         </div>
@@ -294,7 +295,7 @@ export const Consultations: React.FC = () => {
                         <div className="flex-1 p-6 md:p-10 overflow-y-auto custom-scrollbar flex flex-col relative bg-white dark:bg-slate-900">
                             {/* Mobile Header (Visible only on small screens) */}
                             <div className="md:hidden mb-6">
-                                <h2 className="text-2xl font-serif font-bold text-slate-800 dark:text-white mb-2">{activeItem.title}</h2>
+                                <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">{activeItem.title}</h2>
                                 <div className="text-xl font-bold text-indigo-600 dark:text-indigo-400">{activeItem.price}</div>
                             </div>
 

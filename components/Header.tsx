@@ -110,16 +110,15 @@ export const Header: React.FC = () => {
             
             {/* Logo Area */}
             <Link to="/" className="flex items-center gap-3 z-50 group flex-shrink-0" onClick={() => { setMobileOpen(false); window.scrollTo(0, 0); }}>
-                <div className={`transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) ${scrolled ? 'w-12 h-12' : 'w-14 h-14'} flex items-center justify-center group-hover:scale-110 relative`}>
-                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 via-fuchsia-500/20 to-indigo-500/20 rounded-full blur-md opacity-60 animate-pulse"></div>
+                <div className={`transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) ${scrolled ? 'w-14 h-14' : 'w-16 h-16'} flex items-center justify-center group-hover:scale-110 relative`}>
                     <img 
                         src="/mandala.png" 
                         alt="Dobrev Opus Zodiac" 
-                        className={`w-full h-full object-contain relative z-10 drop-shadow-lg ${mandalaAnimated ? 'animate-spin-once' : ''}`}
+                        className={`w-full h-full object-contain relative z-10 ${mandalaAnimated ? 'animate-spin-once' : ''}`}
                     />
                 </div>
                 {/* Visible on Tablet (md) and Desktop (lg) */}
-                <span className={`font-serif font-bold tracking-wider transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) hidden md:inline ${scrolled ? 'text-sm' : 'text-lg'}`}>
+                <span className={`font-bold tracking-wider transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) hidden md:inline ${scrolled ? 'text-sm' : 'text-lg'}`}>
                     <span className="bg-gradient-to-r from-indigo-900 to-fuchsia-800 dark:from-indigo-300 dark:to-fuchsia-300 bg-clip-text text-transparent">Dobrev</span>
                     <span className="text-slate-900 dark:text-white"> Opus Zodiac</span>
                 </span>
@@ -134,8 +133,11 @@ export const Header: React.FC = () => {
                             <>
                             <Link 
                                 to={item.path} 
-                                className={`flex items-center gap-0.5 text-[13px] font-bold tracking-wide uppercase py-2 transition-colors duration-300
-                                    text-slate-900 dark:text-white
+                                className={`relative flex items-center gap-0.5 text-[13px] font-bold tracking-wide uppercase py-2 transition-colors duration-300
+                                    ${location.pathname.startsWith(item.path) 
+                                        ? 'text-indigo-600 dark:text-indigo-400' 
+                                        : 'text-slate-900 dark:text-white'
+                                    }
                                     group-hover:text-indigo-600 dark:group-hover:text-indigo-400
                                 `}
                             >
@@ -179,12 +181,12 @@ export const Header: React.FC = () => {
                         ) : (
                             <Link 
                             to={item.path}
-                            className={`text-[13px] font-bold tracking-wide uppercase py-2 transition-colors duration-300
+                            className={`relative text-[13px] font-bold tracking-wide uppercase py-2 transition-colors duration-300
                                 ${location.pathname === item.path 
                                     ? 'text-indigo-600 dark:text-indigo-400' 
                                     : 'text-slate-900 dark:text-white'
                                 } 
-                                hover:text-indigo-600 dark:hover:text-indigo-400`}
+                                hover:text-indigo-600 dark:hover:text-indigo-400 group`}
                             >
                             {getLabel(item.label)}
                             </Link>

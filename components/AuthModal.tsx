@@ -217,7 +217,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                             </button>
                         </div>
 
-                        <h2 className="text-2xl font-serif font-bold text-slate-800 dark:text-white text-center">
+                        <h2 className="text-2xl font-bold text-slate-800 dark:text-white text-center">
                             {mode === 'login' ? 'Вітаємо!' : 'Створити акаунт'}
                         </h2>
                         <p className="text-sm text-slate-500 text-center mt-1">

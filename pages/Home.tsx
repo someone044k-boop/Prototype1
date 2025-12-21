@@ -175,13 +175,29 @@ export const Home: React.FC = () => {
           <Mandala size="w-48 h-48 sm:w-64 sm:h-64 md:w-96 md:h-96" />
         </div>
         
-        {/* Title - drops from mandala */}
+        {/* Title - drops from mandala with running gradient */}
         <h1 
-            className="mt-2 sm:mt-4 text-2xl sm:text-4xl md:text-6xl font-serif font-bold bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 dark:from-indigo-400 dark:via-violet-400 dark:to-fuchsia-400 bg-clip-text text-transparent tracking-wider sm:tracking-widest drop-shadow-sm text-center px-4 relative z-10 opacity-0 animate-drop-in"
+            className="mt-2 sm:mt-4 text-2xl sm:text-4xl md:text-6xl font-bold tracking-wider sm:tracking-widest drop-shadow-sm text-center px-4 relative z-10 opacity-0 animate-drop-in"
             style={{ animationDelay: '500ms', animationFillMode: 'forwards' }}
         >
-            {t('hero_title')}
+            <span 
+              className="bg-clip-text text-transparent animate-text-shimmer"
+              style={{
+                backgroundImage: 'linear-gradient(90deg, #4f46e5, #7c3aed, #c026d3, #db2777, #c026d3, #7c3aed, #4f46e5)',
+                backgroundSize: '200% auto',
+                animation: 'text-shimmer 3s linear infinite'
+              }}
+            >
+              {t('hero_title')}
+            </span>
         </h1>
+        
+        <style>{`
+          @keyframes text-shimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+          }
+        `}</style>
         
         {/* Subtitle - drops from mandala */}
         <p 
@@ -227,7 +243,7 @@ export const Home: React.FC = () => {
             <img loading="lazy" src="/logo.png" alt="Dobrev Opus Zodiac" className="w-full h-auto" />
         </div>
         <div className={`${fadeLeft('about')}`} style={{ transitionDelay: '200ms' }}>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-slate-800 dark:text-white relative inline-block mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-800 dark:text-white relative inline-block mb-4 sm:mb-6">
                 {t('hero_desc_title')}
                 <div className="absolute -bottom-2 left-0 w-16 sm:w-20 h-1 bg-gradient-to-r from-indigo-500 to-fuchsia-500 rounded-full"></div>
             </h2>
@@ -236,8 +252,12 @@ export const Home: React.FC = () => {
               dangerouslySetInnerHTML={{ __html: t('hero_desc_p1') }}
             />
             <div 
-              className="text-slate-700 dark:text-slate-300 leading-relaxed text-justify font-medium text-xs sm:text-sm md:text-base [&_b]:font-bold [&_i]:italic [&_br]:block [&_p]:mb-3"
+              className="text-slate-700 dark:text-slate-300 leading-relaxed text-justify font-medium mb-3 sm:mb-4 text-xs sm:text-sm md:text-base [&_b]:font-bold [&_i]:italic [&_br]:block [&_p]:mb-3"
               dangerouslySetInnerHTML={{ __html: t('hero_desc_p2') }}
+            />
+            <div 
+              className="text-slate-700 dark:text-slate-300 leading-relaxed text-justify font-medium text-xs sm:text-sm md:text-base [&_b]:font-bold [&_i]:italic [&_br]:block [&_p]:mb-3"
+              dangerouslySetInnerHTML={{ __html: t('hero_desc_p3') }}
             />
         </div>
       </div>

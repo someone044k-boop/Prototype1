@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { X, Clock, CreditCard, Send, CheckCircle2, Video } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface LessonPackage {
     id: string;
@@ -125,16 +126,22 @@ export const Master: React.FC = () => {
     const isAskPage = location.pathname.includes('/ask');
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            if (location.pathname.includes('/about')) {
-                document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-            } else if (location.pathname.includes('/lessons')) {
-                document.getElementById('lessons')?.scrollIntoView({ behavior: 'smooth' });
-            } else if (location.pathname.includes('/ask')) {
-                document.getElementById('ask')?.scrollIntoView({ behavior: 'smooth' });
-            }
-        }, 100);
-        return () => clearTimeout(timer);
+        // First scroll to top
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        
+        // Only scroll to sections on main master page, not on /ask
+        if (!location.pathname.includes('/ask')) {
+            const timer = setTimeout(() => {
+                if (location.pathname.includes('/about')) {
+                    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+                } else if (location.pathname.includes('/lessons')) {
+                    document.getElementById('lessons')?.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100);
+            return () => clearTimeout(timer);
+        }
     }, [location]);
 
     useEffect(() => {
@@ -164,15 +171,20 @@ export const Master: React.FC = () => {
     // If on /master/ask page, show only Ask Master section
     if (isAskPage) {
         return (
-            <div className="min-h-screen pt-24 pb-12 w-full mx-auto px-4 animate-fade-in">
+            <div className="min-h-screen pt-28 pb-12 w-full mx-auto px-4">
                 <section id="ask" className="max-w-4xl mx-auto">
-                    <div className="bg-gradient-to-br from-white to-indigo-50 dark:from-slate-900 dark:to-indigo-950/20 p-6 md:p-10 rounded-[2.5rem] border border-white/50 dark:border-white/5 shadow-xl">
+                    <div 
+                        className="bg-gradient-to-br from-white to-indigo-50 dark:from-slate-900 dark:to-indigo-950/20 p-6 md:p-10 rounded-[2.5rem] border border-white/50 dark:border-white/5 elegant-block"
+                        style={{ 
+                            boxShadow: '0 25px 60px -15px rgba(129, 140, 248, 0.25), 0 10px 30px -10px rgba(192, 132, 252, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.5)'
+                        }}
+                    >
                         {/* Header with animation */}
                         <div className="text-center mb-8 opacity-0 animate-fade-in" style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}>
                             <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center text-white text-3xl shadow-xl">
                                 ✉️
                             </div>
-                            <h1 className="text-2xl md:text-3xl font-serif font-bold uppercase mb-2 text-slate-800 dark:text-white">ЗАДАЙТЕ СВОЄ ПИТАННЯ</h1>
+                            <h1 className="text-2xl md:text-3xl font-bold uppercase mb-2 text-slate-800 dark:text-white">ЗАДАЙТЕ СВОЄ ПИТАННЯ</h1>
                             <p className="text-slate-500 text-sm">Костянтин Добрев особисто відповість на ваше питання</p>
                         </div>
                         
@@ -209,7 +221,7 @@ export const Master: React.FC = () => {
                                     style={{ animationDelay: `${400 + i * 100}ms`, animationFillMode: 'forwards' }}
                                 >
                                     <p className="font-bold text-xs text-indigo-500 mb-2 uppercase tracking-wide">Питання від {item.name}:</p>
-                                    <p className="italic mb-4 text-slate-600 dark:text-slate-300 font-serif text-sm">"{item.question}"</p>
+                                    <p className="italic mb-4 text-slate-600 dark:text-slate-300 text-sm">"{item.question}"</p>
                                     <div className="pl-4 border-l-2 border-indigo-200 dark:border-indigo-900">
                                         <p className="font-bold text-[10px] mb-1 text-slate-400 uppercase">Відповідь Майстра:</p>
                                         <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">{item.answer}</p>
@@ -239,7 +251,7 @@ export const Master: React.FC = () => {
                         <img loading="eager" src="/master/aboutmaster1.webp" alt="Костянтин Добрев" className="w-72 md:w-80 lg:w-96 h-auto transition-transform duration-300 group-hover:scale-105" style={{ marginTop: '-2cm', marginBottom: '0' }} />
                     </div>
                     <div className={`space-y-3 text-base leading-relaxed text-slate-700 dark:text-slate-300 text-justify ${fadeLeft('block1')}`} style={{ transitionDelay: '100ms' }}>
-                        <h1 className="text-2xl md:text-3xl font-serif font-bold text-slate-800 dark:text-white uppercase tracking-widest mb-4">
+                        <h1 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white uppercase tracking-widest mb-4">
                             КОСТЯНТИН ДОБРЕВ
                         </h1>
                         <p>
@@ -294,7 +306,7 @@ export const Master: React.FC = () => {
                     data-reveal="block3"
                     className={`mt-16 rounded-[2.5rem] p-6 md:p-10 elegant-block ${fadeUp('block3')}`}
                 >
-                    <h2 className="text-center text-2xl md:text-3xl font-serif font-bold mb-10 text-slate-800 dark:text-white">
+                    <h2 className="text-center text-2xl md:text-3xl font-bold mb-10 text-slate-800 dark:text-white">
                         <span className="text-indigo-600 dark:text-indigo-400">ШКОЛА АРХЕТИПІВ</span> | DOBREV OPUS ZODIAC
                     </h2>
 
@@ -361,7 +373,7 @@ export const Master: React.FC = () => {
                 id="lessons" 
                 className={`scroll-mt-32 mb-12 ${fadeUp('lessons')}`}
             >
-                <h2 className="text-2xl font-serif font-bold text-center mb-10 uppercase text-slate-800 dark:text-white">ІНДИВІДУАЛЬНІ ЗАНЯТТЯ</h2>
+                <h2 className="text-2xl font-bold text-center mb-10 uppercase text-slate-800 dark:text-white">ІНДИВІДУАЛЬНІ ЗАНЯТТЯ</h2>
                 <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     {LESSON_PACKAGES.map((item, index) => (
                         <div 
@@ -387,7 +399,7 @@ export const Master: React.FC = () => {
                             </div>
 
                             <div className="p-3 flex-1 flex flex-col items-center text-center">
-                                <h3 className="text-lg font-bold font-serif mb-1 text-slate-800 dark:text-white leading-tight min-h-[2.5rem] flex items-center justify-center">{item.title}</h3>
+                                <h3 className="text-lg font-bold mb-1 text-slate-800 dark:text-white leading-tight min-h-[2.5rem] flex items-center justify-center">{item.title}</h3>
                                 
                                 <div className="flex flex-wrap justify-center gap-1.5 mb-2">
                                     <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded-full text-[9px] font-bold uppercase tracking-wider text-slate-500">
@@ -423,7 +435,7 @@ export const Master: React.FC = () => {
                 id="reviews" 
                 className={`scroll-mt-32 ${fadeUp('reviews')}`}
             >
-                <h2 className="text-2xl font-serif font-bold text-center mb-10 uppercase text-slate-800 dark:text-white">ВІДГУКИ УЧНІВ</h2>
+                <h2 className="text-2xl font-bold text-center mb-10 uppercase text-slate-800 dark:text-white">ВІДГУКИ УЧНІВ</h2>
                 <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
                     {[
                         { name: 'Олена К.', text: 'Завдяки курсу я нарешті зрозуміла свій архетип і знайшла гармонію у відносинах. Костянтин — справжній майстер своєї справи!', course: '1й курс' },
@@ -438,7 +450,7 @@ export const Master: React.FC = () => {
                                 animationDelay: `${i * 150}ms`
                             }}
                         >
-                            <div className="absolute -top-3 left-6 text-5xl text-indigo-200 dark:text-indigo-900 font-serif">"</div>
+                            <div className="absolute -top-3 left-6 text-5xl text-indigo-200 dark:text-indigo-900 font-bold">"</div>
                             <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-4 pt-4 italic">
                                 {review.text}
                             </p>
@@ -479,14 +491,14 @@ export const Master: React.FC = () => {
                         <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group">
                             <img src={activeItem.image} alt={activeItem.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex flex-col justify-end p-8">
-                                <h3 className="text-white font-serif text-3xl font-bold mb-3 leading-tight drop-shadow-lg">{activeItem.title}</h3>
+                                <h3 className="text-white text-3xl font-bold mb-3 leading-tight drop-shadow-lg">{activeItem.title}</h3>
                                 <p className="text-indigo-200 text-lg font-medium flex items-center gap-2"><CreditCard size={18}/> {activeItem.price}</p>
                             </div>
                         </div>
 
                         <div className="flex-1 p-6 md:p-10 overflow-y-auto custom-scrollbar flex flex-col relative bg-white dark:bg-slate-900">
                             <div className="md:hidden mb-6">
-                                <h2 className="text-2xl font-serif font-bold text-slate-800 dark:text-white mb-2">{activeItem.title}</h2>
+                                <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">{activeItem.title}</h2>
                                 <div className="text-xl font-bold text-indigo-600 dark:text-indigo-400">{activeItem.price}</div>
                             </div>
 

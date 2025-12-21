@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useAuth, hasPermission, UserRole } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Menu items based on permissions
 const menuItems = [
@@ -44,7 +45,7 @@ export const Dashboard: React.FC = () => {
         return (
             <div className="min-h-screen pt-24 pb-12 px-4 flex items-center justify-center">
                 <div className="text-center">
-                    <h2 className="text-2xl font-serif font-bold text-slate-800 dark:text-white mb-4">
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-4">
                         Увійдіть до кабінету
                     </h2>
                     <p className="text-slate-600 dark:text-slate-400 mb-6">
@@ -78,7 +79,7 @@ export const Dashboard: React.FC = () => {
                             {user.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                            <h1 className="text-2xl font-serif font-bold text-slate-800 dark:text-white">
+                            <h1 className="text-2xl font-bold text-slate-800 dark:text-white">
                                 {user.name}
                             </h1>
                             <div className="flex items-center gap-2 mt-1">
@@ -162,7 +163,7 @@ const CoursesTab: React.FC = () => {
 
     return (
         <div className="space-y-6 animate-fade-in">
-            <h2 className="text-xl font-serif font-bold text-slate-800 dark:text-white">Мої курси</h2>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-white">Мої курси</h2>
             
             {userCourses.length === 0 ? (
                 <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 text-center border border-slate-100 dark:border-slate-800">
@@ -210,7 +211,7 @@ const NotificationsTab: React.FC = () => {
 
     return (
         <div className="space-y-6 animate-fade-in">
-            <h2 className="text-xl font-serif font-bold text-slate-800 dark:text-white">Сповіщення</h2>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-white">Сповіщення</h2>
             <div className="space-y-3">
                 {notifications.map(n => (
                     <div key={n.id} className={`bg-white dark:bg-slate-900 rounded-2xl p-4 border ${n.read ? 'border-slate-100 dark:border-slate-800' : 'border-indigo-200 dark:border-indigo-800'} shadow-sm`}>
@@ -238,7 +239,7 @@ const MessagesTab: React.FC = () => {
 
     return (
         <div className="space-y-6 animate-fade-in">
-            <h2 className="text-xl font-serif font-bold text-slate-800 dark:text-white">Особисті повідомлення</h2>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-white">Особисті повідомлення</h2>
             <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-lg overflow-hidden">
                 <div className="h-[400px] overflow-y-auto p-4 space-y-4">
                     {messages.map(m => (
@@ -271,7 +272,7 @@ const MessagesTab: React.FC = () => {
 
 const MythTab: React.FC = () => (
     <div className="space-y-6 animate-fade-in">
-        <h2 className="text-xl font-serif font-bold text-slate-800 dark:text-white">Розрахунок персонального міфу</h2>
+        <h2 className="text-xl font-bold text-slate-800 dark:text-white">Розрахунок персонального міфу</h2>
         <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-100 dark:border-slate-800 shadow-lg">
             <div className="text-center mb-8">
                 <Sparkles className="w-16 h-16 mx-auto mb-4 text-indigo-500" />
@@ -304,7 +305,7 @@ const WriteMasterTab: React.FC = () => {
     
     return (
         <div className="space-y-6 animate-fade-in">
-            <h2 className="text-xl font-serif font-bold text-slate-800 dark:text-white">Написати майстру</h2>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-white">Написати майстру</h2>
             <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-100 dark:border-slate-800 shadow-lg">
                 <div className="flex items-center gap-4 mb-6 pb-6 border-b border-slate-100 dark:border-slate-800">
                     <div className="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center text-white text-xl font-bold">
@@ -358,7 +359,7 @@ const OrdersTab: React.FC = () => {
     return (
         <div className="space-y-6 animate-fade-in">
             <div className="flex items-center justify-between">
-                <h2 className="text-xl font-serif font-bold text-slate-800 dark:text-white">Нові замовлення</h2>
+                <h2 className="text-xl font-bold text-slate-800 dark:text-white">Нові замовлення</h2>
                 <span className="px-3 py-1 bg-red-500 text-white rounded-full text-sm font-bold">
                     {orders.filter(o => o.status === 'new').length} нових
                 </span>
@@ -417,7 +418,7 @@ const UsersTab: React.FC = () => {
     return (
         <div className="space-y-6 animate-fade-in">
             <div className="flex items-center justify-between">
-                <h2 className="text-xl font-serif font-bold text-slate-800 dark:text-white">Користувачі</h2>
+                <h2 className="text-xl font-bold text-slate-800 dark:text-white">Користувачі</h2>
                 <span className="text-sm text-slate-500">{users.length} користувачів</span>
             </div>
             <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-lg overflow-hidden">
@@ -477,7 +478,7 @@ const SettingsTab: React.FC = () => {
     
     return (
         <div className="space-y-6 animate-fade-in">
-            <h2 className="text-xl font-serif font-bold text-slate-800 dark:text-white">Налаштування</h2>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-white">Налаштування</h2>
             <div className="grid gap-6">
                 {/* Profile Settings */}
                 <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-lg">
