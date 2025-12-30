@@ -19,10 +19,10 @@ export const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="bg-transparent mt-auto" style={{ padding: 'var(--space-lg) 0' }}>
+    <footer className="bg-transparent mt-auto w-full max-w-[1920px] mx-auto" style={{ padding: 'var(--footer-padding) 0' }}>
       <div 
         className="w-full max-w-[1600px] mx-auto flex flex-col sm:flex-row items-center justify-between font-bold text-slate-600 dark:text-slate-400 relative"
-        style={{ padding: '0 var(--container-padding)', gap: 'var(--space-lg)', fontSize: 'var(--text-xs)' }}
+        style={{ padding: '0 var(--container-padding)', gap: 'var(--space-lg)', fontSize: 'clamp(10px, var(--text-xs), 14px)' }}
       >
         
         {/* Copyright */}
@@ -41,7 +41,7 @@ export const Footer: React.FC = () => {
                     rel="noreferrer"
                     className="flex items-center justify-center rounded-full bg-white/50 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50 text-slate-500 dark:text-slate-400 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-fuchsia-500 hover:text-white transition-all duration-300 hover:scale-110 hover:border-transparent hover:shadow-lg hover:shadow-indigo-500/30"
                     title={social.label}
-                    style={{ width: 'calc(var(--vw-unit) * 2.5)', height: 'calc(var(--vw-unit) * 2.5)' }}
+                    style={{ width: 'clamp(32px, calc(var(--vw-unit) * 2.5), 40px)', height: 'clamp(32px, calc(var(--vw-unit) * 2.5), 40px)' }}
                 >
                     {social.icon}
                 </a>

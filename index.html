@@ -197,64 +197,104 @@
     <style>
       /* ========================================
          RESPONSIVE SCALING SYSTEM
-         Viewport-based scaling for consistent appearance
+         Viewport-based scaling with clamp() for consistent appearance
          ======================================== */
       
       :root {
         /* Base unit = 1vw, scales with viewport AND browser zoom */
-        /* 1vw at 1440px = 14.4px, we want ~16px base, so multiply by ~1.1 */
         --vw-unit: 1vw;
         
-        /* Spacing scale - all viewport-relative */
-        --space-xs: calc(var(--vw-unit) * 0.3);
-        --space-sm: calc(var(--vw-unit) * 0.5);
-        --space-md: calc(var(--vw-unit) * 0.8);
-        --space-lg: calc(var(--vw-unit) * 1.2);
-        --space-xl: calc(var(--vw-unit) * 2);
-        --space-2xl: calc(var(--vw-unit) * 3);
-        --space-3xl: calc(var(--vw-unit) * 4);
+        /* Spacing scale - clamped for consistency across devices */
+        --space-xs: clamp(4px, calc(var(--vw-unit) * 0.3), 6px);
+        --space-sm: clamp(6px, calc(var(--vw-unit) * 0.5), 10px);
+        --space-md: clamp(10px, calc(var(--vw-unit) * 0.8), 14px);
+        --space-lg: clamp(14px, calc(var(--vw-unit) * 1.2), 20px);
+        --space-xl: clamp(20px, calc(var(--vw-unit) * 2), 32px);
+        --space-2xl: clamp(32px, calc(var(--vw-unit) * 3), 48px);
+        --space-3xl: clamp(48px, calc(var(--vw-unit) * 4), 64px);
         
-        /* Typography scale - viewport-relative */
-        --text-xs: calc(var(--vw-unit) * 0.7);
-        --text-sm: calc(var(--vw-unit) * 0.85);
-        --text-base: calc(var(--vw-unit) * 1);
-        --text-lg: calc(var(--vw-unit) * 1.2);
-        --text-xl: calc(var(--vw-unit) * 1.4);
-        --text-2xl: calc(var(--vw-unit) * 1.7);
-        --text-3xl: calc(var(--vw-unit) * 2.2);
-        --text-4xl: calc(var(--vw-unit) * 2.8);
-        --text-5xl: calc(var(--vw-unit) * 3.5);
-        --text-6xl: calc(var(--vw-unit) * 4.5);
+        /* Typography scale - clamped for readability */
+        --text-xs: clamp(10px, calc(var(--vw-unit) * 0.7), 12px);
+        --text-sm: clamp(12px, calc(var(--vw-unit) * 0.85), 14px);
+        --text-base: clamp(14px, calc(var(--vw-unit) * 1), 16px);
+        --text-lg: clamp(16px, calc(var(--vw-unit) * 1.2), 20px);
+        --text-xl: clamp(18px, calc(var(--vw-unit) * 1.4), 24px);
+        --text-2xl: clamp(22px, calc(var(--vw-unit) * 1.7), 28px);
+        --text-3xl: clamp(28px, calc(var(--vw-unit) * 2.2), 36px);
+        --text-4xl: clamp(36px, calc(var(--vw-unit) * 2.8), 48px);
+        --text-5xl: clamp(44px, calc(var(--vw-unit) * 3.5), 60px);
+        --text-6xl: clamp(56px, calc(var(--vw-unit) * 4.5), 80px);
         
-        /* Container padding - viewport-relative */
-        --container-padding: calc(var(--vw-unit) * 2);
+        /* Container padding - clamped */
+        --container-padding: clamp(16px, calc(var(--vw-unit) * 2), 32px);
         
-        /* Border radius scale - viewport-relative */
-        --radius-sm: calc(var(--vw-unit) * 0.4);
-        --radius-md: calc(var(--vw-unit) * 0.6);
-        --radius-lg: calc(var(--vw-unit) * 0.8);
-        --radius-xl: calc(var(--vw-unit) * 1.2);
-        --radius-2xl: calc(var(--vw-unit) * 1.6);
-        --radius-3xl: calc(var(--vw-unit) * 2);
+        /* Border radius scale - clamped */
+        --radius-sm: clamp(4px, calc(var(--vw-unit) * 0.4), 8px);
+        --radius-md: clamp(6px, calc(var(--vw-unit) * 0.6), 10px);
+        --radius-lg: clamp(8px, calc(var(--vw-unit) * 0.8), 14px);
+        --radius-xl: clamp(12px, calc(var(--vw-unit) * 1.2), 20px);
+        --radius-2xl: clamp(16px, calc(var(--vw-unit) * 1.6), 26px);
+        --radius-3xl: clamp(20px, calc(var(--vw-unit) * 2), 32px);
         
-        /* Element sizes - viewport-relative */
-        --size-icon-sm: calc(var(--vw-unit) * 1);
-        --size-icon-md: calc(var(--vw-unit) * 1.4);
-        --size-icon-lg: calc(var(--vw-unit) * 2);
-        --size-button-h: calc(var(--vw-unit) * 3);
-        --size-input-h: calc(var(--vw-unit) * 3.2);
+        /* Element sizes - clamped */
+        --size-icon-sm: clamp(14px, calc(var(--vw-unit) * 1), 18px);
+        --size-icon-md: clamp(18px, calc(var(--vw-unit) * 1.4), 24px);
+        --size-icon-lg: clamp(24px, calc(var(--vw-unit) * 2), 32px);
+        --size-button-h: clamp(40px, calc(var(--vw-unit) * 3), 52px);
+        --size-input-h: clamp(44px, calc(var(--vw-unit) * 3.2), 56px);
         
-        /* Image/card sizes */
-        --size-card-sm: calc(var(--vw-unit) * 15);
-        --size-card-md: calc(var(--vw-unit) * 20);
-        --size-card-lg: calc(var(--vw-unit) * 28);
-        --size-mandala: calc(var(--vw-unit) * 18);
+        /* Image/card sizes - clamped */
+        --size-card-sm: clamp(180px, calc(var(--vw-unit) * 15), 240px);
+        --size-card-md: clamp(240px, calc(var(--vw-unit) * 20), 320px);
+        --size-card-lg: clamp(320px, calc(var(--vw-unit) * 28), 450px);
+        --size-mandala: clamp(200px, calc(var(--vw-unit) * 18), 300px);
+        
+        /* Header/Footer specific sizes with minimums */
+        --header-height: clamp(56px, calc(var(--vw-unit) * 6), 96px);
+        --header-height-scrolled: clamp(48px, calc(var(--vw-unit) * 4.5), 72px);
+        --footer-padding: clamp(16px, var(--space-lg), 24px);
+        --header-logo-size: clamp(32px, calc(var(--vw-unit) * 4), 64px);
+        --header-logo-size-scrolled: clamp(28px, calc(var(--vw-unit) * 3.5), 56px);
       }
       
       /* Mobile adjustments - larger base unit for readability */
       @media (max-width: 768px) {
         :root {
           --vw-unit: 2.5vw;
+          /* Override clamps for mobile with fixed minimums */
+          --space-xs: 4px;
+          --space-sm: 8px;
+          --space-md: 12px;
+          --space-lg: 16px;
+          --space-xl: 24px;
+          --space-2xl: 36px;
+          --space-3xl: 48px;
+          
+          --text-xs: 11px;
+          --text-sm: 13px;
+          --text-base: 15px;
+          --text-lg: 17px;
+          --text-xl: 20px;
+          --text-2xl: 24px;
+          --text-3xl: 30px;
+          --text-4xl: 38px;
+          --text-5xl: 48px;
+          --text-6xl: 60px;
+          
+          --container-padding: 16px;
+          
+          --radius-sm: 6px;
+          --radius-md: 8px;
+          --radius-lg: 12px;
+          --radius-xl: 16px;
+          --radius-2xl: 20px;
+          --radius-3xl: 24px;
+          
+          --size-icon-sm: 16px;
+          --size-icon-md: 20px;
+          --size-icon-lg: 28px;
+          --size-button-h: 44px;
+          --size-input-h: 48px;
         }
       }
       
@@ -262,6 +302,40 @@
       @media (min-width: 769px) and (max-width: 1024px) {
         :root {
           --vw-unit: 1.4vw;
+          /* Override clamps for tablet with balanced values */
+          --space-xs: 5px;
+          --space-sm: 8px;
+          --space-md: 12px;
+          --space-lg: 18px;
+          --space-xl: 28px;
+          --space-2xl: 40px;
+          --space-3xl: 56px;
+          
+          --text-xs: 11px;
+          --text-sm: 13px;
+          --text-base: 15px;
+          --text-lg: 18px;
+          --text-xl: 22px;
+          --text-2xl: 26px;
+          --text-3xl: 32px;
+          --text-4xl: 42px;
+          --text-5xl: 52px;
+          --text-6xl: 68px;
+          
+          --container-padding: 24px;
+          
+          --radius-sm: 6px;
+          --radius-md: 8px;
+          --radius-lg: 12px;
+          --radius-xl: 18px;
+          --radius-2xl: 22px;
+          --radius-3xl: 28px;
+          
+          --size-icon-sm: 16px;
+          --size-icon-md: 22px;
+          --size-icon-lg: 30px;
+          --size-button-h: 46px;
+          --size-input-h: 50px;
         }
       }
       
@@ -797,7 +871,32 @@
         }
       }
       
-      /* Responsive card grid */
+      /* ========================================
+         ADAPTIVE GRID SYSTEM
+         Universal responsive grid for all content
+         ======================================== */
+      
+      /* Base container with max-width and auto margins */
+      .grid-container {
+        width: 100%;
+        max-width: 1600px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: var(--container-padding);
+        padding-right: var(--container-padding);
+      }
+      
+      /* Narrow container for text-heavy content */
+      .grid-container-narrow {
+        max-width: 900px;
+      }
+      
+      /* Wide container for full-width layouts */
+      .grid-container-wide {
+        max-width: 1920px;
+      }
+      
+      /* Responsive card grid - auto-fit with min/max */
       .card-grid {
         display: grid;
         gap: var(--space-lg);
@@ -812,6 +911,188 @@
       @media (min-width: 1280px) {
         .card-grid { grid-template-columns: repeat(4, 1fr); }
       }
+      
+      /* Auto-fit grid - cards expand to fill space */
+      .grid-auto-fit {
+        display: grid;
+        gap: var(--space-lg);
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+      }
+      
+      /* Auto-fill grid - maintains minimum card size */
+      .grid-auto-fill {
+        display: grid;
+        gap: var(--space-lg);
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+      }
+      
+      /* Fixed column grids */
+      .grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
+      .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+      .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+      .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+      .grid-cols-5 { grid-template-columns: repeat(5, 1fr); }
+      .grid-cols-6 { grid-template-columns: repeat(6, 1fr); }
+      
+      /* Responsive grid variants */
+      @media (max-width: 639px) {
+        .sm\:grid-cols-1 { grid-template-columns: repeat(1, 1fr) !important; }
+        .sm\:grid-cols-2 { grid-template-columns: repeat(2, 1fr) !important; }
+      }
+      @media (min-width: 640px) and (max-width: 1023px) {
+        .md\:grid-cols-2 { grid-template-columns: repeat(2, 1fr) !important; }
+        .md\:grid-cols-3 { grid-template-columns: repeat(3, 1fr) !important; }
+      }
+      @media (min-width: 1024px) {
+        .lg\:grid-cols-3 { grid-template-columns: repeat(3, 1fr) !important; }
+        .lg\:grid-cols-4 { grid-template-columns: repeat(4, 1fr) !important; }
+      }
+      @media (min-width: 1280px) {
+        .xl\:grid-cols-4 { grid-template-columns: repeat(4, 1fr) !important; }
+        .xl\:grid-cols-5 { grid-template-columns: repeat(5, 1fr) !important; }
+      }
+      
+      /* Two-column layout with sidebar */
+      .grid-sidebar {
+        display: grid;
+        gap: var(--space-xl);
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 1024px) {
+        .grid-sidebar {
+          grid-template-columns: 280px 1fr;
+        }
+        .grid-sidebar-right {
+          grid-template-columns: 1fr 280px;
+        }
+        .grid-sidebar-wide {
+          grid-template-columns: 320px 1fr;
+        }
+      }
+      
+      /* Two-column equal split */
+      .grid-split {
+        display: grid;
+        gap: var(--space-xl);
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 768px) {
+        .grid-split {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      
+      /* Three-column layout */
+      .grid-thirds {
+        display: grid;
+        gap: var(--space-lg);
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 640px) {
+        .grid-thirds {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (min-width: 1024px) {
+        .grid-thirds {
+          grid-template-columns: 1fr 1fr 1fr;
+        }
+      }
+      
+      /* Masonry-like grid with CSS columns */
+      .grid-masonry {
+        column-count: 1;
+        column-gap: var(--space-lg);
+      }
+      .grid-masonry > * {
+        break-inside: avoid;
+        margin-bottom: var(--space-lg);
+      }
+      @media (min-width: 640px) {
+        .grid-masonry { column-count: 2; }
+      }
+      @media (min-width: 1024px) {
+        .grid-masonry { column-count: 3; }
+      }
+      @media (min-width: 1280px) {
+        .grid-masonry { column-count: 4; }
+      }
+      
+      /* Featured grid - large item + smaller items */
+      .grid-featured {
+        display: grid;
+        gap: var(--space-lg);
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 768px) {
+        .grid-featured {
+          grid-template-columns: 2fr 1fr;
+          grid-template-rows: auto auto;
+        }
+        .grid-featured > :first-child {
+          grid-row: span 2;
+        }
+      }
+      
+      /* Gap utilities */
+      .gap-xs { gap: var(--space-xs); }
+      .gap-sm { gap: var(--space-sm); }
+      .gap-md { gap: var(--space-md); }
+      .gap-lg { gap: var(--space-lg); }
+      .gap-xl { gap: var(--space-xl); }
+      .gap-2xl { gap: var(--space-2xl); }
+      
+      /* Section spacing */
+      .section-spacing {
+        padding-top: var(--space-2xl);
+        padding-bottom: var(--space-2xl);
+      }
+      @media (min-width: 768px) {
+        .section-spacing {
+          padding-top: var(--space-3xl);
+          padding-bottom: var(--space-3xl);
+        }
+      }
+      
+      /* Page top padding (accounts for fixed header) */
+      .page-top {
+        padding-top: calc(var(--vw-unit) * 7);
+      }
+      @media (max-width: 768px) {
+        .page-top {
+          padding-top: calc(var(--vw-unit) * 18);
+        }
+      }
+      
+      /* Content max-width utilities */
+      .max-w-prose { max-width: 65ch; }
+      .max-w-content { max-width: 900px; }
+      .max-w-wide { max-width: 1200px; }
+      .max-w-full { max-width: 100%; }
+      
+      /* Center content */
+      .mx-auto { margin-left: auto; margin-right: auto; }
+      
+      /* Flex utilities for grid items */
+      .items-start { align-items: flex-start; }
+      .items-center { align-items: center; }
+      .items-end { align-items: flex-end; }
+      .items-stretch { align-items: stretch; }
+      
+      .justify-start { justify-content: flex-start; }
+      .justify-center { justify-content: center; }
+      .justify-end { justify-content: flex-end; }
+      .justify-between { justify-content: space-between; }
+      
+      /* Span utilities for grid items */
+      .col-span-1 { grid-column: span 1; }
+      .col-span-2 { grid-column: span 2; }
+      .col-span-3 { grid-column: span 3; }
+      .col-span-full { grid-column: 1 / -1; }
+      
+      .row-span-1 { grid-row: span 1; }
+      .row-span-2 { grid-row: span 2; }
+      .row-span-3 { grid-row: span 3; }
       
       /* Responsive navigation sidebar */
       .nav-sidebar {

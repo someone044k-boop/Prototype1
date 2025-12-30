@@ -339,33 +339,33 @@ export const Home: React.FC = () => {
         ref={(el) => registerElement('telegram', el)}
         data-reveal="telegram"
         className={`max-w-2xl mx-auto ${fadeUp('telegram')}`}
-        style={{ padding: 'var(--space-xl) var(--container-padding)', marginBottom: 'var(--space-2xl)' }}
+        style={{ padding: 'clamp(16px, var(--space-xl), 32px) var(--container-padding)', marginBottom: 'clamp(24px, var(--space-2xl), 48px)' }}
       >
           <div 
             className={`glass-panel dark:bg-slate-900/70 snake-border ${scaleIn('telegram')}`} 
-            style={{ transitionDelay: '150ms', borderRadius: 'var(--radius-3xl)', padding: 'var(--space-xl)' }}
+            style={{ transitionDelay: '150ms', borderRadius: 'clamp(20px, var(--radius-3xl), 32px)', padding: 'clamp(16px, var(--space-xl), 32px)' }}
           >
              {/* Header */}
              <div 
                className="flex items-center border-b border-slate-200/50 dark:border-slate-700/50"
-               style={{ gap: 'var(--space-md)', marginBottom: 'var(--space-xl)', paddingBottom: 'var(--space-lg)' }}
+               style={{ gap: 'clamp(12px, var(--space-md), 16px)', marginBottom: 'clamp(16px, var(--space-xl), 24px)', paddingBottom: 'clamp(12px, var(--space-lg), 20px)' }}
              >
                <div 
                  className="rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center text-white shadow-lg"
-                 style={{ width: 'calc(var(--vw-unit) * 3)', height: 'calc(var(--vw-unit) * 3)' }}
+                 style={{ width: 'clamp(40px, calc(var(--vw-unit) * 3), 56px)', height: 'clamp(40px, calc(var(--vw-unit) * 3), 56px)' }}
                >
-                 <Send style={{ width: 'var(--size-icon-md)', height: 'var(--size-icon-md)' }} />
+                 <Send style={{ width: 'clamp(16px, var(--size-icon-md), 20px)', height: 'clamp(16px, var(--size-icon-md), 20px)' }} />
                </div>
                <div>
-                 <h3 className="font-bold text-slate-800 dark:text-white" style={{ fontSize: 'var(--text-base)' }}>Elite Archetypes</h3>
-                 <span className="text-slate-500" style={{ fontSize: 'var(--text-xs)' }}>@EliteArchetypes • Telegram</span>
+                 <h3 className="font-bold text-slate-800 dark:text-white" style={{ fontSize: 'clamp(14px, var(--text-base), 16px)' }}>Elite Archetypes</h3>
+                 <span className="text-slate-500" style={{ fontSize: 'clamp(10px, var(--text-xs), 12px)' }}>@EliteArchetypes • Telegram</span>
                </div>
                <a 
                  href="https://t.me/EliteArchetypes" 
                  target="_blank" 
                  rel="noreferrer" 
                  className="ml-auto rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white font-bold hover:scale-105 transition-transform shadow-md"
-                 style={{ padding: 'var(--space-sm) var(--space-lg)', fontSize: 'var(--text-xs)' }}
+                 style={{ padding: 'clamp(6px, var(--space-sm), 10px) clamp(12px, var(--space-lg), 20px)', fontSize: 'clamp(10px, var(--text-xs), 12px)' }}
                >
                  Підписатися
                </a>
@@ -374,13 +374,13 @@ export const Home: React.FC = () => {
              {/* Posts */}
              <div 
                className="overflow-y-auto custom-scrollbar" 
-               style={{ height: 'calc(var(--vw-unit) * 30)', paddingRight: 'var(--space-sm)' }}
+               style={{ height: 'clamp(280px, calc(var(--vw-unit) * 30), 450px)', paddingRight: 'clamp(6px, var(--space-sm), 10px)' }}
                onScroll={handleScroll}
              >
-                 <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
+                 <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(12px, var(--space-lg), 20px)' }}>
                    {loading ? (
                      <div className="flex items-center justify-center h-full">
-                       <Loader2 className="animate-spin text-indigo-500" style={{ width: 'var(--size-icon-lg)', height: 'var(--size-icon-lg)' }} />
+                       <Loader2 className="animate-spin text-indigo-500" style={{ width: 'clamp(20px, var(--size-icon-lg), 28px)', height: 'clamp(20px, var(--size-icon-lg), 28px)' }} />
                      </div>
                    ) : posts.length > 0 ? (
                      <>
@@ -388,26 +388,26 @@ export const Home: React.FC = () => {
                          <div 
                            key={post.id} 
                            className="bg-white/50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:shadow-md transition-shadow"
-                           style={{ padding: 'var(--space-lg)', borderRadius: 'var(--radius-xl)' }}
+                           style={{ padding: 'clamp(12px, var(--space-lg), 20px)', borderRadius: 'clamp(12px, var(--radius-xl), 20px)' }}
                          >
                            <div 
                              className="font-sans text-slate-900 dark:text-slate-100 leading-relaxed whitespace-pre-wrap break-words [&_a]:text-indigo-500 [&_a]:underline [&_b]:font-bold [&_i]:italic"
-                             style={{ fontSize: 'var(--text-sm)' }}
+                             style={{ fontSize: 'clamp(12px, var(--text-sm), 14px)' }}
                              dangerouslySetInnerHTML={{ __html: post.text }}
                            />
-                           <span className="text-slate-400 block" style={{ fontSize: 'var(--text-xs)', marginTop: 'var(--space-md)' }}>{post.date}</span>
+                           <span className="text-slate-400 block" style={{ fontSize: 'clamp(10px, var(--text-xs), 12px)', marginTop: 'clamp(8px, var(--space-md), 12px)' }}>{post.date}</span>
                          </div>
                        ))}
                        {loadingMore && (
-                         <div className="flex justify-center" style={{ padding: 'var(--space-lg)' }}>
-                           <Loader2 className="animate-spin text-indigo-500" style={{ width: 'var(--size-icon-md)', height: 'var(--size-icon-md)' }} />
+                         <div className="flex justify-center" style={{ padding: 'clamp(12px, var(--space-lg), 20px)' }}>
+                           <Loader2 className="animate-spin text-indigo-500" style={{ width: 'clamp(16px, var(--size-icon-md), 20px)', height: 'clamp(16px, var(--size-icon-md), 20px)' }} />
                          </div>
                        )}
                      </>
                    ) : (
                      <div className="flex flex-col items-center justify-center h-full text-slate-400">
-                       <Send className="opacity-30" style={{ width: 'calc(var(--vw-unit) * 2.5)', height: 'calc(var(--vw-unit) * 2.5)', marginBottom: 'var(--space-md)' }} />
-                       <p style={{ fontSize: 'var(--text-sm)' }}>Перейдіть в канал для перегляду постів</p>
+                       <Send className="opacity-30" style={{ width: 'clamp(32px, calc(var(--vw-unit) * 2.5), 48px)', height: 'clamp(32px, calc(var(--vw-unit) * 2.5), 48px)', marginBottom: 'clamp(8px, var(--space-md), 12px)' }} />
+                       <p style={{ fontSize: 'clamp(12px, var(--text-sm), 14px)' }}>Перейдіть в канал для перегляду постів</p>
                      </div>
                    )}
                  </div>

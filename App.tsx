@@ -105,10 +105,10 @@ const ScrollProgress = memo(() => {
 
   return (
     <div 
-      className="fixed left-0 right-0 z-[9998] pointer-events-none"
+      className="fixed left-0 right-0 z-40 pointer-events-none"
       style={{
-        top: scrolled ? 'calc(var(--vw-unit) * 4.5)' : 'calc(var(--vw-unit) * 6)',
-        height: isModalOpen ? '0px' : 'calc(var(--vw-unit) * 0.25)',
+        top: scrolled ? 'var(--header-height-scrolled)' : 'var(--header-height)',
+        height: isModalOpen ? '0px' : 'clamp(2px, calc(var(--vw-unit) * 0.25), 4px)',
         opacity: shouldShow && !isModalOpen ? 1 : 0,
         transform: isModalOpen ? 'scaleY(0) translateY(-10px)' : 'scaleY(1) translateY(0)',
         transformOrigin: 'top center',
@@ -116,6 +116,7 @@ const ScrollProgress = memo(() => {
         filter: isModalOpen ? 'blur(8px)' : 'blur(0px)'
       }}
     >
+      <div className="max-w-[1920px] mx-auto w-full h-full">
       <div
         className="h-full rounded-full"
         style={{
@@ -132,6 +133,7 @@ const ScrollProgress = memo(() => {
           willChange: 'width'
         }}
       />
+      </div>
       <style>{`
         @keyframes rainbow-shift {
           0% { background-position: 0% 50%; }

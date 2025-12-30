@@ -185,20 +185,22 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             style={{ animationDuration: '0.15s' }}
             onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
         >
-            <div 
-                ref={modalRef}
-                className="bg-white dark:bg-slate-900 w-full max-w-md max-h-[90vh] rounded-[2rem] shadow-2xl border border-white/20 dark:border-slate-700 relative overflow-hidden flex flex-col animate-drop-in"
-                style={{ animationDuration: '0.2s' }}
-            >
-                {/* Close Button */}
+            {/* Modal wrapper for positioning close button outside */}
+            <div className="relative">
+                {/* Close Button - Outside modal, just next to the window */}
                 <button 
                     onClick={onClose}
-                    className="absolute top-4 right-4 z-50 p-2 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                    className="absolute -top-3 -right-3 z-[201] w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-white hover:bg-gradient-to-r hover:from-indigo-500 hover:to-fuchsia-500 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/30"
                 >
                     <X size={20} />
                 </button>
 
-                {/* Scrollable content */}
+                <div 
+                    ref={modalRef}
+                    className="bg-white dark:bg-slate-900 w-full max-w-md max-h-[90vh] rounded-[2rem] shadow-2xl border border-white/20 dark:border-slate-700 relative overflow-hidden flex flex-col animate-drop-in"
+                    style={{ animationDuration: '0.2s' }}
+                >
+                    {/* Scrollable content */}
                 <div className="flex-1 overflow-y-auto custom-scrollbar">
                     {/* Header with tabs */}
                     <div className="pt-8 pb-4 px-8">
@@ -404,6 +406,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                         )}
                     </p>
                     </div>
+                </div>
                 </div>
             </div>
         </div>

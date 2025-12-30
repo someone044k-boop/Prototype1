@@ -125,6 +125,16 @@ export const Master: React.FC = () => {
 
     const isAskPage = location.pathname.includes('/ask');
 
+    // Lock body scroll when modal is open
+    useEffect(() => {
+        if (selectedId) {
+            document.body.classList.add('modal-open');
+        } else {
+            document.body.classList.remove('modal-open');
+        }
+        return () => document.body.classList.remove('modal-open');
+    }, [selectedId]);
+
     useEffect(() => {
         // First scroll to top
         window.scrollTo(0, 0);
@@ -477,51 +487,56 @@ export const Master: React.FC = () => {
                     style={{ animation: 'fadeIn 0.15s ease-out' }}
                     onClick={(e) => { if (e.target === e.currentTarget) setSelectedId(null); }}
                 >
-                    <div 
-                        className="bg-white dark:bg-slate-900 w-full max-w-6xl max-h-[90vh] rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row overflow-hidden border border-white/20 dark:border-slate-700 relative"
-                        style={{ animation: 'fadeIn 0.2s ease-out' }}
-                    >
+                    {/* Modal wrapper for positioning close button outside */}
+                    <div className="relative">
+                        {/* Close Button - Outside modal, just next to the window */}
                         <button 
                             onClick={() => setSelectedId(null)} 
-                            className="absolute top-4 right-4 z-50 p-2 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md rounded-full text-slate-800 dark:text-white hover:bg-red-500 hover:text-white transition-colors duration-150 shadow-sm"
+                            className="absolute -top-3 -right-3 z-[101] w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-white hover:bg-gradient-to-r hover:from-indigo-500 hover:to-fuchsia-500 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/30 shadow-md"
                         >
-                            <X size={24} />
+                            <X size={20} />
                         </button>
 
-                        <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group card-img-hover">
-                            <img src={activeItem.image} alt={activeItem.title} className="w-full h-full object-cover" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex flex-col justify-end p-8">
-                                <h3 className="text-white text-3xl font-bold mb-3 leading-tight drop-shadow-lg">{activeItem.title}</h3>
-                                <p className="text-indigo-200 text-lg font-medium flex items-center gap-2"><CreditCard size={18}/> {activeItem.price}</p>
-                            </div>
-                        </div>
+                        <div 
+                            className="bg-white dark:bg-slate-900 w-full max-w-6xl max-h-[90vh] rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row overflow-hidden border border-white/20 dark:border-slate-700 relative"
+                            style={{ animation: 'fadeIn 0.2s ease-out' }}
+                        >
 
-                        <div className="flex-1 p-6 md:p-10 overflow-y-auto custom-scrollbar flex flex-col relative bg-white dark:bg-slate-900">
-                            <div className="md:hidden mb-6">
-                                <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">{activeItem.title}</h2>
-                                <div className="text-xl font-bold text-indigo-600 dark:text-indigo-400">{activeItem.price}</div>
-                            </div>
-
-                            <div className="text-slate-600 dark:text-slate-300 mb-8 font-medium">
-                                {activeItem.description}
-                            </div>
-                            
-                            <div className="mt-auto pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center gap-6">
-                                <div className="flex-1 w-full">
-                                    <div className="flex items-center gap-4 text-sm font-bold text-slate-500 mb-1">
-                                        <span className="flex items-center gap-1.5"><Clock size={16} className="text-indigo-500"/> {activeItem.duration}</span>
-                                        <span className="flex items-center gap-1.5"><CheckCircle2 size={16} className="text-green-500"/> Вільні місця є</span>
-                                    </div>
-                                    <p className="text-xs text-slate-400">Попередній запис обов'язковий. Майстер зв'яжеться з вами.</p>
+                            <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group card-img-hover">
+                                <img src={activeItem.image} alt={activeItem.title} className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex flex-col justify-end p-8">
+                                    <h3 className="text-white text-3xl font-bold mb-3 leading-tight drop-shadow-lg">{activeItem.title}</h3>
+                                    <p className="text-indigo-200 text-lg font-medium flex items-center gap-2"><CreditCard size={18}/> {activeItem.price}</p>
                                 </div>
-                                <a 
-                                    href="https://t.me/dobrevk" 
-                                    target="_blank" 
-                                    rel="noreferrer"
-                                    className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white font-bold rounded-xl shadow-lg hover:shadow-indigo-500/50 hover:scale-[1.02] transition-[transform,box-shadow] duration-300 uppercase tracking-widest text-sm flex items-center justify-center gap-2 ring-4 ring-indigo-50 dark:ring-slate-800"
-                                >
-                                    <Send size={18} /> ЗАПИСАТИСЬ
-                                </a>
+                            </div>
+
+                            <div className="flex-1 p-6 md:p-10 overflow-y-auto custom-scrollbar flex flex-col relative bg-white dark:bg-slate-900">
+                                <div className="md:hidden mb-6">
+                                    <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">{activeItem.title}</h2>
+                                    <div className="text-xl font-bold text-indigo-600 dark:text-indigo-400">{activeItem.price}</div>
+                                </div>
+
+                                <div className="text-slate-600 dark:text-slate-300 mb-8 font-medium">
+                                    {activeItem.description}
+                                </div>
+                                
+                                <div className="mt-auto pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center gap-6">
+                                    <div className="flex-1 w-full">
+                                        <div className="flex items-center gap-4 text-sm font-bold text-slate-500 mb-1">
+                                            <span className="flex items-center gap-1.5"><Clock size={16} className="text-indigo-500"/> {activeItem.duration}</span>
+                                            <span className="flex items-center gap-1.5"><CheckCircle2 size={16} className="text-green-500"/> Вільні місця є</span>
+                                        </div>
+                                        <p className="text-xs text-slate-400">Попередній запис обов'язковий. Майстер зв'яжеться з вами.</p>
+                                    </div>
+                                    <a 
+                                        href="https://t.me/dobrevk" 
+                                        target="_blank" 
+                                        rel="noreferrer"
+                                        className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white font-bold rounded-xl shadow-lg hover:shadow-indigo-500/50 hover:scale-[1.02] transition-[transform,box-shadow] duration-300 uppercase tracking-widest text-sm flex items-center justify-center gap-2 ring-4 ring-indigo-50 dark:ring-slate-800"
+                                    >
+                                        <Send size={18} /> ЗАПИСАТИСЬ
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>

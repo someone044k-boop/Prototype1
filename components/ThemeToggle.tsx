@@ -23,7 +23,7 @@ export const ThemeToggle: React.FC = () => {
       </button>
       
       {/* Tooltip */}
-      <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-50">
+      <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-[9999]">
         <div className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded-lg whitespace-nowrap shadow-lg">
           {isDark ? 'магія дня' : 'магія ночі'}
         </div>

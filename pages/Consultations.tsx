@@ -292,61 +292,63 @@ export const Consultations: React.FC = () => {
                         if (e.target === e.currentTarget) setSelectedId(null);
                     }}
                 >
-                    {/* Increased width to max-w-6xl for better visibility without scrolling */}
-                    <div 
-                      className="bg-white dark:bg-slate-900 w-full max-w-6xl max-h-[90vh] shadow-2xl flex flex-col md:flex-row overflow-hidden border border-white/20 dark:border-slate-700 relative animate-fade-in"
-                      style={{ borderRadius: 'var(--radius-3xl)' }}
-                    >
-                        
-                        {/* Close Button */}
+                    {/* Modal wrapper for positioning close button outside */}
+                    <div className="relative">
+                        {/* Close Button - Outside modal, just next to the window */}
                         <button 
                             onClick={() => setSelectedId(null)} 
-                            className="absolute top-4 right-4 z-50 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md rounded-full text-slate-800 dark:text-white hover:bg-red-500 hover:text-white transition-all shadow-sm"
-                            style={{ padding: 'var(--space-sm)' }}
+                            className="absolute -top-3 -right-3 z-[101] w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-white hover:bg-gradient-to-r hover:from-indigo-500 hover:to-fuchsia-500 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/30 shadow-md"
                         >
-                            <X style={{ width: 'var(--size-icon-md)', height: 'var(--size-icon-md)' }} />
+                            <X size={20} />
                         </button>
 
-                        {/* Modal Image (Left Side) - Adjusted width ratio */}
-                        <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group card-img-hover">
-                            <img loading="lazy" src={activeItem.image} alt={activeItem.title} className="w-full h-full object-cover" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex flex-col justify-end" style={{ padding: 'var(--space-xl)' }}>
-                                <h3 className="text-white font-bold leading-tight drop-shadow-lg" style={{ fontSize: 'var(--text-3xl)', marginBottom: 'var(--space-md)' }}>{activeItem.title}</h3>
-                                <p className="text-indigo-200 font-medium flex items-center" style={{ fontSize: 'var(--text-lg)', gap: 'var(--space-sm)' }}><CreditCard style={{ width: 'var(--size-icon-md)', height: 'var(--size-icon-md)' }}/> {activeItem.price}</p>
-                            </div>
-                        </div>
+                        {/* Increased width to max-w-6xl for better visibility without scrolling */}
+                        <div 
+                          className="bg-white dark:bg-slate-900 w-full max-w-6xl max-h-[90vh] shadow-2xl flex flex-col md:flex-row overflow-hidden border border-white/20 dark:border-slate-700 relative animate-fade-in"
+                          style={{ borderRadius: 'var(--radius-3xl)' }}
+                        >
 
-                        {/* Modal Content (Right Side) */}
-                        <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col relative bg-white dark:bg-slate-900" style={{ padding: 'var(--space-xl)' }}>
-                            {/* Mobile Header (Visible only on small screens) */}
-                            <div className="md:hidden" style={{ marginBottom: 'var(--space-xl)' }}>
-                                <h2 className="font-bold text-slate-800 dark:text-white" style={{ fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-sm)' }}>{activeItem.title}</h2>
-                                <div className="font-bold text-indigo-600 dark:text-indigo-400" style={{ fontSize: 'var(--text-xl)' }}>{activeItem.price}</div>
-                            </div>
-
-                            {/* Main Description Content - Rich Text */}
-                            <div className="text-slate-600 dark:text-slate-300 font-medium" style={{ marginBottom: 'var(--space-xl)', fontSize: 'var(--text-base)' }}>
-                                {activeItem.description}
-                            </div>
-                            
-                            {/* Sticky Footer in Modal */}
-                            <div className="mt-auto flex flex-col sm:flex-row items-center border-t border-slate-100 dark:border-slate-800" style={{ paddingTop: 'var(--space-xl)', gap: 'var(--space-xl)' }}>
-                                <div className="flex-1 w-full">
-                                    <div className="flex items-center font-bold text-slate-500" style={{ gap: 'var(--space-lg)', fontSize: 'var(--text-sm)', marginBottom: 'var(--space-xs)' }}>
-                                        <span className="flex items-center" style={{ gap: 'var(--space-xs)' }}><Clock style={{ width: 'var(--size-icon-sm)', height: 'var(--size-icon-sm)' }} className="text-indigo-500"/> {activeItem.duration}</span>
-                                        <span className="flex items-center" style={{ gap: 'var(--space-xs)' }}><CheckCircle2 style={{ width: 'var(--size-icon-sm)', height: 'var(--size-icon-sm)' }} className="text-green-500"/> Вільні місця є</span>
-                                    </div>
-                                    <p className="text-slate-400" style={{ fontSize: 'var(--text-xs)' }}>Попередній запис обов'язковий. Майстер зв'яжеться з вами.</p>
+                            {/* Modal Image (Left Side) - Adjusted width ratio */}
+                            <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group card-img-hover">
+                                <img loading="lazy" src={activeItem.image} alt={activeItem.title} className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex flex-col justify-end" style={{ padding: 'var(--space-xl)' }}>
+                                    <h3 className="text-white font-bold leading-tight drop-shadow-lg" style={{ fontSize: 'var(--text-3xl)', marginBottom: 'var(--space-md)' }}>{activeItem.title}</h3>
+                                    <p className="text-indigo-200 font-medium flex items-center" style={{ fontSize: 'var(--text-lg)', gap: 'var(--space-sm)' }}><CreditCard style={{ width: 'var(--size-icon-md)', height: 'var(--size-icon-md)' }}/> {activeItem.price}</p>
                                 </div>
-                                <a 
-                                    href="https://t.me/dobrevk" 
-                                    target="_blank" 
-                                    rel="noreferrer"
-                                    className="w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white font-bold shadow-lg hover:shadow-indigo-500/50 hover:scale-[1.02] transition-all uppercase tracking-widest flex items-center justify-center ring-4 ring-indigo-50 dark:ring-slate-800"
-                                    style={{ padding: 'var(--space-lg) var(--space-2xl)', borderRadius: 'var(--radius-lg)', fontSize: 'var(--text-sm)', gap: 'var(--space-sm)' }}
-                                >
-                                    <Send style={{ width: 'var(--size-icon-md)', height: 'var(--size-icon-md)' }} /> ЗАПИСАТИСЬ
-                                </a>
+                            </div>
+
+                            {/* Modal Content (Right Side) */}
+                            <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col relative bg-white dark:bg-slate-900" style={{ padding: 'var(--space-xl)' }}>
+                                {/* Mobile Header (Visible only on small screens) */}
+                                <div className="md:hidden" style={{ marginBottom: 'var(--space-xl)' }}>
+                                    <h2 className="font-bold text-slate-800 dark:text-white" style={{ fontSize: 'var(--text-2xl)', marginBottom: 'var(--space-sm)' }}>{activeItem.title}</h2>
+                                    <div className="font-bold text-indigo-600 dark:text-indigo-400" style={{ fontSize: 'var(--text-xl)' }}>{activeItem.price}</div>
+                                </div>
+
+                                {/* Main Description Content - Rich Text */}
+                                <div className="text-slate-600 dark:text-slate-300 font-medium" style={{ marginBottom: 'var(--space-xl)', fontSize: 'var(--text-base)' }}>
+                                    {activeItem.description}
+                                </div>
+                                
+                                {/* Sticky Footer in Modal */}
+                                <div className="mt-auto flex flex-col sm:flex-row items-center border-t border-slate-100 dark:border-slate-800" style={{ paddingTop: 'var(--space-xl)', gap: 'var(--space-xl)' }}>
+                                    <div className="flex-1 w-full">
+                                        <div className="flex items-center font-bold text-slate-500" style={{ gap: 'var(--space-lg)', fontSize: 'var(--text-sm)', marginBottom: 'var(--space-xs)' }}>
+                                            <span className="flex items-center" style={{ gap: 'var(--space-xs)' }}><Clock style={{ width: 'var(--size-icon-sm)', height: 'var(--size-icon-sm)' }} className="text-indigo-500"/> {activeItem.duration}</span>
+                                            <span className="flex items-center" style={{ gap: 'var(--space-xs)' }}><CheckCircle2 style={{ width: 'var(--size-icon-sm)', height: 'var(--size-icon-sm)' }} className="text-green-500"/> Вільні місця є</span>
+                                        </div>
+                                        <p className="text-slate-400" style={{ fontSize: 'var(--text-xs)' }}>Попередній запис обов'язковий. Майстер зв'яжеться з вами.</p>
+                                    </div>
+                                    <a 
+                                        href="https://t.me/dobrevk" 
+                                        target="_blank" 
+                                        rel="noreferrer"
+                                        className="w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white font-bold shadow-lg hover:shadow-indigo-500/50 hover:scale-[1.02] transition-all uppercase tracking-widest flex items-center justify-center ring-4 ring-indigo-50 dark:ring-slate-800"
+                                        style={{ padding: 'var(--space-lg) var(--space-2xl)', borderRadius: 'var(--radius-lg)', fontSize: 'var(--text-sm)', gap: 'var(--space-sm)' }}
+                                    >
+                                        <Send style={{ width: 'var(--size-icon-md)', height: 'var(--size-icon-md)' }} /> ЗАПИСАТИСЬ
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>

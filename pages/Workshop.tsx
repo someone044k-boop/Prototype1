@@ -491,6 +491,16 @@ export const Workshop: React.FC = () => {
     const { t } = useLanguage();
     const [selectedItem, setSelectedItem] = useState<any>(null);
 
+    // Lock body scroll when modal is open
+    useEffect(() => {
+        if (selectedItem) {
+            document.body.classList.add('modal-open');
+        } else {
+            document.body.classList.remove('modal-open');
+        }
+        return () => document.body.classList.remove('modal-open');
+    }, [selectedItem]);
+
     const getLabel = (key: string) => t(key as any);
 
     // Determine current season based on month
@@ -640,15 +650,17 @@ export const Workshop: React.FC = () => {
                 className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in"
                 onClick={(e) => { if (e.target === e.currentTarget) setSelectedItem(null); }}
             >
-                <div className="bg-white dark:bg-slate-900 w-full max-w-6xl max-h-[95vh] rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row overflow-hidden border border-white/20 dark:border-slate-700 relative animate-fade-in">
-                    
-                    {/* Close Button */}
+                {/* Modal wrapper for positioning close button outside */}
+                <div className="relative">
+                    {/* Close Button - Outside modal, just next to the window */}
                     <button 
                         onClick={() => setSelectedItem(null)} 
-                        className="absolute top-4 right-4 z-50 p-2 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md rounded-full text-slate-800 dark:text-white hover:bg-red-500 hover:text-white transition-all shadow-sm"
+                        className="absolute -top-3 -right-3 z-[101] w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-white hover:bg-gradient-to-r hover:from-indigo-500 hover:to-fuchsia-500 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/30 shadow-md"
                     >
-                        <X size={24} />
+                        <X size={20} />
                     </button>
+
+                    <div className="bg-white dark:bg-slate-900 w-full max-w-6xl max-h-[95vh] rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row overflow-hidden border border-white/20 dark:border-slate-700 relative animate-fade-in">
 
                     {/* Modal Image (Left Side) */}
                     <div className="w-full md:w-1/3 h-48 md:h-auto relative hidden md:block group card-img-hover">
@@ -688,6 +700,7 @@ export const Workshop: React.FC = () => {
                             </a>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         );
